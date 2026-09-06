@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Logo } from "@/components/brand/logo";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import { MARKETING_NAV } from "./nav-links";
@@ -28,11 +29,8 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--hairline)] bg-[var(--ground)]">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-10 lg:px-16">
-        <Link href="/" className="flex h-11 items-center gap-2">
-          <span className="flex h-8 w-8 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[13px] font-black text-white">
-            D
-          </span>
-          <span className="text-[17px] font-extrabold tracking-tight">Doorlane</span>
+        <Link href="/" className="flex h-11 items-center">
+          <Logo height={30} />
         </Link>
 
         <div className="hidden items-center gap-7 md:flex">

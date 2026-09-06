@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/brand/logo";
 import { FOOTER_COLUMNS } from "./nav-links";
 import {
   DEFAULT_PLATFORM_FEE_VALUE,
@@ -21,11 +22,8 @@ export function SiteFooter() {
     <footer className="border-t border-[var(--hairline)] px-6 py-14 sm:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-12 lg:flex-row lg:justify-between lg:gap-16">
-          <Link href="/" className="flex h-11 shrink-0 items-center gap-2.5 self-start">
-            <span className="flex h-9 w-9 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[14px] font-black text-white">
-              D
-            </span>
-            <span className="text-[21px] font-extrabold tracking-tight">Doorlane</span>
+          <Link href="/" className="flex h-11 shrink-0 items-center self-start">
+            <Logo height={36} />
           </Link>
 
           <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:flex lg:gap-x-16">

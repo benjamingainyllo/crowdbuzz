@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Logo } from "@/components/brand/logo";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
@@ -79,10 +80,7 @@ export default function ResetPasswordPage() {
     <main className="lp flex min-h-screen flex-col items-center justify-center px-6 py-14 font-[family-name:var(--font-bricolage-grotesque)]">
       <div className="w-full max-w-[420px]">
         <Link href="/" className="mb-9 flex items-center justify-center gap-2">
-          <span className="flex h-8 w-8 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[13px] font-black text-white">
-            D
-          </span>
-          <span className="text-[17px] font-extrabold tracking-tight">Doorlane</span>
+          <Logo height={30} />
         </Link>
 
         {checking ? (

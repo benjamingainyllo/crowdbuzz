@@ -6,6 +6,7 @@ import { StatTiles } from "@/components/charts/figures";
 import { ExploreCard } from "@/components/storefront/explore-card";
 import { trend } from "@/lib/dashboard-shape";
 import type { ExploreEvent } from "@/lib/explore";
+import { Logo, LogoMark } from "@/components/brand/logo";
 import { easeOut, lerp, prog, scene } from "./timing";
 import {
   Caption, Serif, FeeRace, SplitDiagram, Phone,
@@ -126,17 +127,14 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
       {/* ── 1. Title ─────────────────────────────────────── */}
       <Stage tall={tall} s={sc("title")}>
         <div className="flex flex-col items-center text-center">
-          <span
-            className="flex h-[104px] w-[104px] rotate-[-4deg] items-center justify-center rounded-3xl border-[5px] border-[var(--ink)] bg-[var(--coral)] text-[52px] font-black text-white"
+          {/* The logo IS the name, so the title card no longer sets it twice. */}
+          <div
             style={{
-              transform: `rotate(-4deg) scale(${lerp(0.7, 1, easeOut(prog(sc("title").t, 0, 800)))})`,
+              transform: `scale(${lerp(0.78, 1, easeOut(prog(sc("title").t, 0, 800)))})`,
             }}
           >
-            D
-          </span>
-          <h1 className="mt-10 text-[110px] font-extrabold leading-none tracking-[-0.045em]">
-            Doorlane
-          </h1>
+            <Logo height={190} />
+          </div>
           <p
             className="mt-6 text-[34px] text-[var(--on-ground-soft)]"
             style={{ opacity: easeOut(prog(sc("title").t, 900, 800)) }}
@@ -332,9 +330,7 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
       {/* ── 9. Close ─────────────────────────────────────── */}
       <Stage tall={tall} s={sc("close")}>
         <div className="flex flex-col items-center text-center">
-          <span className="flex h-[84px] w-[84px] rotate-[-4deg] items-center justify-center rounded-3xl border-[5px] border-[var(--ink)] bg-[var(--coral)] text-[42px] font-black text-white">
-            D
-          </span>
+          <LogoMark height={104} />
           <h2 className="mt-9 text-[86px] font-extrabold leading-none tracking-[-0.04em]">
             {RATE} a ticket.
           </h2>
