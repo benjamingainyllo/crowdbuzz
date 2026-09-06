@@ -25,7 +25,7 @@ export function SiteFooter() {
             <span className="flex h-9 w-9 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[14px] font-black text-white">
               P
             </span>
-            <span className="text-[21px] font-extrabold tracking-tight">Paylance</span>
+            <span className="text-[21px] font-extrabold tracking-tight">Doorlane</span>
           </Link>
 
           <div className="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:flex lg:gap-x-16">
@@ -56,7 +56,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-[var(--hairline)] pt-7 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[12.5px] text-[var(--on-ground-faint)]">
-            © {new Date().getFullYear()} Paylance
+            © {new Date().getFullYear()} Doorlane
           </p>
           {/* Read from the live fee engine rather than typed in. This line
               said "a flat fee per ticket, never a percentage" long after

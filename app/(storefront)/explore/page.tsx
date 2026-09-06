@@ -4,7 +4,7 @@ import { loadExplore } from "@/lib/explore";
 import { savedEventIds } from "@/app/actions/interest";
 
 /**
- * Explore — every published event on Paylance, by city.
+ * Explore — every published event on Doorlane, by city.
  *
  * THE PAGE IS ONLY AS GOOD AS THE EVENTS ON IT, AND IT SAYS SO. A
  * discovery page with three events that pretends to be a marketplace is
@@ -21,7 +21,7 @@ import { savedEventIds } from "@/app/actions/interest";
 export const metadata: Metadata = {
   title: "Explore events",
   description:
-    "Every event selling on Paylance right now — parties, concerts, workshops, conferences and church programmes, city by city. Find one, get a ticket in a couple of taps.",
+    "Every event selling on Doorlane right now — parties, concerts, workshops, conferences and church programmes, city by city. Find one, get a ticket in a couple of taps.",
 };
 
 /**

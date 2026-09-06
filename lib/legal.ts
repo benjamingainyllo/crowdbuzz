@@ -23,7 +23,7 @@ const TODO = (what: string) => `[${what}]` as const;
 
 export const LEGAL = {
   /** Trading name. Changes when the rename lands. */
-  product: "Paylance",
+  product: "Doorlane",
 
   /** The registered company that actually contracts with users. */
   entity: TODO("REGISTERED COMPANY NAME"),

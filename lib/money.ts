@@ -1,5 +1,5 @@
 /**
- * Money in Paylance is ALWAYS an integer number of kobo.
+ * Money in Doorlane is ALWAYS an integer number of kobo.
  *
  * Never store or compute money as naira, as a float, or as `numeric`.
  * Every conversion and every bit of formatting goes through this file —
@@ -60,7 +60,7 @@ export function formatKobo(kobo: Kobo): string {
 export type PlatformFeeType = "percentage" | "flat" | "banded" | "capped";
 
 /**
- * Paylance takes 4% of a ticket, and never more than ₦3,000.
+ * Doorlane takes 4% of a ticket, and never more than ₦3,000.
  *
  * WHY THIS SHAPE. The old model was four flat bands, and bands have an
  * unavoidable fault: the fee jumps at every boundary. A ₦29,999 ticket

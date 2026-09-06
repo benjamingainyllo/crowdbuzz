@@ -7,7 +7,7 @@
  * GPU drops frames wherever the machine is busy; this cannot, because
  * nothing is racing a clock.
  *
- *   node scripts/record-reel.mjs [--fps 30] [--out out/paylance-launch.mp4]
+ *   node scripts/record-reel.mjs [--fps 30] [--out out/doorlane-launch.mp4]
  *
  * Needs a dev server on :3000 and ffmpeg on the PATH.
  */
@@ -22,7 +22,7 @@ const arg = (name, fallback) => {
 };
 
 const FPS = Number(arg("fps", 30));
-const OUT = path.resolve(arg("out", "out/paylance-launch.mp4"));
+const OUT = path.resolve(arg("out", "out/doorlane-launch.mp4"));
 const BASE = arg("base", "http://localhost:3000");
 const FORMAT = arg("format", "wide");          // wide (1920×1080) or tall (1080×1920)
 const W = FORMAT === "tall" ? 1080 : 1920;

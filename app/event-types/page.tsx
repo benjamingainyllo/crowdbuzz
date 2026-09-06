@@ -17,7 +17,7 @@ const FREE_BELOW_LABEL = formatKobo(PLATFORM_FEE_FREE_BELOW_KOBO);
 export const metadata: Metadata = {
   title: "Every kind of event",
   description:
-    "Concerts, club nights, festivals, conferences, workshops, church programmes, weddings. If people come through a door, Paylance sells the ticket — 4% of it, and never more than ₦3,000.",
+    "Concerts, club nights, festivals, conferences, workshops, church programmes, weddings. If people come through a door, Doorlane sells the ticket — 4% of it, and never more than ₦3,000.",
 };
 
 export default function EventTypesPage() {

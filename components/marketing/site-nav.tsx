@@ -32,7 +32,7 @@ export function SiteNav() {
           <span className="flex h-8 w-8 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[13px] font-black text-white">
             P
           </span>
-          <span className="text-[17px] font-extrabold tracking-tight">Paylance</span>
+          <span className="text-[17px] font-extrabold tracking-tight">Doorlane</span>
         </Link>
 
         <div className="hidden items-center gap-7 md:flex">

@@ -10,7 +10,7 @@ import { EventCheckoutPage } from "./event-page";
  * This page used to be a client component all the way down, which meant it
  * could not export metadata at all — so every event link pasted into a
  * WhatsApp group, an Instagram bio or a group chat showed the generic
- * Paylance homepage card instead of the event.
+ * Doorlane homepage card instead of the event.
  *
  * That matters more here than almost anywhere else in the product. The whole
  * distribution model is "share one link", and /features promises in writing

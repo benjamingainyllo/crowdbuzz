@@ -1,4 +1,4 @@
-# Working on Paylance
+# Working on Doorlane
 
 ## Who you are talking to
 
@@ -54,7 +54,14 @@ saves sending him hunting through menus.
 
 ## What this product is
 
-Paylance is an **event ticketing platform**, Nigeria-first.
+Doorlane is an **event ticketing platform**, Nigeria-first but not
+Nigeria-only — the naming, the copy and the city handling are all built to
+travel. It was called Paylance until 6 September 2026; that name is
+retired, its .com was never ours, and nothing new should carry it. The
+handle `/paylance` stays reserved so nobody can claim it.
+
+Domains: `doorlane.com` is owned by somebody else. The ones to buy and use
+are `doorlane.io`, `doorlane.co` and `doorlane.ng`.
 
 - **4% of a ticket, and never more than ₦3,000.** Under ₦2,000 a ticket, and
   on free events, we charge nothing. The cap is the pitch — past ₦75,000 a
@@ -68,7 +75,7 @@ Paylance is an **event ticketing platform**, Nigeria-first.
   understated us by about half — check a live checkout before changing it.
 - **No custody, ever.** Payments split at transaction time and the organiser's
   share settles directly to their own bank. There is no wallet, no balance and
-  no withdrawal anywhere in the product, by design. Anything implying Paylance
+  no withdrawal anywhere in the product, by design. Anything implying Doorlane
   holds creator funds is out of scope.
 - Money is always **integer kobo**, and every conversion goes through
   `lib/money.ts`. Never naira, never a float.

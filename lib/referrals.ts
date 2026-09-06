@@ -17,6 +17,7 @@ import { normaliseReferralCode } from "@/lib/referral-code";
  */
 
 export {
+  LEGACY_REFERRAL_COOKIE,
   REFERRAL_COOKIE,
   REFERRAL_COOKIE_MAX_AGE,
   normaliseReferralCode,

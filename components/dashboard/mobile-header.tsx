@@ -15,7 +15,7 @@ export function MobileHeader() {
           <span className="flex h-8 w-8 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-acid)] text-[13px] font-black text-[var(--dl-ink)]">
             P
           </span>
-          <span className="text-[17px] font-extrabold tracking-tight">Paylance</span>
+          <span className="text-[17px] font-extrabold tracking-tight">Doorlane</span>
         </Link>
 
         <button

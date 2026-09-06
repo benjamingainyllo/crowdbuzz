@@ -68,7 +68,7 @@ export function buildEventMetadata(event: PreviewEvent, origin: string): Metadat
       description,
       url,
       type: "website",
-      siteName: "Paylance",
+      siteName: "Doorlane",
       images: image ? [{ url: image }] : undefined,
     },
     twitter: {

@@ -97,7 +97,7 @@ export default function StorefrontPage() {
      read as verification; and a footer reading "Built with Creator OS" —
      the name of the product this was before, on a page buyers see.
 
-     Tip Creator was the worst of them. Paylance never holds anybody's
+     Tip Creator was the worst of them. Doorlane never holds anybody's
      money — that is the whole legal shape of the business — and a tip
      button says the opposite on the most public page there is.
      ─────────────────────────────────────────────────────────────── */
@@ -127,7 +127,7 @@ export default function StorefrontPage() {
           href="/"
           className="mt-3 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-6 py-3 text-[14px] font-extrabold text-[var(--dl-paper)]"
         >
-          Go to Paylance
+          Go to Doorlane
         </a>
       </main>
     );
@@ -251,7 +251,7 @@ export default function StorefrontPage() {
         )}
 
         <p className="mt-14 text-center text-[12px] font-bold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]">
-          Tickets by Paylance
+          Tickets by Doorlane
         </p>
       </div>
     </main>

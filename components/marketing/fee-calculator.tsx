@@ -179,7 +179,7 @@ export function FeeCalculator() {
               {isFree && unitPriceKobo > 0 ? (
                 <>
                   Tickets under {formatKobo(FREE_BELOW_KOBO)} are free to sell on
-                  Paylance. Not discounted &mdash; free. You&rsquo;d pay{" "}
+                  Doorlane. Not discounted &mdash; free. You&rsquo;d pay{" "}
                   <strong className="font-bold text-[var(--on-ground)]">
                     nothing at all
                   </strong>{" "}
@@ -187,7 +187,7 @@ export function FeeCalculator() {
                 </>
               ) : unitPriceKobo === 0 ? (
                 <>
-                  A free event costs nothing on Paylance. It also costs nothing
+                  A free event costs nothing on Doorlane. It also costs nothing
                   on most platforms &mdash; so there&rsquo;s no saving to claim
                   here, and we won&rsquo;t invent one. Put in a paid ticket
                   price to see the difference.
@@ -209,7 +209,7 @@ export function FeeCalculator() {
         <dl className="mt-8 border-t border-[var(--hairline)] pt-6 text-[15px] [font-variant-numeric:tabular-nums]">
           <div className="flex items-baseline justify-between gap-4 py-2">
             <dt className="text-[var(--on-ground-soft)]">
-              Paylance
+              Doorlane
               <span className="ml-2 text-[13px] text-[var(--on-ground-faint)]">
                 {formatKobo(Math.round(ours / quantity))} a ticket
               </span>

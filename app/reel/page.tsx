@@ -10,7 +10,7 @@ import { Reel } from "@/components/reel/reel";
  * `npm run reel` starts a dev server, films this and writes the mp4.
  */
 export const metadata = {
-  title: "Paylance — launch reel",
+  title: "Doorlane — launch reel",
   robots: { index: false, follow: false },
 };
 

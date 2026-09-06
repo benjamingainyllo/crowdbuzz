@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
-import { REFERRAL_COOKIE, recordReferral } from "@/lib/referrals";
+import { LEGACY_REFERRAL_COOKIE, REFERRAL_COOKIE, recordReferral } from "@/lib/referrals";
 import type { EmailOtpType } from "@supabase/supabase-js";
 
 /**
@@ -33,7 +33,7 @@ import type { EmailOtpType } from "@supabase/supabase-js";
  *
  * `next` says where to land afterwards. It is deliberately restricted to a
  * path on this site: an open redirect here would let somebody send a
- * convincing paylance link that ends up somewhere else entirely.
+ * convincing doorlane link that ends up somewhere else entirely.
  */
 
 /**
@@ -79,7 +79,14 @@ function safeNext(raw: string | null): string {
 async function attributeReferral(response: NextResponse) {
   try {
     const store = await cookies();
-    const code = store.get(REFERRAL_COOKIE)?.value ?? null;
+    // The cookie was renamed with the company. Anyone who clicked a
+    // referral link before that and is only now signing up still holds
+    // the old one, and dropping them would silently rob the friend who
+    // invited them.
+    const code =
+      store.get(REFERRAL_COOKIE)?.value ??
+      store.get(LEGACY_REFERRAL_COOKIE)?.value ??
+      null;
     if (!code) return;
 
     const supabase = createClient();
@@ -92,6 +99,7 @@ async function attributeReferral(response: NextResponse) {
     console.error("Referral attribution failed", error);
   } finally {
     response.cookies.delete(REFERRAL_COOKIE);
+    response.cookies.delete(LEGACY_REFERRAL_COOKIE);
   }
 }
 

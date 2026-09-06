@@ -11,7 +11,7 @@ import { Plus, X } from "lucide-react";
  * rights is a real security decision, and it should be made on purpose
  * rather than inherited from a text field.
  *
- * The handle is optional and links to their Paylance page when they have
+ * The handle is optional and links to their Doorlane page when they have
  * one, which is the bit that makes cohosting worth anything for reach.
  */
 

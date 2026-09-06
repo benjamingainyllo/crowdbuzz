@@ -1,5 +1,5 @@
 -- ============================================================
--- Paylance — complete database setup
+-- Doorlane — complete database setup
 --
 -- This is the ONLY SQL file you need. Run the whole thing in the
 -- Supabase SQL Editor.
@@ -354,7 +354,7 @@ CREATE POLICY "Users can manage their own audience" ON public.audience
 -- ============================================================
 -- PART 4 — Getting paid
 --
--- Paylance NEVER holds creator money. The payment provider splits
+-- Doorlane NEVER holds creator money. The payment provider splits
 -- each payment as it happens and sends the creator's share straight
 -- to their own bank. That is why there is no wallet, no balance and
 -- no withdrawals anywhere in this schema.
@@ -383,7 +383,7 @@ CREATE TABLE IF NOT EXISTS public.payout_accounts (
   --   flat       -> kobo PER TICKET
   --   banded     -> kobo PER TICKET, chosen by the ticket's own price
   --
-  -- Paylance takes 4% of a ticket and never more than N3,000, with
+  -- Doorlane takes 4% of a ticket and never more than N3,000, with
   -- anything under N2,000 free. For 'capped', platform_fee_value is the
   -- rate in basis points (400 = 4.00%); the cap and the free floor live
   -- in lib/money.ts so there is one place to change them.
@@ -1092,14 +1092,14 @@ ON CONFLICT (id) DO NOTHING;
 
 DROP POLICY IF EXISTS "Public Access" ON storage.objects;
 DROP POLICY IF EXISTS "Public Access to Event Covers" ON storage.objects;
-DROP POLICY IF EXISTS "Paylance public read" ON storage.objects;
-CREATE POLICY "Paylance public read" ON storage.objects
+DROP POLICY IF EXISTS "Doorlane public read" ON storage.objects;
+CREATE POLICY "Doorlane public read" ON storage.objects
   FOR SELECT USING (bucket_id IN ('avatars', 'event_covers', 'offer_covers'));
 
 DROP POLICY IF EXISTS "Users can upload their own avatars" ON storage.objects;
 DROP POLICY IF EXISTS "Users can upload event covers" ON storage.objects;
-DROP POLICY IF EXISTS "Paylance authenticated upload" ON storage.objects;
-CREATE POLICY "Paylance authenticated upload" ON storage.objects
+DROP POLICY IF EXISTS "Doorlane authenticated upload" ON storage.objects;
+CREATE POLICY "Doorlane authenticated upload" ON storage.objects
   FOR INSERT WITH CHECK (
     bucket_id IN ('avatars', 'event_covers', 'offer_covers')
     AND auth.role() = 'authenticated'
@@ -1107,8 +1107,8 @@ CREATE POLICY "Paylance authenticated upload" ON storage.objects
 
 DROP POLICY IF EXISTS "Users can update their own avatars" ON storage.objects;
 DROP POLICY IF EXISTS "Users can update event covers" ON storage.objects;
-DROP POLICY IF EXISTS "Paylance authenticated update" ON storage.objects;
-CREATE POLICY "Paylance authenticated update" ON storage.objects
+DROP POLICY IF EXISTS "Doorlane authenticated update" ON storage.objects;
+CREATE POLICY "Doorlane authenticated update" ON storage.objects
   FOR UPDATE USING (
     bucket_id IN ('avatars', 'event_covers', 'offer_covers')
     AND auth.role() = 'authenticated'
@@ -1334,7 +1334,7 @@ CREATE TABLE IF NOT EXISTS public.event_cohosts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   event_id UUID NOT NULL REFERENCES public.events(id) ON DELETE CASCADE,
   name TEXT NOT NULL CHECK (length(trim(name)) BETWEEN 1 AND 60),
-  -- Optional link to a Paylance handle, so a cohost who is also an
+  -- Optional link to a Doorlane handle, so a cohost who is also an
   -- organiser gets their page linked from the flyer.
   handle TEXT,
   avatar_url TEXT,
@@ -1829,7 +1829,7 @@ CREATE POLICY "Admins read settings" ON public.platform_settings
 -- ============================================================
 -- The discovery page needs a real signal for "people want this", and the
 -- only honest one is people actually saying so. Buying a ticket on
--- Paylance needs no account, so saving one must not either — asking a
+-- Doorlane needs no account, so saving one must not either — asking a
 -- stranger to sign up before they can tap a star is how a discovery page
 -- gets no signal at all.
 --

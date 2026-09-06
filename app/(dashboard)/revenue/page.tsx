@@ -176,7 +176,7 @@ export default function RevenuePage() {
   const exportCsv = () => {
     if (filtered.length === 0) return;
     const rows = [
-      ["Reference", "Buyer", "Email", "Item", "Quantity", "Gross (NGN)", "Paylance fee (NGN)", "Card fee (NGN)", "Settled (NGN)", "Status", "Paid at"],
+      ["Reference", "Buyer", "Email", "Item", "Quantity", "Gross (NGN)", "Doorlane fee (NGN)", "Card fee (NGN)", "Settled (NGN)", "Status", "Paid at"],
       ...filtered.map((o) => [
         o.reference,
         o.buyer_name ?? "",
@@ -197,7 +197,7 @@ export default function RevenuePage() {
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
     const link = document.createElement("a");
     link.href = url;
-    link.download = `paylance-sales-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.download = `doorlane-sales-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -321,7 +321,7 @@ export default function RevenuePage() {
           <div className="p-5">
             <dl className="max-w-md space-y-3 text-[14px]">
               <Row label="Ticket sales" value={formatKobo(lifetime.gross)} />
-              <Row label="Paylance fee" value={`−${formatKobo(lifetime.platform)}`} />
+              <Row label="Doorlane fee" value={`−${formatKobo(lifetime.platform)}`} />
               <Row label="Card processing" value={`−${formatKobo(lifetime.provider)}`} />
               <div className="border-t-2 border-[var(--dl-line)] pt-3">
                 <Row
@@ -337,7 +337,7 @@ export default function RevenuePage() {
                 {lifetime.gross > 0 ? ((lifetime.net / lifetime.gross) * 100).toFixed(1) : "0"}%
               </strong>{" "}
               of what buyers pay. It settles straight to your own bank account —
-              Paylance never holds it.
+              Doorlane never holds it.
             </p>
           </div>
         ) : (

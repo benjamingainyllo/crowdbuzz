@@ -152,7 +152,7 @@ export async function loadExplore(now = new Date()): Promise<{
         (p.box_office_name as string) ||
         (p.first_name as string) ||
         (p.handle as string) ||
-        "A Paylance organiser",
+        "A Doorlane organiser",
       handle: (p.handle as string) ?? null,
     });
   }
@@ -170,7 +170,7 @@ export async function loadExplore(now = new Date()): Promise<{
       time: (e.time as string) ?? null,
       location: (e.location as string) ?? null,
       cover: (e.cover_image_url as string) ?? null,
-      hostName: host?.name ?? "A Paylance organiser",
+      hostName: host?.name ?? "A Doorlane organiser",
       hostHandle: host?.handle ?? null,
       fromKobo: cheapest.get(e.id as string) ?? null,
       going: sold.get(e.id as string) ?? 0,

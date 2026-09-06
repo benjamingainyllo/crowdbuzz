@@ -8,7 +8,7 @@ import { getReferralSummary, type ReferralSummary } from "@/lib/referrals";
 /**
  * Spending a referral credit.
  *
- * A credit is one free event: Paylance takes no fee on any ticket sold
+ * A credit is one free event: Doorlane takes no fee on any ticket sold
  * for it. Two facts have to move together — the credit is marked spent,
  * and the event is marked fee_waived, which is what checkout reads. This
  * file is the only thing allowed to write either of them, so they cannot

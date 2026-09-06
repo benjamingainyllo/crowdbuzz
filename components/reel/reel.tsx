@@ -135,7 +135,7 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
             P
           </span>
           <h1 className="mt-10 text-[110px] font-extrabold leading-none tracking-[-0.045em]">
-            Paylance
+            Doorlane
           </h1>
           <p
             className="mt-6 text-[34px] text-[var(--on-ground-soft)]"
@@ -206,7 +206,7 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
               className="mt-8 max-w-[560px] text-[25px] leading-relaxed text-[var(--on-ground-soft)]"
               style={{ opacity: easeOut(prog(sc("link").t, 900, 700)) }}
             >
-              It lands on Explore too — every event on Paylance, city by
+              It lands on Explore too — every event on Doorlane, city by
               city, with who is putting it on.
             </p>
           </div>

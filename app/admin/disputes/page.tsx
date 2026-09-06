@@ -36,7 +36,7 @@ export default async function AdminDisputesPage({
         <p className="text-[14px] leading-relaxed">
           <strong>Sixteen hours to answer each one.</strong> Miss it and it&apos;s decided
           against us by default — the full ticket price plus an arbitration fee, out of
-          Paylance, not the organiser. The strongest evidence is a scanned ticket: it
+          Doorlane, not the organiser. The strongest evidence is a scanned ticket: it
           proves the buyer walked in.
         </p>
       </div>

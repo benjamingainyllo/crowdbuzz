@@ -1,7 +1,7 @@
 /**
  * The seven faces an event title can wear.
  *
- * WHY THIS EXISTS. Every event on Paylance has the same fields, so without
+ * WHY THIS EXISTS. Every event on Doorlane has the same fields, so without
  * something like this every flyer looks like the same flyer. The title is
  * where an organiser's taste actually shows, and letting them set it costs
  * us one column and no money.

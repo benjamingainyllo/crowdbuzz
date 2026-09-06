@@ -115,7 +115,7 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
             collapsed ? "hidden" : ""
           }`}
         >
-          Paylance <span className="text-[var(--dl-ink-faint)]">owner</span>
+          Doorlane <span className="text-[var(--dl-ink-faint)]">owner</span>
         </Link>
         <button
           onClick={() => setCollapsed(!collapsed)}
@@ -203,7 +203,7 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
     <>
       <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b-2 border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 lg:hidden">
         <Link href="/admin" className="flex h-11 items-center text-[16px] font-extrabold tracking-[-0.03em]">
-          Paylance <span className="ml-1 text-[var(--dl-ink-faint)]">owner</span>
+          Doorlane <span className="ml-1 text-[var(--dl-ink-faint)]">owner</span>
         </Link>
         <button
           onClick={() => setOpen(true)}

@@ -17,7 +17,7 @@ const CATEGORIES = [
 ];
 
 export default function SettingsPage() {
-  // The real host this deployment is served from. paylance.me was hardcoded
+  // The real host this deployment is served from. A brand domain was hardcoded
   // here and does not exist — an organiser copying that link got nowhere.
   const publicHost = useHost();
 

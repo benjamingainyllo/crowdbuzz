@@ -61,7 +61,7 @@ function siteOrigin() {
 /**
  * Starts a checkout.
  *
- * Paylance never receives the buyer's money. For paid items the provider
+ * Doorlane never receives the buyer's money. For paid items the provider
  * splits at transaction time using the creator's subaccount, so the
  * creator's share settles to their own bank and we only ever receive the
  * platform fee. A paid checkout without an active payout account is
@@ -281,7 +281,7 @@ export async function createCheckoutSession(payload: CheckoutPayload): Promise<C
       !payoutAccount.provider_subaccount_id
     ) {
       // Deliberately not falling back to a non-split charge: that would put
-      // the money in Paylance's account, which we must never do.
+      // the money in Doorlane's account, which we must never do.
       await releaseProducts(productsTaken);
       await releaseReservation(reservation);
       return {
@@ -293,7 +293,7 @@ export async function createCheckoutSession(payload: CheckoutPayload): Promise<C
     // Priced per ticket, not per order — a flat fee has to see the quantity.
     //
     // An event carrying a referral credit is free to sell: fee_waived means
-    // the organiser spent their "next event free" on this one, so Paylance
+    // the organiser spent their "next event free" on this one, so Doorlane
     // takes nothing on every ticket of it. Read straight off the event row
     // rather than joined from referral_credits, because this is the hot
     // path of every purchase and it must not depend on another table.
@@ -312,7 +312,7 @@ export async function createCheckoutSession(payload: CheckoutPayload): Promise<C
 
     // WHO PAYS WHAT.
     //
-    //   Paylance's fee  -> the organiser, out of what they set
+    //   Doorlane's fee  -> the organiser, out of what they set
     //   the bank's fee  -> the buyer, added to what they are charged
     //
     // So the amount that has to survive processing is the ticket price,
@@ -342,7 +342,7 @@ export async function createCheckoutSession(payload: CheckoutPayload): Promise<C
         // Our estimate, and the one the split was actually built on — so
         // it is what the organiser's settlement is calculated from, not
         // whatever the webhook reports later. Any difference between the
-        // two is Paylance's to absorb, by design.
+        // two is Doorlane's to absorb, by design.
         provider_fee_kobo: processingKobo,
         net_kobo: chargeKobo - platformFeeKobo - processingKobo,
         status: "pending",

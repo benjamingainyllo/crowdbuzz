@@ -19,7 +19,10 @@ const RESERVED = new Set([
   "api", "auth", "admin", "static", "assets", "public", "_next",
   "webhook", "webhooks", "callback", "health",
   // Brand and support surfaces we may want later
-  "paylance", "support", "help", "docs", "blog", "pricing", "terms",
+  "doorlane", "support", "help", "docs", "blog", "pricing", "terms",
+  // The name this product launched under. Kept reserved so nobody can
+  // register /paylance and inherit whatever old links point at it.
+  "paylance",
   "privacy", "legal", "contact", "about", "status", "app", "www",
 ]);
 

@@ -6,7 +6,7 @@ import { LEGAL } from "@/lib/legal";
 export const metadata: Metadata = {
   title: "Terms of service",
   description:
-    "The agreement between Paylance and the people who sell and buy tickets through it.",
+    "The agreement between Doorlane and the people who sell and buy tickets through it.",
 };
 
 export default function TermsPage() {
@@ -31,7 +31,7 @@ export default function TermsPage() {
         </P>
       </Clause>
 
-      <Clause n="2." title="What Paylance is, and what it is not">
+      <Clause n="2." title="What Doorlane is, and what it is not">
         <P>
           {LEGAL.product} is software that lets an organiser sell tickets and
           check people in at the door. That is the whole of what we provide.

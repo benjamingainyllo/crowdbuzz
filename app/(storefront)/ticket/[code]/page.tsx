@@ -26,7 +26,7 @@ export default async function TicketPage({ params }: { params: { code: string } 
             dashes and all.
           </p>
           <Link href="/" className="mt-6 inline-block text-[14px] font-extrabold underline underline-offset-2">
-            Go to Paylance
+            Go to Doorlane
           </Link>
         </div>
       </main>

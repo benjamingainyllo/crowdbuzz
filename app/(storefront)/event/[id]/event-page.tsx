@@ -229,7 +229,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
     <div className="dl min-h-screen font-[family-name:var(--font-bricolage-grotesque)]">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-16">
         <a href="/" className="mb-10 inline-block text-[17px] font-extrabold tracking-[-0.03em]">
-          Paylance
+          Doorlane
         </a>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-16">

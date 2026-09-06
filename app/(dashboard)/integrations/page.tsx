@@ -51,7 +51,7 @@ export default function IntegrationsPage() {
     <section className="space-y-6">
       <div>
         <h1 className="text-[32px] font-extrabold leading-[1] tracking-[-0.04em] sm:text-[40px]">Integrations</h1>
-        <p className="mt-3 text-[15px] text-[var(--dl-ink-soft)]">What Paylance is connected to.</p>
+        <p className="mt-3 text-[15px] text-[var(--dl-ink-soft)]">What Doorlane is connected to.</p>
       </div>
 
       <div className="space-y-3">

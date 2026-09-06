@@ -125,7 +125,7 @@ export default function ReferPage() {
         </h1>
         <p className="mt-3 max-w-[62ch] text-[15px] leading-relaxed text-[var(--dl-ink-soft)]">
           Send your link to someone who runs events. When they sell their
-          first ticket, you each get one event with no Paylance fee on it at
+          first ticket, you each get one event with no Doorlane fee on it at
           all &mdash; however many tickets it sells.
         </p>
       </div>
