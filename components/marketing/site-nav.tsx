@@ -30,7 +30,7 @@ export function SiteNav() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-10 lg:px-16">
         <Link href="/" className="flex h-11 items-center gap-2">
           <span className="flex h-8 w-8 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[13px] font-black text-white">
-            P
+            D
           </span>
           <span className="text-[17px] font-extrabold tracking-tight">Doorlane</span>
         </Link>

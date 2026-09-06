@@ -263,7 +263,7 @@ export function AuthScreen() {
       <div className="w-full max-w-[420px]">
         <Link href="/" className="mb-9 flex h-11 items-center justify-center gap-2">
           <span className="flex h-8 w-8 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[13px] font-black text-white">
-            P
+            D
           </span>
           <span className="text-[17px] font-extrabold tracking-tight">Doorlane</span>
         </Link>

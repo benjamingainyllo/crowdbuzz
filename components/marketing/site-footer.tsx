@@ -23,7 +23,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-12 lg:flex-row lg:justify-between lg:gap-16">
           <Link href="/" className="flex h-11 shrink-0 items-center gap-2.5 self-start">
             <span className="flex h-9 w-9 rotate-[-4deg] items-center justify-center rounded-lg border-2 border-[var(--ink)] bg-[var(--coral)] text-[14px] font-black text-white">
-              P
+              D
             </span>
             <span className="text-[21px] font-extrabold tracking-tight">Doorlane</span>
           </Link>

@@ -132,7 +132,7 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
               transform: `rotate(-4deg) scale(${lerp(0.7, 1, easeOut(prog(sc("title").t, 0, 800)))})`,
             }}
           >
-            P
+            D
           </span>
           <h1 className="mt-10 text-[110px] font-extrabold leading-none tracking-[-0.045em]">
             Doorlane
@@ -333,7 +333,7 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
       <Stage tall={tall} s={sc("close")}>
         <div className="flex flex-col items-center text-center">
           <span className="flex h-[84px] w-[84px] rotate-[-4deg] items-center justify-center rounded-3xl border-[5px] border-[var(--ink)] bg-[var(--coral)] text-[42px] font-black text-white">
-            P
+            D
           </span>
           <h2 className="mt-9 text-[86px] font-extrabold leading-none tracking-[-0.04em]">
             {RATE} a ticket.
