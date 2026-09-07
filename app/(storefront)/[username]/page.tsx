@@ -101,11 +101,11 @@ export default function StorefrontPage() {
      money — that is the whole legal shape of the business — and a tip
      button says the opposite on the most public page there is.
      ─────────────────────────────────────────────────────────────── */
-  const panel = "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)]";
 
   if (loading) {
     return (
-      <main className="dl flex min-h-screen items-center justify-center">
+      <main className="sf flex min-h-screen items-center justify-center">
         <Loader2 className="h-7 w-7 animate-spin text-[var(--dl-ink-faint)]" />
       </main>
     );
@@ -113,7 +113,7 @@ export default function StorefrontPage() {
 
   if (notFound) {
     return (
-      <main className="dl flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center font-[family-name:var(--font-bricolage-grotesque)]">
+      <main className="sf flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center font-[family-name:var(--font-bricolage-grotesque)]">
         <span className={`${panel} flex h-16 w-16 items-center justify-center`}>
           <User className="h-7 w-7" strokeWidth={2} />
         </span>
@@ -125,7 +125,7 @@ export default function StorefrontPage() {
         </p>
         <a
           href="/"
-          className="mt-3 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-6 py-3 text-[14px] font-extrabold text-[var(--dl-paper)]"
+          className="mt-3 rounded-xl border border-[var(--dl-line)] bg-[var(--dl-ink)] px-6 py-3 text-[14px] font-extrabold text-[var(--dl-paper)]"
         >
           Go to Doorlane
         </a>
@@ -137,12 +137,12 @@ export default function StorefrontPage() {
     [creator?.first_name, creator?.last_name].filter(Boolean).join(" ") || "Box office";
 
   return (
-    <main className="dl min-h-screen font-[family-name:var(--font-bricolage-grotesque)]">
+    <main className="sf min-h-screen font-[family-name:var(--font-bricolage-grotesque)]">
       <div className="mx-auto max-w-3xl px-5 py-10 sm:px-8 lg:py-14">
         {isOwner && (
           <a
             href="/overview"
-            className="mb-10 inline-block rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em]"
+            className="mb-10 inline-block rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em]"
           >
             Back to your dashboard
           </a>
@@ -197,7 +197,7 @@ export default function StorefrontPage() {
                 key={event.id}
                 href={`/event/${event.id}`}
                 className={`flex items-center gap-4 p-4 transition-colors hover:bg-[var(--dl-paper)] ${
-                  i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""
+                  i !== 0 ? "border-t border-[var(--dl-line)]" : ""
                 }`}
               >
                 {event.cover_image_url ? (
@@ -205,10 +205,10 @@ export default function StorefrontPage() {
                   <img
                     src={event.cover_image_url}
                     alt=""
-                    className="h-16 w-16 shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] object-cover"
+                    className="h-16 w-16 shrink-0 rounded-xl border border-[var(--dl-line)] object-cover"
                   />
                 ) : (
-                  <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)]">
+                  <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-[var(--dl-line)]">
                     <Calendar className="h-6 w-6" strokeWidth={1.75} />
                   </span>
                 )}

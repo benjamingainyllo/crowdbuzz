@@ -67,7 +67,7 @@ export function InterestButton({
           onClick={press}
           disabled={pending}
           aria-pressed={shown.saved}
-          className={`flex h-11 items-center justify-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] px-5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px] disabled:opacity-70 ${
+          className={`flex h-11 items-center justify-center gap-2 rounded-xl border border-[var(--dl-line)] px-5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px] disabled:opacity-70 ${
             shown.saved
               ? "bg-[var(--dl-ink)] text-[var(--dl-paper)]"
               : "bg-transparent text-[var(--dl-ink)]"

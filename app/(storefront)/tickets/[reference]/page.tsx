@@ -21,7 +21,7 @@ export default async function OrderTicketsPage({
 
   if (!result) {
     return (
-      <main className="dl flex min-h-screen items-center justify-center px-6 font-[family-name:var(--font-bricolage-grotesque)]">
+      <main className="sf flex min-h-screen items-center justify-center px-6 font-[family-name:var(--font-bricolage-grotesque)]">
         <div className="w-full max-w-sm text-center">
           <TicketTwoTone className="mx-auto h-12 w-12 text-[var(--dl-ink-faint)]" />
           <h1 className="mt-4 text-[22px] font-extrabold tracking-[-0.025em]">We can&apos;t find that order</h1>
@@ -38,7 +38,7 @@ export default async function OrderTicketsPage({
 
   if (result.tickets.length === 0) {
     return (
-      <main className="dl flex min-h-screen items-center justify-center px-6 font-[family-name:var(--font-bricolage-grotesque)]">
+      <main className="sf flex min-h-screen items-center justify-center px-6 font-[family-name:var(--font-bricolage-grotesque)]">
         <div className="w-full max-w-sm text-center">
           <TicketTwoTone className="mx-auto h-12 w-12 text-[var(--dl-ink-faint)]" />
           <h1 className="mt-4 text-[22px] font-extrabold tracking-[-0.025em]">Nothing issued yet</h1>
@@ -59,7 +59,7 @@ export default async function OrderTicketsPage({
   );
 
   return (
-    <main className="dl min-h-screen px-4 py-10 font-[family-name:var(--font-bricolage-grotesque)]">
+    <main className="sf min-h-screen px-4 py-10 font-[family-name:var(--font-bricolage-grotesque)]">
       <div className="mx-auto w-full max-w-sm space-y-5">
         <header className="text-center">
           <h1 className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--dl-ink-faint)]">

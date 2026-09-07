@@ -26,7 +26,7 @@ export function TicketCard({ ticket, qrSvg }: { ticket: TicketView; qrSvg: strin
   const when = [ticket.event.date, ticket.event.time].filter(Boolean).join(" · ");
 
   return (
-    <div className="overflow-hidden rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+    <div className="overflow-hidden rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)]">
       <div className="border-b-2 border-dashed border-[var(--dl-line)] p-6 text-center">
         <p className="text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]">
           {ticket.ticketTypeName || "Admission"}
@@ -37,7 +37,7 @@ export function TicketCard({ ticket, qrSvg }: { ticket: TicketView; qrSvg: strin
           {/* White under the QR is not a theme choice — scanners need the
               contrast, and a tinted ground costs reads. */}
           <div
-            className={`rounded-[3px] bg-white p-3 [&>svg]:h-44 [&>svg]:w-44 ${
+            className={`rounded-xl bg-white p-3 [&>svg]:h-44 [&>svg]:w-44 ${
               used || dead ? "opacity-20" : ""
             }`}
             dangerouslySetInnerHTML={{ __html: qrSvg }}
@@ -46,7 +46,7 @@ export function TicketCard({ ticket, qrSvg }: { ticket: TicketView; qrSvg: strin
           {(used || dead) && (
             <div className="absolute inset-0 flex items-center justify-center">
               <span
-                className={`-rotate-12 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[13px] font-black uppercase tracking-[0.08em] text-white ${
+                className={`-rotate-12 rounded-xl border border-[var(--dl-line)] px-4 py-2 text-[13px] font-black uppercase tracking-[0.08em] text-white ${
                   used ? "bg-[var(--mint)]" : "bg-[var(--dl-danger)]"
                 }`}
               >
@@ -103,7 +103,7 @@ export function TicketCard({ ticket, qrSvg }: { ticket: TicketView; qrSvg: strin
           </span>
         </div>
 
-        <div className="flex items-center justify-between border-t-2 border-[var(--dl-line)] pt-3 text-[12.5px] font-bold">
+        <div className="flex items-center justify-between border-t border-[var(--dl-line)] pt-3 text-[12.5px] font-bold">
           <span>{ticket.holderName || "Guest"}</span>
           <span className="[font-variant-numeric:tabular-nums]">
             {ticket.priceKobo === 0 ? "Free" : formatKobo(ticket.priceKobo)}

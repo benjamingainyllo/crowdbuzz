@@ -13,7 +13,7 @@ export default function CheckoutSuccessPage() {
   return (
     <Suspense
       fallback={
-        <div className="dl flex min-h-screen items-center justify-center font-[family-name:var(--font-bricolage-grotesque)]">
+        <div className="sf flex min-h-screen items-center justify-center font-[family-name:var(--font-bricolage-grotesque)]">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
         </div>
       }
@@ -68,8 +68,8 @@ function CheckoutSuccessContent() {
   }, [reference]);
 
   return (
-    <div className="dl flex min-h-screen items-center justify-center px-4 font-[family-name:var(--font-bricolage-grotesque)]">
-      <div className="w-full max-w-md rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-8 text-center shadow-xl">
+    <div className="sf flex min-h-screen items-center justify-center px-4 font-[family-name:var(--font-bricolage-grotesque)]">
+      <div className="w-full max-w-md rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] p-8 text-center shadow-xl">
         {status === "loading" && (
           <>
             <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
@@ -93,7 +93,7 @@ function CheckoutSuccessContent() {
             {isEvent && reference && (
               <Link
                 href={`/tickets/${reference}`}
-                className="mt-6 block rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] py-3 text-[14px] font-extrabold text-[var(--dl-paper)]"
+                className="mt-6 block rounded-xl border border-[var(--dl-line)] bg-[var(--dl-ink)] py-3 text-[14px] font-extrabold text-[var(--dl-paper)]"
               >
                 Show my tickets
               </Link>

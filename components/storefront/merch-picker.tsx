@@ -73,7 +73,7 @@ export function MerchPicker({
         return (
           <div
             key={product.id}
-            className={`rounded-[3px] border p-3 transition-colors ${
+            className={`rounded-xl border p-3 transition-colors ${
               picked ? "border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]" : "border-[var(--dl-line)] bg-[var(--dl-panel)]"
             } ${product.soldOut ? "opacity-50" : ""}`}
           >
@@ -83,7 +83,7 @@ export function MerchPicker({
                 <img
                   src={product.imageUrl}
                   alt=""
-                  className="h-11 w-11 shrink-0 rounded-[3px] object-cover"
+                  className="h-11 w-11 shrink-0 rounded-xl object-cover"
                 />
               )}
 
@@ -104,7 +104,7 @@ export function MerchPicker({
                     <button
                       onClick={() => setQuantity(product, picked.quantity - 1)}
                       aria-label={`One fewer ${product.name}`}
-                      className="flex h-7 w-7 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] "
+                      className="flex h-7 w-7 items-center justify-center rounded-xl border border-[var(--dl-line)] "
                     >
                       <Minus className="h-3 w-3" />
                     </button>
@@ -115,7 +115,7 @@ export function MerchPicker({
                       disabled={picked.quantity >= ceiling}
                       onClick={() => setQuantity(product, picked.quantity + 1)}
                       aria-label={`One more ${product.name}`}
-                      className="flex h-7 w-7 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)]  disabled:opacity-40"
+                      className="flex h-7 w-7 items-center justify-center rounded-xl border border-[var(--dl-line)]  disabled:opacity-40"
                     >
                       <Plus className="h-3 w-3" />
                     </button>
@@ -123,7 +123,7 @@ export function MerchPicker({
                 ) : (
                   <button
                     onClick={() => add(product)}
-                    className="shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-1.5 text-xs font-bold"
+                    className="shrink-0 rounded-xl border border-[var(--dl-line)] px-3 py-1.5 text-xs font-bold"
                   >
                     Add
                   </button>
@@ -136,7 +136,7 @@ export function MerchPicker({
                   <button
                     key={option}
                     onClick={() => setVariant(product, option)}
-                    className={`rounded-[3px] border px-2.5 py-1 text-xs font-semibold transition-colors ${
+                    className={`rounded-xl border px-2.5 py-1 text-xs font-semibold transition-colors ${
                       picked.variant === option
                         ? "border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]"
                         : "border-[var(--dl-line)] text-[var(--dl-ink-soft)]"

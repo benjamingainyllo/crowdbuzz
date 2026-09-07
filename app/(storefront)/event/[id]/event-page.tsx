@@ -248,7 +248,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
         </a>
 
         {isPreview && (
-          <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-[3px] border-2 border-[var(--dl-line)] border-l-[6px] border-l-[var(--coral)] bg-[var(--dl-panel)] px-4 py-3">
+          <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-[var(--dl-line)] border-l-[6px] border-l-[var(--coral)] bg-[var(--dl-panel)] px-4 py-3">
             <span className="text-[13px] font-extrabold uppercase tracking-[0.1em] text-[var(--coral)]">Preview</span>
             <span className="text-[14px] font-semibold">
               A made-up event, so you can see the page. Nothing here is on sale.
@@ -300,10 +300,10 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                   <img
                     src={host.avatar_url}
                     alt=""
-                    className="h-10 w-10 rounded-[3px] border-2 border-[var(--dl-line)] object-cover"
+                    className="h-10 w-10 rounded-xl border border-[var(--dl-line)] object-cover"
                   />
                 ) : (
-                  <span className="flex h-10 w-10 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] text-[14px] font-extrabold">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] text-[14px] font-extrabold">
                     {hostName.charAt(0).toUpperCase()}
                   </span>
                 )}
@@ -345,14 +345,14 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                     <a
                       key={c.id}
                       href={`/${c.handle}`}
-                      className="rounded-full border-2 border-[var(--dl-line)] px-3 py-1 text-[13.5px] font-extrabold hover:-translate-y-[1px]"
+                      className="rounded-full border border-[var(--dl-line)] px-3 py-1 text-[13.5px] font-extrabold hover:-translate-y-[1px]"
                     >
                       {c.name}
                     </a>
                   ) : (
                     <span
                       key={c.id}
-                      className="rounded-full border-2 border-[var(--dl-line)] px-3 py-1 text-[13.5px] font-extrabold"
+                      className="rounded-full border border-[var(--dl-line)] px-3 py-1 text-[13.5px] font-extrabold"
                     >
                       {c.name}
                     </span>
@@ -443,7 +443,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                 {reference && (
                   <a
                     href={`/tickets/${reference}`}
-                    className="mt-4 block rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] py-3 text-[14px] font-extrabold text-[var(--dl-paper)]"
+                    className="mt-4 block rounded-xl border border-[var(--dl-line)] bg-[var(--dl-ink)] py-3 text-[14px] font-extrabold text-[var(--dl-paper)]"
                   >
                     {quantity > 1 ? `Open your ${quantity} tickets` : "Open your ticket"}
                   </a>
@@ -480,7 +480,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                               type="button"
                               disabled={!tier.available}
                               onClick={() => setSelectedTierId(tier.id)}
-                              className={`flex w-full items-center justify-between gap-3 rounded-[3px] border-2 p-4 text-left transition-colors ${
+                              className={`flex w-full items-center justify-between gap-3 rounded-xl border-2 p-4 text-left transition-colors ${
                                 selected
                                   ? "border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]"
                                   : "border-[var(--dl-line)] bg-[var(--dl-panel)]"
@@ -531,7 +531,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                             aria-label="One fewer"
                             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                             disabled={quantity <= 1}
-                            className="flex h-11 w-11 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] disabled:opacity-40"
+                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] disabled:opacity-40"
                           >
                             <Minus className="h-4 w-4" strokeWidth={2.5} />
                           </button>
@@ -543,7 +543,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                             aria-label="One more"
                             onClick={() => setQuantity((q) => Math.min(maxQuantity, q + 1))}
                             disabled={quantity >= maxQuantity}
-                            className="flex h-11 w-11 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] disabled:opacity-40"
+                            className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] disabled:opacity-40"
                           >
                             <Plus className="h-4 w-4" strokeWidth={2.5} />
                           </button>
@@ -646,7 +646,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                       </div>
                     )}
 
-                    <div className="flex justify-between border-t-2 border-[var(--dl-line)] pt-1.5 font-extrabold">
+                    <div className="flex justify-between border-t border-[var(--dl-line)] pt-1.5 font-extrabold">
                       <span>Total</span>
                       <span className="[font-variant-numeric:tabular-nums]">{formatKobo(totalKobo)}</span>
                     </div>
@@ -660,7 +660,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                 <button
                   onClick={handleCheckout}
                   disabled={isPending || nothingOnSale || isPreview}
-                  className="flex w-full items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--coral)] py-4 text-[16px] font-extrabold text-white transition-transform hover:-translate-y-[1px] disabled:opacity-60"
+                  className="flex w-full items-center justify-center rounded-xl border border-[var(--dl-line)] bg-[var(--coral)] py-4 text-[16px] font-extrabold text-white transition-transform hover:-translate-y-[1px] disabled:opacity-60"
                 >
                   {isPreview ? (
                     "Preview — nothing to buy"

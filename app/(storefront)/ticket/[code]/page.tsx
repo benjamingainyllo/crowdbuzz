@@ -17,7 +17,7 @@ export default async function TicketPage({ params }: { params: { code: string } 
 
   if (!ticket) {
     return (
-      <main className="dl flex min-h-screen items-center justify-center px-6 font-[family-name:var(--font-bricolage-grotesque)]">
+      <main className="sf flex min-h-screen items-center justify-center px-6 font-[family-name:var(--font-bricolage-grotesque)]">
         <div className="w-full max-w-sm text-center">
           <TicketTwoTone className="mx-auto h-12 w-12 text-[var(--dl-ink-faint)]" />
           <h1 className="mt-4 text-[22px] font-extrabold tracking-[-0.025em]">We can&apos;t find that ticket</h1>
@@ -36,14 +36,14 @@ export default async function TicketPage({ params }: { params: { code: string } 
   const qrSvg = await ticketQrSvg(ticket.code);
 
   return (
-    <main className="dl min-h-screen px-4 py-10 font-[family-name:var(--font-bricolage-grotesque)]">
+    <main className="sf min-h-screen px-4 py-10 font-[family-name:var(--font-bricolage-grotesque)]">
       <div className="mx-auto w-full max-w-sm space-y-4">
         <TicketCard ticket={ticket} qrSvg={qrSvg} />
 
         {ticket.totalOnOrder > 1 && (
           <Link
             href={`/tickets/${ticket.orderReference}`}
-            className="block rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] py-3 text-center text-[14px] font-extrabold"
+            className="block rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] py-3 text-center text-[14px] font-extrabold"
           >
             See all {ticket.totalOnOrder} tickets
           </Link>
