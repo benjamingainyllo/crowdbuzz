@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { siteUrl } from "@/lib/site";
 import { buildEventMetadata } from "@/lib/event-preview";
+import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
 import { EventCheckoutPage } from "./event-page";
 
 /**
@@ -70,6 +71,15 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata> {
+  // The showroom event is real enough to look at and must never be indexed.
+  if (params.id === SAMPLE_EVENT_ID) {
+    return {
+      title: "Preview — Doorlane",
+      description: "A sample event, for looking at the page with.",
+      robots: { index: false, follow: false },
+    };
+  }
+
   const event = await loadEventForPreview(params.id);
 
   if (!event) {

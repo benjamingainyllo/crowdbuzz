@@ -8,6 +8,7 @@ import { createCheckoutSession } from "@/app/actions/checkout";
 import { getInterest } from "@/app/actions/interest";
 import { Logo } from "@/components/brand/logo";
 import { Poster } from "@/components/storefront/poster";
+import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
 import { InterestButton } from "@/components/storefront/interest-button";
 import { getDeliveryChannels } from "@/app/actions/delivery";
 import { bandFeeKobo, formatKobo } from "@/lib/money";
@@ -121,6 +122,10 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
 
   const nothingOnSale = ticketTypes.length === 0 || !ticketTypes.some((t) => t.available);
 
+  // The showroom event exists to be looked at, not bought. Checkout would
+  // fail on it anyway — there is no such row — so it fails politely instead.
+  const isPreview = params.id === SAMPLE_EVENT_ID;
+
   // Clamp if the buyer picks a smaller tier after choosing a big quantity.
   useEffect(() => {
     setQuantity((current) => Math.min(current, maxQuantity));
@@ -233,6 +238,15 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
         <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="Doorlane">
           <Logo height={28} />
         </a>
+
+        {isPreview && (
+          <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-[3px] border-2 border-[var(--dl-line)] border-l-[6px] border-l-[var(--coral)] bg-[var(--dl-panel)] px-4 py-3">
+            <span className="text-[13px] font-extrabold uppercase tracking-[0.1em] text-[var(--coral)]">Preview</span>
+            <span className="text-[14px] font-semibold">
+              A made-up event, so you can see the page. Nothing here is on sale.
+            </span>
+          </div>
+        )}
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-16">
           {/* ── What it is ─────────────────────────────────── */}
@@ -607,10 +621,12 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
 
                 <button
                   onClick={handleCheckout}
-                  disabled={isPending || nothingOnSale}
+                  disabled={isPending || nothingOnSale || isPreview}
                   className="flex w-full items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--coral)] py-4 text-[16px] font-extrabold text-white transition-transform hover:-translate-y-[1px] disabled:opacity-60"
                 >
-                  {isPending ? (
+                  {isPreview ? (
+                    "Preview — nothing to buy"
+                  ) : isPending ? (
                     <>
                       <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Processing…
                     </>

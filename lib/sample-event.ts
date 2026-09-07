@@ -14,10 +14,9 @@ import type { PublicCohost, PublicProduct, PublicTicketType } from "@/app/action
  * `/event/demo` renders the real page, the real components and the real fee
  * arithmetic against this instead of Supabase.
  *
- * GUARDED TWICE. The id has to be this exact reserved word, and NODE_ENV must
- * not be production. Every real event id is a UUID, so "demo" can never
- * shadow one, and the check in getEventById means this file is never reached
- * from the live site.
+ * The id is a reserved word and every real event id is a UUID, so "demo" can
+ * never shadow a real event. See sampleAllowed below for why this is reachable
+ * on the live site as well.
  *
  * The numbers are chosen to exercise the awkward cases rather than the happy
  * one: a sold-out tier, an unlimited tier, a tier that has not opened yet, a
@@ -27,8 +26,22 @@ import type { PublicCohost, PublicProduct, PublicTicketType } from "@/app/action
 
 export const SAMPLE_EVENT_ID = "demo";
 
-export const sampleAllowed = () =>
-  process.env.NODE_ENV !== "production";
+/**
+ * Reachable on the live site too, deliberately.
+ *
+ * It started development-only, which was the cautious call and the wrong
+ * one: it meant the owner of this product could not look at his own
+ * storefront until somebody had published a real event, so a whole
+ * afternoon's work on the event page was invisible to him. A tool you can
+ * only use on a laptop with a checkout of the code is not a tool he has.
+ *
+ * The safety comes from the shape of it instead. The id is a reserved word,
+ * never a UUID, so it cannot shadow a real event. Nothing links to it —
+ * Explore reads the database and this is not in the database. The page is
+ * told not to be indexed, wears a banner saying what it is, and cannot take
+ * money. It is a showroom, not a listing.
+ */
+export const sampleAllowed = () => true;
 
 /** Far enough out that the countdown never reads "today" while developing. */
 function inDays(n: number): string {
