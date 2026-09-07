@@ -8,6 +8,31 @@
 -- create what's missing and skip what already exists. It will not
 -- duplicate tables, drop your data, or fail halfway because
 -- something was already there.
+--
+-- WHAT IS IN THIS FILE (so "is my copy current?" is answerable by
+-- looking, rather than by trusting a date on GitHub — GitHub labels a
+-- file with the last commit that CHANGED it, so this one reads as old
+-- whenever the week's work happened elsewhere in the repo):
+--
+--    1  Accounts and profiles
+--    2  The things a creator sells
+--    3  Buyers
+--    4  Getting paid          4B  Tickets
+--    5  Rules the database enforces itself
+--    6  Image storage
+--    7  Referrals
+--    8  Test sales, kept out of the real numbers
+--    9  Event personality: title styles, host name, cohosts
+--   10  Telling guests when something changes
+--   11  The admin system: roles, audit, admin-set state
+--   12  Refunds, disputes, and the attention queue
+--   13  Split payments
+--   14  Interest: saving an event without an account
+--
+-- Fifteen parts, ending at PART 14. If the copy you are holding ends
+-- somewhere earlier, it is out of date. Last verified end to end on
+-- 7 September 2026: three consecutive clean runs against an empty
+-- database, 26 tables and 36 policies, RLS on every one of them.
 -- ============================================================
 
 
