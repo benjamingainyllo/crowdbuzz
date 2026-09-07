@@ -355,3 +355,83 @@ body {
 * {
   box-sizing: border-box;
 }
+
+/* ============================================================
+   The storefront — an invitation, not a page in an app
+   ------------------------------------------------------------
+   The event page used to run in .dl, the Daylight world the
+   organiser's dashboard is built in. That was wrong twice over: a
+   pale lilac-blue wash is the most generic thing a page can be, and
+   a guest deciding whether to trust a stranger with money is not
+   using a tool, they are reading an invitation.
+
+   So the storefront gets its own scope. It reuses the SAME token
+   NAMES as .dl on purpose — --dl-panel, --dl-line, --dl-ink and the
+   rest — so pages move worlds by changing one class instead of
+   several hundred colour utilities.
+
+   Two of those names invert, and that is deliberate: on a dark
+   ground the strong foreground IS the light one. --dl-ink becomes
+   the paper colour and --dl-paper becomes the near-black, which
+   means the existing `bg-[--dl-ink] text-[--dl-paper]` selected
+   states come out light-on-dark without a single edit.
+
+   The event's own colour arrives separately, as a glow set inline
+   from the same pair its poster is painted in.
+   ============================================================ */
+.sf {
+  --background: 18 8 15;
+  --surface: 27 13 24;
+  --muted: 36 20 48;
+  --border: 51 42 47;
+  --text: 253 248 240;
+  --subtle: 141 132 130;
+
+  --dl-ink: #FDF8F0;          /* inverted: the strong colour on a dark ground */
+  --dl-paper: #12080F;        /* inverted: what sits ON the strong colour */
+  --dl-ink-soft: rgba(253, 248, 240, 0.74);
+  --dl-ink-faint: rgba(253, 248, 240, 0.48);
+
+  /* Panels stop being cards. A 5.5% lift reads as a surface without
+     drawing a box around everything, which is what made the old page
+     look like nine stacked receipts. */
+  --dl-panel: rgba(253, 248, 240, 0.055);
+  --dl-line: rgba(253, 248, 240, 0.15);
+  --dl-danger: #FF5470;
+
+  --coral: #FF6A45;
+  --marker: #FFDE59;
+  --mint: #9BE3C0;
+
+  background: #12080F;
+  color: #FDF8F0;
+  color-scheme: dark;
+}
+
+html:has(.sf),
+html:has(.sf) body { background: #12080F; }
+
+/* The event's colour, thrown up the page behind everything. Two stops
+   set inline per event; the shape is the same every time so the brand
+   stays recognisable while every event still looks like itself. */
+/* z-index 0 with the content lifted above it, NOT z-index -1: a negative
+   child paints underneath its own ancestor's background, so the glow was
+   being covered by .sf itself and the page came out flat black. */
+.sf-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(76% 52% at 10% -12%, var(--ev-from) 0%, transparent 68%),
+    radial-gradient(70% 48% at 96% 2%, var(--ev-to) 0%, transparent 70%);
+  opacity: 0.42;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sf-rise { animation: sf-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  @keyframes sf-rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+}

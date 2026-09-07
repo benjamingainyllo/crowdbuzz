@@ -31,7 +31,7 @@ function hash(seed: string): number {
  * muddy roughly a third of the time. These are hand-chosen out of the brand
  * palette and every one of them has been looked at.
  */
-const SCHEMES: { from: string; to: string; ink: string }[] = [
+const SCHEMES: Scheme[] = [
   { from: "#FF6A45", to: "#FFB3C7", ink: "#2A0E05" }, // coral into marker pink
   { from: "#241430", to: "#FF6A45", ink: "#FDF8F0" }, // plum into coral
   { from: "#9BE3C0", to: "#B7C4FF", ink: "#12241C" }, // mint into peri
@@ -41,6 +41,19 @@ const SCHEMES: { from: string; to: string; ink: string }[] = [
   { from: "#FFB3C7", to: "#FFDE59", ink: "#33121C" }, // pink into marker
   { from: "#DDBBF5", to: "#FF6A45", ink: "#2B0E33" }, // lilac into coral
 ];
+
+export interface Scheme { from: string; to: string; ink: string }
+
+/**
+ * The colours this event owns, wherever they are needed.
+ *
+ * The page tints itself with the same pair the poster is painted in, so an
+ * event is one world rather than a picture sitting on a generic page. That
+ * is the whole difference between a listing and an invitation.
+ */
+export function schemeFor(seed: string): Scheme {
+  return SCHEMES[hash(seed) % SCHEMES.length];
+}
 
 export interface PosterProps {
   /** What the art is seeded from. The event id, so it never drifts. */

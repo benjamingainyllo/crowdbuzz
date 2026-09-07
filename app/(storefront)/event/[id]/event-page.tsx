@@ -7,13 +7,13 @@ import { MerchPicker, type Basket } from "@/components/storefront/merch-picker";
 import { createCheckoutSession } from "@/app/actions/checkout";
 import { getInterest } from "@/app/actions/interest";
 import { Logo } from "@/components/brand/logo";
-import { Poster } from "@/components/storefront/poster";
+import { Poster, schemeFor } from "@/components/storefront/poster";
 import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
 import { InterestButton } from "@/components/storefront/interest-button";
 import { getDeliveryChannels } from "@/app/actions/delivery";
 import { bandFeeKobo, formatKobo } from "@/lib/money";
 import { formatE164, toE164 } from "@/lib/whatsapp/phone";
-import { Loader2, MapPin, Users, ExternalLink, CheckCircle2, Minus, Plus } from "lucide-react";
+import { Loader2, MapPin, ExternalLink, CheckCircle2, Minus, Plus } from "lucide-react";
 
 export function EventCheckoutPage({ params }: { params: { id: string } }) {
   const [event, setEvent] = useState<any>(null);
@@ -126,6 +126,10 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
   // fail on it anyway — there is no such row — so it fails politely instead.
   const isPreview = params.id === SAMPLE_EVENT_ID;
 
+  // The page wears the same two colours its poster is painted in.
+  const scheme = schemeFor(params.id);
+  const goingCount = Number(event?.attendees_count ?? 0);
+
   // Clamp if the buyer picks a smaller tier after choosing a big quantity.
   useEffect(() => {
     setQuantity((current) => Math.min(current, maxQuantity));
@@ -189,14 +193,14 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
      a buyer decides from. What it replaces was a 448px dark card with the
      title at 24px and the artwork squashed into a 176px strip on top.
      ─────────────────────────────────────────────────────────────── */
-  const panel = "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "rounded-2xl border border-[var(--dl-line)] bg-[var(--dl-panel)]";
   const label = "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
   const field =
-    "w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3 text-[15px] outline-none placeholder:text-[var(--dl-ink-faint)]";
+    "w-full rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5 text-[15.5px] outline-none transition-colors placeholder:text-[var(--dl-ink-faint)] focus:border-[var(--coral)]";
 
   if (loading) {
     return (
-      <div className="dl flex min-h-screen items-center justify-center">
+      <div className="sf flex min-h-screen items-center justify-center">
         <Loader2 className="h-7 w-7 animate-spin text-[var(--dl-ink-faint)]" />
       </div>
     );
@@ -204,7 +208,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
 
   if (!event) {
     return (
-      <div className="dl flex min-h-screen flex-col items-center justify-center gap-2 px-6 text-center font-[family-name:var(--font-bricolage-grotesque)]">
+      <div className="sf flex min-h-screen flex-col items-center justify-center gap-2 px-6 text-center font-[family-name:var(--font-bricolage-grotesque)]">
         <p className="text-[24px] font-extrabold tracking-[-0.03em]">Event not found</p>
         <p className="text-[15px] text-[var(--dl-ink-soft)]">
           This event may have been removed, or it isn&apos;t published yet.
@@ -233,8 +237,12 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
     null;
 
   return (
-    <div className="dl min-h-screen font-[family-name:var(--font-bricolage-grotesque)]">
-      <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-16">
+    <div
+      className="sf min-h-screen font-[family-name:var(--font-bricolage-grotesque)]"
+      style={{ "--ev-from": scheme.from, "--ev-to": scheme.to } as React.CSSProperties}
+    >
+      <div className="sf-glow" aria-hidden="true" />
+      <div className="relative z-10 mx-auto max-w-6xl px-5 py-8 sm:px-8 lg:py-16">
         <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="Doorlane">
           <Logo height={28} />
         </a>
@@ -254,6 +262,18 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
             {/* One element. The clamp carries the face's own scale at both
                 ends, so a script shrinks from its larger size rather than
                 from everyone else's. */}
+            <div
+              className={`${panel} sf-rise mb-7 aspect-[4/5] w-full overflow-hidden shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)] lg:hidden`}
+              style={{ containerType: "inline-size" }}
+            >
+              {event.cover_image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={event.cover_image_url} alt={event.title} className="h-full w-full object-cover" />
+              ) : (
+                <Poster seed={event.id} title={event.title} caption={formattedDate} />
+              )}
+            </div>
+
             <h1
               className="break-words"
               style={titleStyleCssClamp(event.title_style, 40, 56)}
@@ -364,18 +384,36 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               </p>
             )}
 
-            <div className="mt-8 flex items-center gap-2.5 border-t-2 border-[var(--dl-line)] pt-5">
-              <Users className="h-[18px] w-[18px] shrink-0" strokeWidth={2} />
-              <p className="text-[15px] font-bold">
-                {event.attendees_count || 0} going
+            {/* An invitation's job is to say other people are coming. This was
+                a grey 15px line with an icon; it is the second-loudest thing
+                on the page now, and it says something true when the number is
+                zero rather than printing a dispiriting "0". */}
+            <div className="mt-10 border-t border-[var(--dl-line)] pt-7">
+              <div className="flex items-baseline gap-3">
+                <span className="text-[44px] font-extrabold leading-none tracking-[-0.045em] sm:text-[54px]">
+                  {goingCount}
+                </span>
+                <span className="text-[17px] font-bold text-[var(--dl-ink-soft)]">
+                  {goingCount === 1 ? "person is going" : "people are going"}
+                </span>
+              </div>
+              <p className="mt-2.5 text-[14.5px] text-[var(--dl-ink-faint)]">
+                {goingCount === 0
+                  ? "Nobody yet. Somebody has to be first — it may as well be you."
+                  : interest && interest.count > 0
+                    ? `${interest.count} more ${interest.count === 1 ? "person has" : "people have"} saved it.`
+                    : "Tap the star above to keep it, and decide later."}
               </p>
             </div>
           </div>
 
-          {/* ── The flyer, and getting in ───────────────────── */}
+          {/* ── The flyer, and getting in ─────────────────────
+              order-first on a phone: a flyer arrives picture-first, and
+              scrolling past six lines of admin to reach the artwork is how
+              a listing behaves, not an invitation. */}
           <div className="lg:sticky lg:top-8 lg:self-start">
             <div
-              className={`${panel} aspect-[4/5] w-full overflow-hidden`}
+              className={`${panel} hidden aspect-[4/5] w-full overflow-hidden shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)] lg:block`}
               style={{ containerType: "inline-size" }}
             >
               {event.cover_image_url ? (
