@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { SAMPLE_EVENT_ID, sampleAllowed, sampleEvent } from "@/lib/sample-event";
 
 /** A ticket tier as the buyer sees it. Never carries sales figures. */
 export interface PublicTicketType {
@@ -46,6 +47,11 @@ export interface PublicCohost {
 }
 
 export async function getEventById(id: string) {
+  // Development only, and only for the one reserved id: renders the real
+  // storefront against an invented event so it can be looked at without a
+  // database. See lib/sample-event.ts — every real id is a UUID.
+  if (id === SAMPLE_EVENT_ID && sampleAllowed()) return sampleEvent();
+
   const supabase = createClient();
 
   const { data: event, error } = await supabase

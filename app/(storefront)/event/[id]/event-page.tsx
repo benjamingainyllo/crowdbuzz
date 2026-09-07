@@ -6,11 +6,13 @@ import { titleStyleCssClamp } from "@/lib/title-styles";
 import { MerchPicker, type Basket } from "@/components/storefront/merch-picker";
 import { createCheckoutSession } from "@/app/actions/checkout";
 import { getInterest } from "@/app/actions/interest";
+import { Logo } from "@/components/brand/logo";
+import { Poster } from "@/components/storefront/poster";
 import { InterestButton } from "@/components/storefront/interest-button";
 import { getDeliveryChannels } from "@/app/actions/delivery";
 import { bandFeeKobo, formatKobo } from "@/lib/money";
 import { formatE164, toE164 } from "@/lib/whatsapp/phone";
-import { Loader2, Calendar, MapPin, Users, ExternalLink, CheckCircle2, Minus, Plus } from "lucide-react";
+import { Loader2, MapPin, Users, ExternalLink, CheckCircle2, Minus, Plus } from "lucide-react";
 
 export function EventCheckoutPage({ params }: { params: { id: string } }) {
   const [event, setEvent] = useState<any>(null);
@@ -228,8 +230,8 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
   return (
     <div className="dl min-h-screen font-[family-name:var(--font-bricolage-grotesque)]">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-16">
-        <a href="/" className="mb-10 inline-block text-[17px] font-extrabold tracking-[-0.03em]">
-          Doorlane
+        <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="Doorlane">
+          <Logo height={28} />
         </a>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-16">
@@ -358,7 +360,10 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
 
           {/* ── The flyer, and getting in ───────────────────── */}
           <div className="lg:sticky lg:top-8 lg:self-start">
-            <div className={`${panel} aspect-[4/5] w-full overflow-hidden`}>
+            <div
+              className={`${panel} aspect-[4/5] w-full overflow-hidden`}
+              style={{ containerType: "inline-size" }}
+            >
               {event.cover_image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -367,9 +372,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center">
-                  <Calendar className="h-10 w-10 text-[var(--dl-ink-faint)]" />
-                </div>
+                <Poster seed={event.id} title={event.title} caption={formattedDate} />
               )}
             </div>
 
@@ -605,7 +608,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                 <button
                   onClick={handleCheckout}
                   disabled={isPending || nothingOnSale}
-                  className="flex w-full items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] py-4 text-[15px] font-extrabold text-[var(--dl-paper)] transition-transform hover:-translate-y-[1px] disabled:opacity-60"
+                  className="flex w-full items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--coral)] py-4 text-[16px] font-extrabold text-white transition-transform hover:-translate-y-[1px] disabled:opacity-60"
                 >
                   {isPending ? (
                     <>
