@@ -45,7 +45,7 @@ const FEATURED_TYPES = EVENT_TYPES.slice(0, 9);
  */
 const TICKET_PRICE = 20000;
 const TICKET_COUNT = 200;
-const DOORLANE_PER_TICKET = koboToNaira(
+const CROWDBUZZ_PER_TICKET = koboToNaira(
   calculatePlatformFeeKobo(
     nairaToKobo(TICKET_PRICE),
     DEFAULT_PLATFORM_FEE_TYPE,
@@ -62,9 +62,9 @@ const FREE_BELOW_LABEL = formatKobo(PLATFORM_FEE_FREE_BELOW_KOBO);
 const naira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
 
 export default function LandingPage() {
-  const doorlaneTotal = DOORLANE_PER_TICKET * TICKET_COUNT;
+  const crowdbuzzTotal = CROWDBUZZ_PER_TICKET * TICKET_COUNT;
   const typicalTotal = TYPICAL_PER_TICKET * TICKET_COUNT;
-  const difference = typicalTotal - doorlaneTotal;
+  const difference = typicalTotal - crowdbuzzTotal;
 
   return (
     <main className="lp min-h-screen overflow-x-hidden font-[family-name:var(--font-bricolage-grotesque)]">
@@ -177,18 +177,18 @@ export default function LandingPage() {
           <div className="mt-14 grid gap-5 sm:grid-cols-2">
             <div className="lp-block lp-tilt-1 rounded-2xl bg-[#9BE3C0] p-7">
               <p className="text-[11px] font-bold uppercase tracking-widest text-[#1B1512]/70">
-                Doorlane
+                CrowdBuzz
               </p>
               <p className="mt-2 text-[42px] font-extrabold leading-none tracking-tight text-[var(--ink)]">
-                {naira(doorlaneTotal)}
+                {naira(crowdbuzzTotal)}
               </p>
               <p className="mt-2 text-[13px] font-semibold text-[#1B1512]/70">
-                in fees · {naira(DOORLANE_PER_TICKET)} × {TICKET_COUNT} tickets
+                in fees · {naira(CROWDBUZZ_PER_TICKET)} × {TICKET_COUNT} tickets
               </p>
               <div className="mt-5 border-t-2 border-[#1B1512]/15 pt-4">
                 <p className="text-[12px] font-semibold text-[#1B1512]/70">You keep</p>
                 <p className="text-[24px] font-extrabold text-[var(--ink)]">
-                  {naira(TICKET_PRICE * TICKET_COUNT - doorlaneTotal)}
+                  {naira(TICKET_PRICE * TICKET_COUNT - crowdbuzzTotal)}
                 </p>
               </div>
             </div>

@@ -17,7 +17,7 @@ export class ResendEmailProvider implements EmailProvider {
   private get from(): string {
     // A verified sender is required in production. The Resend sandbox
     // sender lets a fresh install send to its own address without one.
-    return process.env.EMAIL_FROM || "Doorlane <onboarding@resend.dev>";
+    return process.env.EMAIL_FROM || "CrowdBuzz <onboarding@resend.dev>";
   }
 
   async send(message: EmailMessage): Promise<SendEmailResult> {

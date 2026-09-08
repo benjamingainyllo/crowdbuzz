@@ -1,10 +1,10 @@
-<title>Doorlane Setup Walkthrough</title>
+<title>CrowdBuzz Setup Walkthrough</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
 
 <style>
-  /* ── Light: Doorlane's own warm paper and ink ───────────────── */
+  /* ── Light: CrowdBuzz's own warm paper and ink ───────────────── */
   :root {
     --paper:      #FDF8F0;
     --card:       #FFFFFF;
@@ -508,8 +508,8 @@
 <div class="wrap">
 
   <header class="top">
-    <p class="eyebrow">Doorlane · Setup</p>
-    <h1>Getting Doorlane live</h1>
+    <p class="eyebrow">CrowdBuzz · Setup</p>
+    <h1>Getting CrowdBuzz live</h1>
     <p class="standfirst">
       Everything below happens in your web browser. There is no code to write and
       nothing to install. Work top to bottom and tick each step off as you go —
@@ -535,7 +535,7 @@
     <p class="part-label">Part one</p>
     <h2>Set up the database</h2>
     <p>
-      Supabase is where everything Doorlane knows will live — your events, your
+      Supabase is where everything CrowdBuzz knows will live — your events, your
       tickets, who bought what. Right now the app has nowhere to put any of it,
       which is why nothing works yet.
     </p>
@@ -571,7 +571,7 @@
       <h3>Create the project</h3>
       <ol>
         <li>Click <span class="ui">New project</span></li>
-        <li><strong>Name:</strong> type <code>doorlane</code></li>
+        <li><strong>Name:</strong> type <code>crowdbuzz</code></li>
         <li><strong>Database password:</strong> click <span class="ui">Generate a password</span>,
           then copy it somewhere safe — your notes app, a password manager, anywhere you'll find it again</li>
         <li><strong>Region:</strong> pick the one closest to your audience. For Nigeria
@@ -856,7 +856,7 @@
       <h3>Fix the site address</h3>
       <p>
         Vercel has now given you a real address, something like
-        <code>doorlane-abc123.vercel.app</code>. The app needs to know it, or the
+        <code>crowdbuzz-abc123.vercel.app</code>. The app needs to know it, or the
         links inside ticket emails will point nowhere.
       </p>
       <ol>
@@ -902,7 +902,7 @@
       </ol>
       <div class="warn">
         <span class="lbl">You can't skip the bank step</span>
-        Doorlane refuses to publish a paid event until a bank account is connected —
+        CrowdBuzz refuses to publish a paid event until a bank account is connected —
         deliberately, so nobody can sell tickets with no way to be paid. Free events
         publish without one.
       </div>
@@ -1056,7 +1056,7 @@
 
 <script>
   (function () {
-    var KEY = "doorlane-setup-progress";
+    var KEY = "crowdbuzz-setup-progress";
     var steps = Array.prototype.slice.call(document.querySelectorAll(".step"));
     var fill = document.getElementById("fill");
     var count = document.getElementById("count");

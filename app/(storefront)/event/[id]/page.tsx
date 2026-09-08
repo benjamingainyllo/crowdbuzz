@@ -11,7 +11,7 @@ import { EventCheckoutPage } from "./event-page";
  * This page used to be a client component all the way down, which meant it
  * could not export metadata at all — so every event link pasted into a
  * WhatsApp group, an Instagram bio or a group chat showed the generic
- * Doorlane homepage card instead of the event.
+ * CrowdBuzz homepage card instead of the event.
  *
  * That matters more here than almost anywhere else in the product. The whole
  * distribution model is "share one link", and /features promises in writing
@@ -74,7 +74,7 @@ export async function generateMetadata({
   // The showroom event is real enough to look at and must never be indexed.
   if (params.id === SAMPLE_EVENT_ID) {
     return {
-      title: "Preview — Doorlane",
+      title: "Preview — CrowdBuzz",
       description: "A sample event, for looking at the page with.",
       robots: { index: false, follow: false },
     };

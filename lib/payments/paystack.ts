@@ -23,7 +23,7 @@ const BASE_URL = "https://api.paystack.co";
  *
  * Read this with lib/processing-fee.ts, because on its own it looks
  * backwards. The decision is that the BUYER pays processing and the
- * organiser pays only Doorlane's fee. Paystack has no "buyer" bearer, so
+ * organiser pays only CrowdBuzz's fee. Paystack has no "buyer" bearer, so
  * it is done in two parts:
  *
  *   1. the buyer is charged the ticket price PLUS the processing fee
@@ -31,7 +31,7 @@ const BASE_URL = "https://api.paystack.co";
  *   2. that same processing fee is added to transaction_charge, and
  *      Paystack deducts its real fee from there
  *
- * So Doorlane's charge covers the bank and nets out to exactly its own
+ * So CrowdBuzz's charge covers the bank and nets out to exactly its own
  * fee, and the organiser's settlement is untouched by processing. Setting
  * this back to "subaccount" without also changing the charge maths would
  * silently take the fee out of the organiser's money twice over.
@@ -94,7 +94,7 @@ export class PaystackProvider implements PaymentProvider {
   /**
    * Initializes a SPLIT transaction.
    *
-   * `subaccount` + `transaction_charge` is what keeps Doorlane out of the
+   * `subaccount` + `transaction_charge` is what keeps CrowdBuzz out of the
    * money: Paystack splits at transaction time, the creator's share settles
    * to their own bank account, and we only ever receive `transaction_charge`.
    * Never initialize a paid checkout without a subaccount.

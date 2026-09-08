@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
-import { LEGACY_REFERRAL_COOKIE, REFERRAL_COOKIE, recordReferral } from "@/lib/referrals";
+import { LEGACY_REFERRAL_COOKIES, REFERRAL_COOKIE, recordReferral } from "@/lib/referrals";
 import type { EmailOtpType } from "@supabase/supabase-js";
 
 /**
@@ -33,7 +33,7 @@ import type { EmailOtpType } from "@supabase/supabase-js";
  *
  * `next` says where to land afterwards. It is deliberately restricted to a
  * path on this site: an open redirect here would let somebody send a
- * convincing doorlane link that ends up somewhere else entirely.
+ * convincing crowdbuzz link that ends up somewhere else entirely.
  */
 
 /**
@@ -85,7 +85,7 @@ async function attributeReferral(response: NextResponse) {
     // invited them.
     const code =
       store.get(REFERRAL_COOKIE)?.value ??
-      store.get(LEGACY_REFERRAL_COOKIE)?.value ??
+      LEGACY_REFERRAL_COOKIES.map((name: string) => store.get(name)?.value).find(Boolean) ??
       null;
     if (!code) return;
 
@@ -99,7 +99,7 @@ async function attributeReferral(response: NextResponse) {
     console.error("Referral attribution failed", error);
   } finally {
     response.cookies.delete(REFERRAL_COOKIE);
-    response.cookies.delete(LEGACY_REFERRAL_COOKIE);
+    for (const name of LEGACY_REFERRAL_COOKIES) response.cookies.delete(name);
   }
 }
 

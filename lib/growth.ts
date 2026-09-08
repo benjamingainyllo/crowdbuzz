@@ -3,7 +3,7 @@ import { siteUrl } from "@/lib/site";
 /**
  * The line that rides along on a delivered ticket.
  *
- * WHY THIS EXISTS. A ticket sold on Doorlane lands in somebody's WhatsApp,
+ * WHY THIS EXISTS. A ticket sold on CrowdBuzz lands in somebody's WhatsApp,
  * and WhatsApp messages get forwarded — to the group chat, to the friend
  * who's coming, to the friend who isn't. That message already travels;
  * until now it travelled without saying who sent it. Every forward was

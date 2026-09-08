@@ -12,7 +12,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Doorlane — owner",
+  title: "CrowdBuzz — owner",
   robots: { index: false, follow: false },
 };
 

@@ -45,7 +45,7 @@ export async function settleOrder(input: SettleOrderInput) {
   // funding processing, the organiser's settlement is charge minus our
   // transaction_charge — both fixed when checkout ran — so recomputing it
   // from whatever the provider reports afterwards would move a number
-  // that did not move. Any gap between the two is Doorlane's, by design.
+  // that did not move. Any gap between the two is CrowdBuzz's, by design.
   const providerFeeKobo =
     Number(order.provider_fee_kobo ?? 0) > 0
       ? Number(order.provider_fee_kobo)

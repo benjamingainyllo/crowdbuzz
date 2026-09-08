@@ -76,7 +76,7 @@ const cormorantGaramond = Cormorant_Garamond({
  * the first thing anybody read about us was a price we do not charge.
  * The cap is the pitch; say the cap.
  */
-const SITE_TITLE = "Doorlane — Sell tickets at 4% a ticket, capped at ₦3,000";
+const SITE_TITLE = "CrowdBuzz — Sell tickets at 4% a ticket, capped at ₦3,000";
 
 const SITE_DESCRIPTION =
   "Event ticketing that takes 4% of a ticket and never more than ₦3,000 — so the fee stops growing where a percentage competitor keeps climbing. Free under ₦2,000 a ticket and on free events. Set your ticket types, share one link, scan people in at the door, and the money settles straight to your own bank account.";
@@ -84,7 +84,7 @@ const SITE_DESCRIPTION =
 export const metadata: Metadata = {
   title: {
     default: SITE_TITLE,
-    template: "%s | Doorlane"
+    template: "%s | CrowdBuzz"
   },
   description: SITE_DESCRIPTION,
   keywords: [
@@ -99,7 +99,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    siteName: "Doorlane",
+    siteName: "CrowdBuzz",
     type: "website"
   },
   twitter: {

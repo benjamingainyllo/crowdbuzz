@@ -6,7 +6,7 @@ import { LEGAL } from "@/lib/legal";
 export const metadata: Metadata = {
   title: "Cookie policy",
   description:
-    "The small number of cookies Doorlane uses, what each one does, and how to control them.",
+    "The small number of cookies CrowdBuzz uses, what each one does, and how to control them.",
 };
 
 /**

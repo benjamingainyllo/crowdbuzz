@@ -3,7 +3,7 @@ import type { Kobo } from "@/lib/money";
 /**
  * The card processing fee, and how to put it on the buyer.
  *
- * WHOSE FEE IS WHOSE. Doorlane's fee is the organiser's to pay — it comes
+ * WHOSE FEE IS WHOSE. CrowdBuzz's fee is the organiser's to pay — it comes
  * out of what they set. The bank's fee for moving the money is the
  * buyer's, added to what they are charged. That is the decision, and this
  * module is how it is kept.
@@ -20,7 +20,7 @@ import type { Kobo } from "@/lib/money";
  *
  * THE RATES ARE AN ESTIMATE, AND THE ERROR IS DELIBERATELY OURS. Paystack
  * deducts its real fee from our transaction_charge, so if this estimate is
- * a few kobo out, Doorlane absorbs the difference and the organiser still
+ * a few kobo out, CrowdBuzz absorbs the difference and the organiser still
  * receives exactly the figure they were promised. That is the right way
  * round: we can measure and correct the estimate, an organiser cannot.
  */
@@ -79,13 +79,13 @@ export function grossUpForProcessing(targetKobo: Kobo): Kobo {
   // Safe to do: the organiser's settlement is the charge minus our
   // transaction charge, and the rounding lands inside the processing part
   // of that charge — so the organiser is still paid to the kobo and the
-  // rounding stays with Doorlane.
+  // rounding stays with CrowdBuzz.
   charge = Math.ceil(charge / 100) * 100;
 
   // THEN guarantee the invariant, in whole naira, because rounding up can
   // itself tip the charge into a marginally higher fee. It did: at a
   // ₦121,832 ticket the rounded charge cost one kobo more to process than
-  // it had raised, so Doorlane paid a kobo to make the sale. Checking
+  // it had raised, so CrowdBuzz paid a kobo to make the sale. Checking
   // before rounding rather than after is exactly the kind of off-by-one
   // that never shows up until it is money.
   let guard = 0;

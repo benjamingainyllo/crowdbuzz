@@ -12,7 +12,7 @@
  * their link twice does not see it change, and two events in a row on the
  * Explore page do not come out identical.
  *
- * The palette is Doorlane's own — the marketing site's accents, not stock
+ * The palette is CrowdBuzz's own — the marketing site's accents, not stock
  * gradient purple — so a generated poster still reads as this product.
  */
 

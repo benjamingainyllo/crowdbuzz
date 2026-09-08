@@ -1,4 +1,4 @@
-# Doorlane
+# CrowdBuzz
 
 Event ticketing platform built with Next.js 14, Tailwind CSS, Supabase and Paystack.
 
@@ -6,7 +6,7 @@ This README is the living product and execution document. We will update it cont
 
 ## Product Positioning
 
-**Doorlane sells tickets. 4% a ticket capped at ₦3,000, and the
+**CrowdBuzz sells tickets. 4% a ticket capped at ₦3,000, and the
 money lands in your own bank account.**
 
 Two things follow from that, and they are the product:
@@ -68,7 +68,7 @@ the same creator — but ticketing is the wedge, and the thing we are best at.
 - Commerce core (no-custody rail):
   - Payments run on split transactions with per-creator subaccounts — a buyer's payment
     splits at transaction time and the creator's share settles **directly to their own
-    bank account**. Doorlane never holds creator funds, so there is no wallet, no balance
+    bank account**. CrowdBuzz never holds creator funds, so there is no wallet, no balance
     and no withdrawal anywhere in the product.
   - Money is stored and computed as integer kobo (`*_kobo`, `bigint`) via `lib/money.ts`
   - Payment logic sits behind a provider interface in `lib/payments/`; no column or module
@@ -109,7 +109,7 @@ the same creator — but ticketing is the wedge, and the thing we are best at.
 
 ## Pricing
 
-Doorlane charges **4% of a ticket, and never more than ₦3,000 — no percentage of
+CrowdBuzz charges **4% of a ticket, and never more than ₦3,000 — no percentage of
 revenue**. Free tickets are never charged a fee. See `BUSINESS_MODEL.md` for
 the reasoning and the one open decision (a floor for very cheap tickets).
 
@@ -120,7 +120,7 @@ from an order total would charge once for a four-ticket purchase.
 
 ## Open question: currency and reach
 
-Positioning is global — anyone selling to an audience can use Doorlane. The money
+Positioning is global — anyone selling to an audience can use CrowdBuzz. The money
 layer is not there yet, and the gap is worth being honest about:
 
 - All amounts are stored as integer **kobo** and formatted as **₦** (`lib/money.ts`).
@@ -155,8 +155,8 @@ a mature ticketing product:
 
 ### 2) Memberships & Recurring Revenue
 
-A product a creator sells to *their own* audience — not a Doorlane plan.
-Doorlane itself has no subscription tiers; we earn only from transaction fees.
+A product a creator sells to *their own* audience — not a CrowdBuzz plan.
+CrowdBuzz itself has no subscription tiers; we earn only from transaction fees.
 
 - Monthly/yearly subscriptions creators offer their audience
 - Tiered access and gated content
@@ -185,7 +185,7 @@ Doorlane itself has no subscription tiers; we earn only from transaction fees.
 - Cashflow forecast
 - Payout and fee transparency
 
-> Note: anything implying Doorlane holds creator funds (wallet, balance,
+> Note: anything implying CrowdBuzz holds creator funds (wallet, balance,
 > withdrawal, "safe-to-withdraw") is out of scope by design — settlement goes
 > directly to the creator's bank via split payments.
 

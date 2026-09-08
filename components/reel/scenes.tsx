@@ -138,7 +138,7 @@ export function FeeRace({ t }: { t: number }) {
 
       <div className="mt-12">
         <div className="flex items-baseline justify-between">
-          <p className="text-[21px] font-bold text-[var(--coral)]">Doorlane</p>
+          <p className="text-[21px] font-bold text-[var(--coral)]">CrowdBuzz</p>
           <p className="text-[46px] font-extrabold tabular-nums text-[var(--coral)]">
             <Counter to={THEIR_FEE} t={t} at={900} dur={2600} stopAt={OUR_FEE} />
           </p>
@@ -204,7 +204,7 @@ export function SplitDiagram({ t }: { t: number }) {
         </div>
         <div className={node} style={{ transform: `translateY(${lerp(16, 0, land)}px)` }}>
           <p className="text-[15px] font-bold uppercase tracking-[0.18em] text-[var(--on-ground-faint)]">
-            Doorlane
+            CrowdBuzz
           </p>
           <p className="mt-2 text-[40px] font-extrabold tabular-nums text-[var(--on-ground-soft)]">
             {naira(OUR_FEE)}

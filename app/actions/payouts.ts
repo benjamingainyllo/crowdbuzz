@@ -14,7 +14,7 @@ import {
  * Payouts here means ONE thing: connecting the creator's own bank account so
  * the provider can settle directly into it.
  *
- * Doorlane never holds the money, so there is deliberately no balance,
+ * CrowdBuzz never holds the money, so there is deliberately no balance,
  * no withdrawal and no transfer anywhere in this file.
  */
 
@@ -69,7 +69,7 @@ export async function getPayoutAccount() {
   }
 
   // What has been sold, so the page can say how much is still on its way.
-  // Doorlane holds none of it — this is the provider's settlement lag, not
+  // CrowdBuzz holds none of it — this is the provider's settlement lag, not
   // a balance — but an organiser still needs to know the gap between what
   // they have sold and what has landed.
   const { data: paid, error: paidError } = await supabase

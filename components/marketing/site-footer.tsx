@@ -54,7 +54,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-[var(--hairline)] pt-7 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[12.5px] text-[var(--on-ground-faint)]">
-            © {new Date().getFullYear()} Doorlane
+            © {new Date().getFullYear()} CrowdBuzz
           </p>
           {/* Read from the live fee engine rather than typed in. This line
               said "a flat fee per ticket, never a percentage" long after

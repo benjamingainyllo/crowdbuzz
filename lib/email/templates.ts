@@ -102,7 +102,7 @@ export function ticketConfirmationEmail(input: TicketEmailInput): EmailMessage {
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background:#ffffff;border-radius:16px;padding:32px;">
             <tr>
               <td>
-                <div style="font-size:13px;font-weight:700;color:#E0512F;letter-spacing:.04em;">DOORLANE</div>
+                <div style="font-size:13px;font-weight:700;color:#E0512F;letter-spacing:.04em;">CROWDBUZZ</div>
                 <h1 style="margin:16px 0 4px;font-size:24px;line-height:1.25;font-weight:800;">
                   You're going to ${escapeHtml(input.eventTitle)}
                 </h1>

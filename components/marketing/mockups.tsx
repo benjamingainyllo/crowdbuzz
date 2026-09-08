@@ -14,7 +14,7 @@ import {
  * picture of the product, not a live figure in the reader's account.
  *
  * ILLUSTRATIVE IS NOT THE SAME AS MADE UP. The settlement mock quoted
- * "Doorlane · ₦450 each" — a rate from the superseded band table — and
+ * "CrowdBuzz · ₦450 each" — a rate from the superseded band table — and
  * totalled a payout from it, so a reader working the sum out got a number
  * the product would never produce. The prices here are invented; what we
  * charge on them is computed by the same function that bills a real
@@ -87,7 +87,7 @@ export function PayoutMock() {
       <div className="mt-4 space-y-2 border-t-2 border-dashed border-[var(--rule)] pt-4 text-[11px]">
         {[
           [`Gross · ${TICKETS} tickets`, naira(gross)],
-          [`Doorlane · ${naira(feeNaira(PRICE))} each`, `−${naira(ours)}`],
+          [`CrowdBuzz · ${naira(feeNaira(PRICE))} each`, `−${naira(ours)}`],
           ["Processing", `−${naira(processing)}`],
         ].map(([k, v]) => (
           <div key={k} className="flex justify-between">
@@ -152,7 +152,7 @@ export function LinkMock() {
       <div className="flex items-center gap-2 rounded-xl bg-[var(--paper-deep)] px-3 py-2.5">
         <span className="h-2 w-2 rounded-full bg-[#FF6A45]" />
         <span className="truncate text-[12px] font-semibold text-[var(--ink)]">
-          doorlane.io/amara
+          crowdbuzz.io/amara
         </span>
       </div>
 

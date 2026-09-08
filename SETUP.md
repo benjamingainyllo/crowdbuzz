@@ -1,4 +1,4 @@
-# Setting up Doorlane
+# Setting up CrowdBuzz
 
 Getting from a fresh clone to selling a ticket and scanning it at the door.
 Budget about fifteen minutes. Nothing here costs money — Supabase's free tier

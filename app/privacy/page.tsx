@@ -6,7 +6,7 @@ import { LEGAL, PROCESSORS } from "@/lib/legal";
 export const metadata: Metadata = {
   title: "Privacy policy",
   description:
-    "What personal information Doorlane collects, why, who it is shared with, and the rights you have over it.",
+    "What personal information CrowdBuzz collects, why, who it is shared with, and the rights you have over it.",
 };
 
 export default function PrivacyPage() {

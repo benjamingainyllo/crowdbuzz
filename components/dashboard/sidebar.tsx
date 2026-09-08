@@ -95,7 +95,7 @@ export function Sidebar() {
             isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
           }`}
         >
-          Doorlane
+          CrowdBuzz
         </Link>
 
         <button

@@ -9,7 +9,7 @@ import type { NormalizedDispute } from "@/lib/payments/types";
  * THE CLOCK IS THE WHOLE PROBLEM. Paystack gives sixteen hours to answer
  * a dispute and reminds every four until you do. Miss it and it is decided
  * against us by default, along with the full ticket price and an
- * arbitration fee. Before this existed, Doorlane was never told a dispute
+ * arbitration fee. Before this existed, CrowdBuzz was never told a dispute
  * had happened at all — the first sign would have been money missing from
  * a settlement, long after the window closed.
  *

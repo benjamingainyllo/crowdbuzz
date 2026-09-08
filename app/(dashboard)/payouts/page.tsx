@@ -18,7 +18,7 @@ import { toast } from "sonner";
 /**
  * Payouts = bank connection + read-only settlement history.
  *
- * Doorlane never holds creator funds — the payment provider splits at
+ * CrowdBuzz never holds creator funds — the payment provider splits at
  * transaction time and settles the creator's share straight to this bank
  * account. That's why there is no balance and nothing to withdraw here.
  */
@@ -213,7 +213,7 @@ export default function PayoutsPage() {
       <div className="flex items-start gap-3 rounded-[3px] border border-[#FF6A4533] bg-[#FF6A450d] p-4">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-[var(--dl-ink)]" />
         <p className="text-xs leading-relaxed text-subtle">
-          Doorlane never holds your money. When someone pays, the transaction is split at the
+          CrowdBuzz never holds your money. When someone pays, the transaction is split at the
           moment of payment — your share goes directly to your bank, and we only receive our fee.
           That&apos;s why there&apos;s nothing to withdraw here.
         </p>

@@ -10,7 +10,7 @@
  */
 
 /** Where a visitor's referral code waits until they finish signing up. */
-export const REFERRAL_COOKIE = "doorlane_ref";
+export const REFERRAL_COOKIE = "crowdbuzz_ref";
 
 /**
  * The cookie this used to be called.
@@ -18,10 +18,18 @@ export const REFERRAL_COOKIE = "doorlane_ref";
  * Renaming a cookie silently drops anyone who clicked a referral link
  * before the rename and has not signed up yet — their credit would just
  * vanish, and the friend who invited them would never know why. Read the
- * old name as a fallback; it can be deleted once ninety days have passed
- * since the rename, which is the cookie's own lifetime.
+ * old names as a fallback; each can go ninety days after its own rename,
+ * which is the cookie's own lifetime.
+ *
+ * Two of them now: Paylance became Doorlane on 6 September 2026 and
+ * Doorlane became CrowdBuzz on the 8th. Two renames inside a week is
+ * exactly when a link clicked on the Monday is most likely to be spent on
+ * the Wednesday, so both stay readable.
  */
-export const LEGACY_REFERRAL_COOKIE = "paylance_ref";
+export const LEGACY_REFERRAL_COOKIES = ["doorlane_ref", "paylance_ref"] as const;
+
+/** @deprecated Read LEGACY_REFERRAL_COOKIES — there are two now. */
+export const LEGACY_REFERRAL_COOKIE = "doorlane_ref";
 
 /**
  * Ninety days. Long enough that somebody can see a friend's link, think

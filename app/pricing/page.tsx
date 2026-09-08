@@ -242,7 +242,7 @@ export default function PricingPage() {
             <table className="w-full min-w-[560px] border-collapse text-[15px]">
               <thead>
                 <tr>
-                  {["", "Tickets", "Doorlane", `${article(Math.round(TYPICAL_RATE * 100))} ${Math.round(TYPICAL_RATE * 100)}% platform`, "You keep"].map((h) => (
+                  {["", "Tickets", "CrowdBuzz", `${article(Math.round(TYPICAL_RATE * 100))} ${Math.round(TYPICAL_RATE * 100)}% platform`, "You keep"].map((h) => (
                     <th
                       key={h}
                       className="border-b border-[var(--hairline)] pb-3 pr-4 text-left text-[10.5px] font-bold uppercase tracking-[0.12em] text-[var(--on-ground-soft)] last:text-right"

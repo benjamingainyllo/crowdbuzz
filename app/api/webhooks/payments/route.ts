@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * Settlements are recorded for reporting only. Doorlane does not move this
+ * Settlements are recorded for reporting only. CrowdBuzz does not move this
  * money — it lands in the creator's own bank account directly.
  */
 async function recordSettlement(

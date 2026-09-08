@@ -8,6 +8,10 @@
  */
 
 const RESERVED = new Set([
+  // Names this platform has traded under. Held, not reused: somebody
+  // claiming /doorlane could impersonate us to anyone still holding an
+  // old link. Paylance until 6 Sep 2026, Doorlane until the 8th.
+  "paylance", "doorlane",
   // App routes, present and legacy
   "login", "logout", "signin", "signup", "register", "onboarding",
   "overview", "home", "dashboard", "settings", "account", "profile",
@@ -19,7 +23,7 @@ const RESERVED = new Set([
   "api", "auth", "admin", "static", "assets", "public", "_next",
   "webhook", "webhooks", "callback", "health",
   // Brand and support surfaces we may want later
-  "doorlane", "support", "help", "docs", "blog", "pricing", "terms",
+  "crowdbuzz", "support", "help", "docs", "blog", "pricing", "terms",
   // The name this product launched under. Kept reserved so nobody can
   // register /paylance and inherit whatever old links point at it.
   "paylance",

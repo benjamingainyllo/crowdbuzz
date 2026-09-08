@@ -18,7 +18,7 @@ export interface RiskEvent {
 }
 
 export interface PlatformStats {
-  /** What Doorlane earned. The reason this screen exists. */
+  /** What CrowdBuzz earned. The reason this screen exists. */
   feesKobo: number;
   feesThisMonthKobo: number;
   /** Everything that moved through the platform — a bigger, different number. */

@@ -243,7 +243,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
     >
       <div className="sf-glow" aria-hidden="true" />
       <div className="relative z-10 mx-auto max-w-6xl px-5 py-8 sm:px-8 lg:py-16">
-        <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="Doorlane">
+        <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="CrowdBuzz">
           <Logo height={28} />
         </a>
 

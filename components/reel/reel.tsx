@@ -204,7 +204,7 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
               className="mt-8 max-w-[560px] text-[25px] leading-relaxed text-[var(--on-ground-soft)]"
               style={{ opacity: easeOut(prog(sc("link").t, 900, 700)) }}
             >
-              It lands on Explore too — every event on Doorlane, city by
+              It lands on Explore too — every event on CrowdBuzz, city by
               city, with who is putting it on.
             </p>
           </div>

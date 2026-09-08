@@ -21,7 +21,7 @@ import { FeeCalculator } from "@/components/marketing/fee-calculator";
 export const metadata: Metadata = {
   title: "What you'd keep",
   description:
-    "Work out what selling your tickets on Doorlane would cost you, against a platform charging 8% + ₦100. 4% a ticket, capped at ₦3,000, free under ₦2,000, and the money reaches your bank the moment a ticket sells.",
+    "Work out what selling your tickets on CrowdBuzz would cost you, against a platform charging 8% + ₦100. 4% a ticket, capped at ₦3,000, free under ₦2,000, and the money reaches your bank the moment a ticket sells.",
 };
 
 const REASONS = [
@@ -91,7 +91,7 @@ export default function SellPage() {
             The fee is the smaller half of it
           </h2>
           <p className="mt-5 max-w-[54ch] text-[16.5px] leading-relaxed text-[var(--on-ground-soft)]">
-            Anyone can cut a price. These are the parts of how Doorlane works
+            Anyone can cut a price. These are the parts of how CrowdBuzz works
             that don&rsquo;t change when somebody runs a promotion.
           </p>
 

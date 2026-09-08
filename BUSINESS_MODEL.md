@@ -1,7 +1,7 @@
-# Doorlane: The Creator OS Business Model
+# CrowdBuzz: The Creator OS Business Model
 
 ## 1. Overview
-Doorlane is a vertically integrated "Business-in-a-Box" platform designed for high-growth digital creators. It centralizes audience management, monetization, and growth analytics into a single, high-fidelity interface.
+CrowdBuzz is a vertically integrated "Business-in-a-Box" platform designed for high-growth digital creators. It centralizes audience management, monetization, and growth analytics into a single, high-fidelity interface.
 
 ---
 
@@ -28,10 +28,10 @@ Creators pay nothing to sign up, nothing monthly, and nothing when they don't se
 
 | | Fee |
 |---|---|
-| Doorlane | ₦200 |
+| CrowdBuzz | ₦200 |
 | Tix.Africa free plan (5% + ₦100) | ₦1,100 |
 | Tix Pro (3.5% + ₦100) | ₦800 |
-| The old Doorlane rate (9%) | ₦1,800 |
+| The old CrowdBuzz rate (9%) | ₦1,800 |
 
 Checked August 2026. An earlier version of this file said Tix charged 8% + ₦100,
 which was wrong and had reached the public pricing page — the corrected rate is
@@ -99,7 +99,7 @@ below it. Still needs a call.
 
 ### B. Explicitly NOT revenue streams
 
-These are ruled out by the no-custody constraint, not by preference. Doorlane
+These are ruled out by the no-custody constraint, not by preference. CrowdBuzz
 never holds creator funds — the payment provider splits at transaction time and
 settles the creator's share directly to their own bank account. Anything that
 requires us to sit on money in between is off the table:
@@ -123,7 +123,7 @@ Deep analytics (like the Event Revenue Analysis) help creators identify high-per
 Provides a stunning, premium "Storefront" that elevates the creator's brand identity far beyond standard social media links.
 
 ### 🛠️ Audience Ownership
-Unlike social platforms, Doorlane gives creators direct access to their "Audience" data, ensuring they own their business independently of algorithm changes.
+Unlike social platforms, CrowdBuzz gives creators direct access to their "Audience" data, ensuring they own their business independently of algorithm changes.
 
 ---
 

@@ -75,8 +75,8 @@ export function ExploreBoard({ blocks, total }: { blocks: CityBlock[]; total: nu
           </h1>
           <p className="mt-5 max-w-lg text-[16px] leading-relaxed text-[var(--on-ground-soft)]">
             {total > 0
-              ? `${total.toLocaleString("en-NG")} ${total === 1 ? "event" : "events"} selling on Doorlane right now. Tickets in a couple of taps — no app, no account needed to buy.`
-              : "Every event selling on Doorlane shows up here — parties, concerts, workshops, church programmes. Nothing is on sale yet, so this page is empty and honest about it."}
+              ? `${total.toLocaleString("en-NG")} ${total === 1 ? "event" : "events"} selling on CrowdBuzz right now. Tickets in a couple of taps — no app, no account needed to buy.`
+              : "Every event selling on CrowdBuzz shows up here — parties, concerts, workshops, church programmes. Nothing is on sale yet, so this page is empty and honest about it."}
           </p>
 
           {blocks.length > 1 && (
@@ -197,7 +197,7 @@ export function ExploreBoard({ blocks, total }: { blocks: CityBlock[]; total: nu
             <p className="max-w-xl text-[15.5px] leading-relaxed text-[var(--on-ground-soft)]">
               Publishing puts your event on this page and gives you one link to
               share. Money from every ticket lands in your own bank account as
-              it sells — Doorlane never holds it.
+              it sells — CrowdBuzz never holds it.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <StartCta />
