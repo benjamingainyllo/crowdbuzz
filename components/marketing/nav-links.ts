@@ -8,10 +8,24 @@
  */
 export const MARKETING_NAV = [
   ["/explore", "Explore"],
-  ["/features", "Features"],
   ["/pricing", "Pricing"],
-  ["/event-types", "Event types"],
+  ["/features", "Features"],
+  ["/help", "Help"],
 ] as const;
+
+/*
+ * Why this order, and why Event types left.
+ *
+ * Three of the previous four items were aimed at somebody already
+ * convinced. Price is the first question anybody asks about a ticketing
+ * platform and the one we win on, so it comes before the feature list.
+ * Help earns a top-level slot because the reader who needs it is
+ * frightened about money, and a person who cannot find that answer does
+ * not sign up and does not tell you why.
+ *
+ * Event types is still a page and still linked from the footer — it is a
+ * supporting argument, not one of the four things worth a menu slot.
+ */
 
 /**
  * The footer's columns.
@@ -35,12 +49,14 @@ export const FOOTER_COLUMNS = [
       ["/features", "Features"],
       ["/pricing", "Pricing"],
       ["/sell", "What you'd keep"],
+      ["/vs-tix", "Compared to Tix"],
       ["/event-types", "Event types"],
     ],
   },
   {
     title: "Organisers",
     links: [
+      ["/help", "How it works"],
       ["/login", "Sign in"],
       ["/login", "Create an account"],
     ],
