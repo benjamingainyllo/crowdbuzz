@@ -23,6 +23,30 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.searchParams.get("ref")
   );
 
+  /**
+   * Make the browser ASK before reusing a page it already has.
+   *
+   * This has to happen here rather than in next.config, because a statically
+   * prerendered page — which is most of the marketing site — gets Next's own
+   * `s-maxage=31536000, stale-while-revalidate` and a headers() rule does not
+   * override it. s-maxage speaks to the CDN, not the browser, so a phone is
+   * left to guess how long to keep the HTML, and it guesses generously. That
+   * is how the site can sit unchanged on a phone for a day after a deploy.
+   *
+   * must-revalidate, NOT no-store: the copy is kept, the browser just checks
+   * it is still current. Next already sends an ETag, so the usual answer is
+   * an empty 304 and nothing is re-downloaded. It matters more for buyers
+   * than for us — an organiser who moves their doors from 9 to 10 needs the
+   * next person opening that link to see 10.
+   */
+  const withFreshness = (response: NextResponse) => {
+    // /version answers "which build is this?" and sets its own no-store.
+    if (!request.nextUrl.pathname.startsWith("/version")) {
+      response.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
+    }
+    return response;
+  };
+
   /** Stamp the code onto whichever response we end up returning. */
   const withReferral = (response: NextResponse) => {
     if (referralCode) {
@@ -34,7 +58,7 @@ export async function middleware(request: NextRequest) {
         path: "/",
       });
     }
-    return response;
+    return withFreshness(response);
   };
 
   let supabaseResponse = NextResponse.next({
