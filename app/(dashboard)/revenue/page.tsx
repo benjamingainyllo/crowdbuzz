@@ -9,6 +9,7 @@ import { StatTiles, PanelHead } from "@/components/charts/figures";
 import { TicketTypeSplit, WeekdayBars } from "@/components/charts/bars";
 import { useAuth } from "@/components/auth/auth-provider";
 import { createClient } from "@/lib/supabase/client";
+import { RefundButton } from "@/components/dashboard/refund-button";
 import { formatKobo } from "@/lib/money";
 import { buildDashboardShape } from "@/lib/dashboard-shape";
 
@@ -412,6 +413,7 @@ export default function RevenuePage() {
                     <Th right>Paid</Th>
                     <Th right>You keep</Th>
                     <Th>When</Th>
+                    <Th right> </Th>
                   </tr>
                 </thead>
                 <tbody>
@@ -443,6 +445,21 @@ export default function RevenuePage() {
                             day: "numeric", month: "short", year: "numeric",
                           })}
                         </p>
+                      </td>
+                      {/* Only a paid order can be sent back. A refunded or
+                          failed one has nothing left to return, and offering
+                          the button anyway invites a click that can only
+                          produce an error. */}
+                      <td className="px-5 py-3 text-right align-top">
+                        {o.status === "paid" && (
+                          <RefundButton
+                            orderId={o.id}
+                            grossKobo={Number(o.gross_kobo)}
+                            platformFeeKobo={Number(o.platform_fee_kobo ?? 0)}
+                            buyerLabel={o.buyer_name || o.buyer_email}
+                            onDone={load}
+                          />
+                        )}
                       </td>
                     </tr>
                   ))}

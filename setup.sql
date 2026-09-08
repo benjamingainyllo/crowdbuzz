@@ -28,8 +28,9 @@
 --   12  Refunds, disputes, and the attention queue
 --   13  Split payments
 --   14  Interest: saving an event without an account
+--   15  What a refund gives back
 --
--- Fifteen parts, ending at PART 14. If the copy you are holding ends
+-- Sixteen parts, ending at PART 15. If the copy you are holding ends
 -- somewhere earlier, it is out of date. Last verified end to end on
 -- 7 September 2026: three consecutive clean runs against an empty
 -- database, 26 tables and 36 policies, RLS on every one of them.
@@ -1949,3 +1950,33 @@ CREATE POLICY "Organisers read interest in their events" ON public.event_interes
 -- ============================================================
 -- Done. You should see "Success. No rows returned".
 -- ============================================================
+
+
+-- ============================================================
+-- PART 15  What a refund gives back
+-- ============================================================
+-- Until now nothing reversed the platform fee. A refund was recorded and
+-- the order was marked, but our cut stayed where it was — so a fully
+-- refunded ticket left us holding a fee on a sale that did not happen.
+-- That is not a position worth defending to an organiser, and /help now
+-- says out loud that the fee comes back.
+--
+-- Proportional, so a partial refund behaves: half the order back means
+-- half the fee back. Computed in lib/refunds.ts and written here.
+--
+-- WHAT THIS COLUMN IS. The authoritative record of what we owe back on a
+-- refund. Whether the money physically leaves our balance depends on the
+-- payment provider unwinding the original split, which is the provider's
+-- behaviour, not something our code performs. Where it does not, this is
+-- the number to settle by hand — the point is that it is computed and
+-- recorded rather than remembered.
+
+ALTER TABLE public.refunds
+  ADD COLUMN IF NOT EXISTS platform_fee_returned_kobo BIGINT NOT NULL DEFAULT 0;
+
+-- Refunds written before this column existed carry 0, which is honest:
+-- nothing was given back on them. Backfilling a number we never returned
+-- would turn a gap in the record into a false statement about money.
+
+COMMENT ON COLUMN public.refunds.platform_fee_returned_kobo IS
+  'Our fee returned with this refund, in kobo. Proportional to the share of the order refunded.';
