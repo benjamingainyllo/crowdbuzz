@@ -10,7 +10,7 @@ import { Logo, LogoMark } from "@/components/brand/logo";
 import { easeOut, lerp, prog, scene } from "./timing";
 import {
   Caption, Serif, FeeRace, SplitDiagram, Phone,
-  RATE, CAP, FREE_BELOW,
+  RATE, CAP, CAP_MAX, FREE_BELOW,
 } from "./scenes";
 
 /**
@@ -335,7 +335,7 @@ export function Reel({ format = "wide" }: { format?: "wide" | "tall" }) {
             {RATE} a ticket.
           </h2>
           <p className="mt-5 text-[52px] font-extrabold leading-none tracking-[-0.03em] text-[var(--coral)]">
-            Never more than {CAP}.
+            Never more than {CAP_MAX}.
           </p>
           <p
             className="mt-8 text-[30px] text-[var(--on-ground-soft)]"

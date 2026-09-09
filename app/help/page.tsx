@@ -6,6 +6,7 @@ import {
   DEFAULT_PLATFORM_FEE_TYPE,
   DEFAULT_PLATFORM_FEE_VALUE,
   PLATFORM_FEE_CAP_KOBO,
+  PLATFORM_FEE_CAP_MAX_KOBO,
   PLATFORM_FEE_FREE_BELOW_KOBO,
   calculatePlatformFeeKobo,
   koboToNaira,
@@ -39,6 +40,7 @@ export const metadata: Metadata = {
 const naira = (n: number) => `₦${Math.round(n).toLocaleString("en-NG")}`;
 const RATE_PCT = DEFAULT_PLATFORM_FEE_VALUE / 100;
 const CAP = koboToNaira(PLATFORM_FEE_CAP_KOBO);
+const CAP_MAX = koboToNaira(PLATFORM_FEE_CAP_MAX_KOBO);
 const FREE_BELOW = koboToNaira(PLATFORM_FEE_FREE_BELOW_KOBO);
 
 const EXAMPLE_PRICE = 20000;
@@ -91,10 +93,12 @@ const MONEY: Answer[] = [
     q: "What do you actually take?",
     a: (
       <>
-        {RATE_PCT}% of each paid ticket, and never more than {naira(CAP)} on a single
-        one. On a {naira(EXAMPLE_PRICE)} ticket that is {naira(EXAMPLE_FEE)}. Under{" "}
-        {naira(FREE_BELOW)} a ticket we charge nothing, and free events cost nothing
-        at all.
+        {RATE_PCT}% of each paid ticket, held at {naira(CAP)} once the ticket is
+        expensive enough. On a {naira(EXAMPLE_PRICE)} ticket that is{" "}
+        {naira(EXAMPLE_FEE)}. On genuinely expensive tickets the cap steps up, but
+        we never take more than {naira(CAP_MAX)} from a single one, whatever you
+        charge. Under {naira(FREE_BELOW)} a ticket we charge nothing, and free
+        events cost nothing at all.
       </>
     ),
   },
@@ -114,10 +118,11 @@ const REFUNDS: Answer[] = [
     q: "A buyer wants their money back. What happens?",
     a: (
       <>
-        Right now you message us and we process it. There is no refund button in
-        your dashboard yet &mdash; that is honest rather than ideal, and it is
-        being built. The decision is still yours; we do not refund anybody without
-        the organiser asking us to.
+        You refund them yourself, from the order in your dashboard. It asks you to
+        confirm the amount and to say why &mdash; the reason is what explains the
+        row to you in three months &mdash; and the money goes back to the card
+        they paid with. The decision is yours: we never refund anybody&rsquo;s
+        buyer on our own.
       </>
     ),
   },
@@ -125,11 +130,10 @@ const REFUNDS: Answer[] = [
     q: "Does your fee come back too?",
     a: (
       <>
-        Not automatically, today. Ask when you request the refund and we will
-        return it &mdash; we do not think we should keep a cut of a sale that did
-        not happen &mdash; but it is a manual step at the moment rather than
-        something the system does on its own. Worth knowing before you price
-        around it.
+        Yes, in proportion. Refund the whole order and the whole fee comes back;
+        refund half and half of it does. It is worked out and recorded the moment
+        you press the button &mdash; you do not have to ask, and you do not have
+        to remember. We should not keep a cut of a sale that did not happen.
       </>
     ),
   },
@@ -137,7 +141,8 @@ const REFUNDS: Answer[] = [
     q: "What if I have to cancel the whole event?",
     a: (
       <>
-        Message us and we will refund the orders together. You can message
+        Refund the orders from your dashboard, or message us and we will do them
+        together if there are a lot. You can message
         everybody who bought a ticket from the event&rsquo;s own page, so they
         hear what happened from the person they bought from &mdash; which is the
         only version of that message anybody actually wants to receive.
@@ -262,7 +267,7 @@ export default function HelpPage() {
 
       <Section
         title="Refunds and problems"
-        note="Nobody plans for these and everybody eventually needs them. Two answers here describe how it works today rather than how it should — they are marked."
+        note="Nobody plans for these and everybody eventually needs them."
         items={REFUNDS}
       />
 

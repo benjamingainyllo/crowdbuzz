@@ -60,23 +60,39 @@ export function formatKobo(kobo: Kobo): string {
 export type PlatformFeeType = "percentage" | "flat" | "banded" | "capped";
 
 /**
- * CrowdBuzz takes 4% of a ticket, and never more than ₦3,000.
+ * CrowdBuzz takes 4.7% of a ticket, and never more than ₦5,000.
  *
- * WHY THIS SHAPE. The old model was four flat bands, and bands have an
- * unavoidable fault: the fee jumps at every boundary. A ₦29,999 ticket
- * cost the organiser ₦450 and a ₦30,000 one cost ₦1,500 — three times as
- * much for one naira more, which across 200 tickets was ₦210,000 for
- * pricing a night ₦1 higher. It also meant the EFFECTIVE rate sawtoothed
- * between 1.25% and 10% depending where a ticket happened to land, so
- * "a flat fee, never a percentage" was not really true.
+ * THE CAP IS A STAIRCASE, NOT A LINE. 4.7% of the ticket, then held at
+ * ₦3,500; ₦4,000 once the ticket reaches ₦150,000; ₦5,000 once it reaches
+ * ₦500,000. Nothing ever exceeds ₦5,000, which is the sentence that gets
+ * repeated — the competition takes ₦40,100 on a ₦500,000 table, eight
+ * times as much.
  *
- * One rate with a ceiling has neither problem. There is nothing to game,
- * nothing to fall off, and it is one sentence to explain.
+ * WHY THIS SHAPE. The model before this was four flat bands charged
+ * INSTEAD of a rate, and bands like that have an unavoidable fault: the
+ * fee jumps at every boundary. A ₦29,999 ticket cost the organiser ₦450
+ * and a ₦30,000 one cost ₦1,500 — three times as much for one naira more,
+ * which across 200 tickets was ₦210,000 for pricing a night ₦1 higher. It
+ * also meant the EFFECTIVE rate sawtoothed between 1.25% and 10%.
  *
- * THE CAP IS THE PRODUCT. 4% on its own is unremarkable. "We stop
- * charging you at ₦3,000" is the part a promoter selling a ₦500,000
- * table repeats to other promoters — the competition takes ₦40,100 on
- * that ticket.
+ * A rate with a stepped ceiling keeps the part that mattered: below the
+ * first step the fee tracks the price exactly, so there is no boundary to
+ * fall off where most tickets actually sell. The steps only exist above
+ * ₦150,000, where they move the fee by ₦500 at a time on a ticket costing
+ * more than that — a 0.33% step, not a 233% one.
+ *
+ * IT IS STILL A STEP, AND THAT IS THE COST OF THIS SHAPE. A ₦149,999
+ * ticket pays ₦3,500 and a ₦150,000 one pays ₦4,000. Chosen deliberately
+ * on 9 September 2026, with that trade-off on the table, in exchange for
+ * premium events (retreats, VIP tables, ₦150,000 conferences) paying
+ * closer to their weight than a flat ₦3,500 would have taken.
+ *
+ * WHAT MOVED, AND WHEN. 9 September 2026, from 4% capped flat at ₦3,000,
+ * by the founder's decision. The rate is where the revenue is — it
+ * touches every ticket, and 4% -> 4.7% is worth roughly ₦1.8m across a
+ * modelled first year. The cap steps earn nothing below ₦74,000 a ticket.
+ * Changed before a single organiser had signed up, which is the only
+ * cheap moment to change a price.
  *
  * FOR REFERENCE, WHAT THE COMPETITION ACTUALLY CHARGES. Tix.Africa takes
  * 8% + ₦100, added on top so the buyer pays it, and charges it once PER
@@ -91,14 +107,65 @@ export type PlatformFeeType = "percentage" | "flat" | "banded" | "capped";
  * half. If you change it, check a live checkout first and say so here.
  */
 export const DEFAULT_PLATFORM_FEE_TYPE: PlatformFeeType = "capped";
-/** Basis points. 400 = 4.00%. Per creator, so a deal can be cut. */
-export const DEFAULT_PLATFORM_FEE_VALUE = 400;
+/** Basis points. 470 = 4.70%. Per creator, so a deal can be cut. */
+export const DEFAULT_PLATFORM_FEE_VALUE = 470;
 
 /**
- * Never take more than this from a single ticket, however expensive.
- * Bites at ₦75,000 on the default 4%.
+ * The ceiling on a single ticket, as a staircase.
+ *
+ * Each step applies while the unit price is BELOW its `belowKobo`. The
+ * last step is Infinity, so there is always a match and the fee can never
+ * fall through to uncapped.
+ *
+ * ORDER MATTERS AND MUST STAY ASCENDING. Read top to bottom, first match
+ * wins; a step inserted out of order would silently shadow the ones after
+ * it. Keep the caps ascending too — a step that lowered the cap as the
+ * ticket got more expensive would let an organiser pay less by charging
+ * more.
  */
-export const PLATFORM_FEE_CAP_KOBO: Kobo = 300_000; // ₦3,000
+export const PLATFORM_FEE_CAP_STEPS: ReadonlyArray<{
+  /** Applies while the unit price is BELOW this, in kobo. */
+  readonly belowKobo: number;
+  readonly capKobo: Kobo;
+}> = [
+  { belowKobo: 15_000_000, capKobo: 350_000 },  // under ₦150,000       -> ₦3,500
+  { belowKobo: 50_000_000, capKobo: 400_000 },  // ₦150,000 - ₦500,000  -> ₦4,000
+  { belowKobo: Infinity, capKobo: 500_000 },    // ₦500,000 and up      -> ₦5,000
+];
+
+/**
+ * The cap that applies to a ticket at this price.
+ *
+ * One function rather than each caller walking the table, because a page
+ * that walked it slightly differently would quote a fee we do not charge.
+ */
+export function platformFeeCapKobo(unitPriceKobo: Kobo): Kobo {
+  for (const step of PLATFORM_FEE_CAP_STEPS) {
+    if (unitPriceKobo < step.belowKobo) return step.capKobo;
+  }
+  // Unreachable while the last step is Infinity. A table edited badly
+  // should charge the top cap rather than nothing at all.
+  return PLATFORM_FEE_CAP_STEPS[PLATFORM_FEE_CAP_STEPS.length - 1].capKobo;
+}
+
+/**
+ * The first step: what an ordinary ticket is capped at.
+ *
+ * This is the number the marketing pages quote as "capped at", because
+ * it is the one almost every real ticket meets. It is NOT the most we
+ * ever take — see PLATFORM_FEE_CAP_MAX_KOBO, and never write "never more
+ * than" against this one.
+ */
+export const PLATFORM_FEE_CAP_KOBO: Kobo = PLATFORM_FEE_CAP_STEPS[0].capKobo; // ₦3,500
+
+/**
+ * The most we will ever take from one ticket, at any price.
+ *
+ * THIS is the "never more than" number. Copy that promises a ceiling has
+ * to use this one, or it is promising something we do not do.
+ */
+export const PLATFORM_FEE_CAP_MAX_KOBO: Kobo =
+  PLATFORM_FEE_CAP_STEPS[PLATFORM_FEE_CAP_STEPS.length - 1].capKobo; // ₦5,000
 
 /**
  * Below this, selling is free. Campus nights, church programmes and
@@ -106,6 +173,33 @@ export const PLATFORM_FEE_CAP_KOBO: Kobo = 300_000; // ₦3,000
  * organisers meet the product.
  */
 export const PLATFORM_FEE_FREE_BELOW_KOBO: Kobo = 200_000; // ₦2,000
+
+/**
+ * HOW THE FEE IS SAID OUT LOUD. One place, because it is now a sentence
+ * with a condition in it and every page that rephrased it by hand got a
+ * slightly different version — some of them false.
+ *
+ * The trap this exists to close: "never more than ₦3,500" is NOT true.
+ * ₦3,500 is the first step of the cap, not the ceiling. An unqualified
+ * "never more than" has to quote PLATFORM_FEE_CAP_MAX_KOBO or it promises
+ * something we do not do on a ₦200,000 ticket.
+ */
+export const PLATFORM_FEE_RATE_LABEL = `${DEFAULT_PLATFORM_FEE_VALUE / 100}%`;
+export const PLATFORM_FEE_CAP_LABEL = formatKobo(PLATFORM_FEE_CAP_KOBO);
+export const PLATFORM_FEE_CAP_MAX_LABEL = formatKobo(PLATFORM_FEE_CAP_MAX_KOBO);
+export const PLATFORM_FEE_FREE_BELOW_LABEL = formatKobo(PLATFORM_FEE_FREE_BELOW_KOBO);
+
+/**
+ * For a badge, a nav strip, a pill — anywhere with no room to qualify.
+ * Quotes the true ceiling, so it cannot be wrong at any ticket price.
+ */
+export const PLATFORM_FEE_BADGE = `${PLATFORM_FEE_RATE_LABEL} a ticket, never more than ${PLATFORM_FEE_CAP_MAX_LABEL}`;
+
+/**
+ * For anywhere with a line to spare: the cap most tickets meet, and the
+ * ceiling nothing passes.
+ */
+export const PLATFORM_FEE_SENTENCE = `${PLATFORM_FEE_RATE_LABEL} of a ticket, capped at ${PLATFORM_FEE_CAP_LABEL} — and never more than ${PLATFORM_FEE_CAP_MAX_LABEL}, however expensive the ticket.`;
 
 /**
  * The fee for one ticket at this price, under the capped model.
@@ -118,7 +212,42 @@ export function cappedFeeKobo(unitPriceKobo: Kobo, rateBps: number): Kobo {
   assertKobo(unitPriceKobo);
   if (unitPriceKobo < PLATFORM_FEE_FREE_BELOW_KOBO) return 0;
   const fee = Math.floor((unitPriceKobo * Math.round(rateBps)) / 10_000);
-  return Math.min(fee, PLATFORM_FEE_CAP_KOBO);
+  return Math.min(fee, platformFeeCapKobo(unitPriceKobo));
+}
+
+/**
+ * The cheapest ticket on which the cap actually bites.
+ *
+ * WHY THIS IS A FUNCTION. This number was written by hand as "₦75,000" on
+ * the home page and the calculator, and hand-written numbers rot: the
+ * moment the rate or the cap moves, every page still says the old hinge
+ * and nobody notices, because nothing fails. Derived, it cannot disagree
+ * with the fee the buyer is actually charged.
+ *
+ * Returns Infinity at a zero rate, where the cap can never be reached.
+ * That is not a Kobo value — callers must check before formatting it.
+ */
+export function capBitesAtKobo(rateBps: number = DEFAULT_PLATFORM_FEE_VALUE): number {
+  const bps = Math.round(rateBps);
+  if (bps <= 0) return Infinity;
+  // cappedFeeKobo floors, so the hinge is the first whole kobo whose fee
+  // reaches the cap — ceil, not round. Measured against the FIRST step:
+  // this is where the fee stops tracking the price, which is the thing
+  // the sentence on the pricing page is actually about.
+  return Math.ceil((PLATFORM_FEE_CAP_STEPS[0].capKobo * 10_000) / bps);
+}
+
+/**
+ * The same hinge, rounded off for a sentence: "past about ₦74,000".
+ *
+ * Prose wants a round number, not ₦74,468.09. Rounded to the nearest
+ * ₦1,000 and always spoken as "about", so it stays honest either way.
+ */
+export function capBitesAtLabel(rateBps: number = DEFAULT_PLATFORM_FEE_VALUE): string {
+  const kobo = capBitesAtKobo(rateBps);
+  if (!Number.isFinite(kobo)) return "never";
+  const rounded = Math.round(koboToNaira(Math.ceil(kobo)) / 1000) * 1000;
+  return `₦${rounded.toLocaleString("en-NG")}`;
 }
 
 /**
@@ -203,7 +332,7 @@ export function calculateOrderPlatformFeeKobo(
   }
 
   // Charged PER TICKET, so the cap is per ticket too. Capping the whole
-  // order at ₦3,000 would make a ten-ticket group nearly free, which is
+  // order at ₦3,500 would make a ten-ticket group nearly free, which is
   // not the promise — the promise is that no single ticket costs more
   // than the cap.
   if (feeType === "flat" || feeType === "banded" || feeType === "capped") {

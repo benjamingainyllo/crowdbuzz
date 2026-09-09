@@ -409,17 +409,18 @@ CREATE TABLE IF NOT EXISTS public.payout_accounts (
   --   flat       -> kobo PER TICKET
   --   banded     -> kobo PER TICKET, chosen by the ticket's own price
   --
-  -- CrowdBuzz takes 4% of a ticket and never more than N3,000, with
+  -- CrowdBuzz takes 4.7% of a ticket and never more than N5,000, with
   -- anything under N2,000 free. For 'capped', platform_fee_value is the
-  -- rate in basis points (400 = 4.00%); the cap and the free floor live
-  -- in lib/money.ts so there is one place to change them.
+  -- rate in basis points (470 = 4.70%); the cap is a staircase (N3,500,
+  -- then N4,000 over N150,000, then N5,000 over N500,000) and it lives,
+  -- with the free floor, in lib/money.ts -- one place to change them.
   --
   -- The CHECK and DEFAULT below are restated further down this file, so
   -- an existing database that predates 'capped' is brought forward too.
   -- Both spellings have to agree; change them together.
   platform_fee_type TEXT NOT NULL DEFAULT 'capped'
     CHECK (platform_fee_type IN ('percentage', 'flat', 'banded', 'capped')),
-  platform_fee_value INTEGER NOT NULL DEFAULT 400,
+  platform_fee_value INTEGER NOT NULL DEFAULT 470,
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
@@ -439,11 +440,12 @@ ALTER TABLE public.payout_accounts
 -- or ('flat', 20000) has never been set by hand, so nothing an operator
 -- chose deliberately is overwritten here.
 ALTER TABLE public.payout_accounts ALTER COLUMN platform_fee_type SET DEFAULT 'capped';
-ALTER TABLE public.payout_accounts ALTER COLUMN platform_fee_value SET DEFAULT 400;
+ALTER TABLE public.payout_accounts ALTER COLUMN platform_fee_value SET DEFAULT 470;
 
 -- Move every account still sitting on a superseded DEFAULT onto the
--- current one: 4% of the ticket, capped at ₦3,000 (the cap and the free
--- floor live in lib/money.ts so there is one place to change them).
+-- current one: 4.7% of the ticket, capped at ₦3,500 and never above
+-- ₦5,000 (the cap steps and the free floor live in lib/money.ts, so there
+-- is one place to change them).
 --
 -- The banded model it replaces jumped at each boundary — a ₦29,999
 -- ticket cost ₦450 and a ₦30,000 one cost ₦1,500 — so an organiser could
@@ -452,11 +454,19 @@ ALTER TABLE public.payout_accounts ALTER COLUMN platform_fee_value SET DEFAULT 4
 -- Each clause below matches a rate that has never been touched by hand,
 -- so nothing an operator chose deliberately is overwritten. A creator on
 -- a negotiated rate keeps it.
+--
+-- ('capped', 400) is on that list from 9 September 2026, when the rate
+-- moved 4% -> 4.7% and the flat ₦3,000 cap became a staircase. It was the
+-- previous default, so an account still sitting on it was never priced by
+-- hand.
+-- If a creator is ever given 4.00% deliberately, drop that clause before
+-- running this again — it cannot tell the two apart.
 UPDATE public.payout_accounts
-SET platform_fee_type = 'capped', platform_fee_value = 400
+SET platform_fee_type = 'capped', platform_fee_value = 470
 WHERE (platform_fee_type = 'percentage' AND platform_fee_value = 900)
    OR (platform_fee_type = 'flat' AND platform_fee_value = 20000)
-   OR (platform_fee_type = 'banded' AND platform_fee_value = 20000);
+   OR (platform_fee_type = 'banded' AND platform_fee_value = 20000)
+   OR (platform_fee_type = 'capped' AND platform_fee_value = 400);
 
 
 ALTER TABLE public.payout_accounts ENABLE ROW LEVEL SECURITY;

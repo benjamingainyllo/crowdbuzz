@@ -7,8 +7,12 @@ import {
   DEFAULT_PLATFORM_FEE_TYPE,
   DEFAULT_PLATFORM_FEE_VALUE,
   PLATFORM_FEE_CAP_KOBO,
+  PLATFORM_FEE_CAP_MAX_KOBO,
   PLATFORM_FEE_FREE_BELOW_KOBO,
+  PLATFORM_FEE_FREE_BELOW_LABEL,
+  PLATFORM_FEE_SENTENCE,
   calculatePlatformFeeKobo,
+  capBitesAtLabel,
   koboToNaira,
   nairaToKobo,
 } from "@/lib/money";
@@ -16,8 +20,10 @@ import { TYPICAL_RATE, TYPICAL_FLAT_NAIRA, TYPICAL_CHECKED } from "@/lib/competi
 
 export const metadata: Metadata = {
   title: "Pricing",
-  description:
-    "4% of each paid ticket, and never more than ₦3,000 on a single one. Nothing at all under ₦2,000 a ticket or on a free event. No monthly plan, no signup fee.",
+  // The shared labels, not this page's own consts: metadata is evaluated
+  // before them, and a page that quotes a price must never depend on
+  // declaration order to be right.
+  description: `${PLATFORM_FEE_SENTENCE} Nothing at all under ${PLATFORM_FEE_FREE_BELOW_LABEL} a ticket or on a free event. No monthly plan, no signup fee.`,
 };
 
 /**
@@ -46,9 +52,13 @@ const feeFor = (priceNaira: number) =>
 /** Read off the engine so the page can never quote a rate we don't charge. */
 const RATE_PCT = DEFAULT_PLATFORM_FEE_VALUE / 100;
 const CAP_NAIRA = koboToNaira(PLATFORM_FEE_CAP_KOBO);
+/** The ceiling nothing passes. CAP_NAIRA is only the first step. */
+const CAP_MAX_NAIRA = koboToNaira(PLATFORM_FEE_CAP_MAX_KOBO);
 const FREE_BELOW_NAIRA = koboToNaira(PLATFORM_FEE_FREE_BELOW_KOBO);
-/** Where the cap starts biting — the number that makes the point. */
-const CAP_BITES_NAIRA = Math.round(CAP_NAIRA / (RATE_PCT / 100));
+/** Where the cap starts biting — the number that makes the point. Worked
+    out by lib/money.ts from the rate and the cap, so it cannot go stale
+    the next time either of them moves. */
+const CAP_BITES_LABEL = capBitesAtLabel();
 
 /**
  * Four worked prices rather than a rate table. A percentage means nothing
@@ -110,16 +120,17 @@ export default function PricingPage() {
             {RATE_PCT}% a ticket.
             <br />
             <span className="font-[family-name:var(--font-instrument-serif)] font-normal italic">
-              Never more than {naira(CAP_NAIRA)}.
+              Capped at {naira(CAP_NAIRA)}.
             </span>
           </h1>
 
           <p className="mx-auto mt-6 max-w-lg text-[17px] leading-relaxed text-[var(--on-ground-soft)]">
-            However much you charge, we never take more than{" "}
-            {naira(CAP_NAIRA)} from a ticket. Past {naira(CAP_BITES_NAIRA)} the
-            fee simply stops growing — so the bigger your night, the smaller
-            our share of it. Under {naira(FREE_BELOW_NAIRA)} a ticket, and on
-            free events, we charge nothing at all.
+            Past about {CAP_BITES_LABEL} a ticket the fee stops tracking the
+            price and holds at {naira(CAP_NAIRA)} — so the bigger your night, the
+            smaller our share of it. On genuinely expensive tickets the cap
+            steps up, but it never passes {naira(CAP_MAX_NAIRA)}, whatever you
+            charge. Under {naira(FREE_BELOW_NAIRA)} a ticket, and on free
+            events, we charge nothing at all.
           </p>
 
           <div className="mx-auto mt-12 max-w-lg">
@@ -165,9 +176,9 @@ export default function PricingPage() {
           </div>
 
           <p className="mx-auto mt-8 max-w-lg text-[15px] leading-relaxed text-[var(--on-ground-faint)]">
-            No steps, no bands, nothing to fall off. The same {RATE_PCT}% on
-            every ticket until the cap takes over &mdash; on a {naira(200000)}{" "}
-            table that is {naira(CAP_NAIRA)} against the {naira(200000 * TYPICAL_RATE + TYPICAL_FLAT_NAIRA)}{" "}
+            The same {RATE_PCT}% on every ticket until the cap takes over, and
+            nothing to fall off where real tickets sell &mdash; on a {naira(200000)}{" "}
+            table that is {naira(feeFor(200000))} against the {naira(200000 * TYPICAL_RATE + TYPICAL_FLAT_NAIRA)}{" "}
             {article(Math.round(TYPICAL_RATE * 100)).toLowerCase()}{" "}
             {Math.round(TYPICAL_RATE * 100)}% platform charges.
           </p>

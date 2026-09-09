@@ -12,8 +12,10 @@ import {
   DEFAULT_PLATFORM_FEE_TYPE,
   DEFAULT_PLATFORM_FEE_VALUE,
   PLATFORM_FEE_CAP_KOBO,
+  PLATFORM_FEE_CAP_MAX_KOBO,
   PLATFORM_FEE_FREE_BELOW_KOBO,
   calculatePlatformFeeKobo,
+  capBitesAtLabel,
   formatKobo,
   koboToNaira,
   nairaToKobo,
@@ -57,6 +59,9 @@ const TYPICAL_PER_TICKET = typicalFeeNaira(TICKET_PRICE);
 /** The pitch, in the engine's own numbers. */
 const RATE_LABEL = `${DEFAULT_PLATFORM_FEE_VALUE / 100}%`;
 const CAP_LABEL = formatKobo(PLATFORM_FEE_CAP_KOBO);
+/* The true ceiling. Any unqualified "never more than" must use THIS —
+   CAP_LABEL is only the first step of the cap. */
+const CAP_MAX_LABEL = formatKobo(PLATFORM_FEE_CAP_MAX_KOBO);
 const FREE_BELOW_LABEL = formatKobo(PLATFORM_FEE_FREE_BELOW_KOBO);
 
 const naira = (n: number) => `₦${n.toLocaleString("en-NG")}`;
@@ -95,7 +100,7 @@ export default function LandingPage() {
           <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
             <div>
               <span className="lp-block-soft inline-block rotate-[-1.5deg] rounded-full bg-[var(--paper)] px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--ink)]">
-                {RATE_LABEL} a ticket · never more than {CAP_LABEL}
+                {RATE_LABEL} a ticket · never more than {CAP_MAX_LABEL}
               </span>
 
               <h1 className="mt-6 text-[46px] font-extrabold leading-[0.95] tracking-[-0.03em] text-white [text-shadow:0_2px_24px_rgba(0,0,0,0.4)] sm:text-[72px]">
@@ -109,8 +114,9 @@ export default function LandingPage() {
               </h1>
 
               <p className="mt-6 max-w-md text-[17px] leading-relaxed text-white/90">
-                {RATE_LABEL} of a ticket, and never more than {CAP_LABEL} however
-                much it costs — so the fee stops growing where everyone else&apos;s
+                {RATE_LABEL} of a ticket, capped at {CAP_LABEL} — and never more
+                than {CAP_MAX_LABEL} however much it costs, so the fee stops
+                tracking the price where everyone else&apos;s
                 keeps climbing. Under {FREE_BELOW_LABEL} a ticket, and on free
                 events, we charge nothing at all. Your share splits off the
                 moment someone pays and settles to your own bank. No wallet
@@ -247,7 +253,8 @@ export default function LandingPage() {
             </h2>
             <p className="mt-5 max-w-md text-[16px] leading-relaxed text-[var(--on-ground-soft)]">
               Thirty people in a room or three thousand in a field — same
-              tickets, same scanner, same {RATE_LABEL} — capped at {CAP_LABEL}.
+              tickets, same scanner, same {RATE_LABEL} — capped at {CAP_LABEL}, and
+              never above {CAP_MAX_LABEL}.
             </p>
           </div>
 
@@ -411,7 +418,7 @@ export default function LandingPage() {
             <div className="mt-8 inline-flex items-center gap-2.5 rounded-full border-2 border-[#FFDE59] px-5 py-2.5">
               <span className="h-2 w-2 rounded-full bg-[#FFDE59]" />
               <span className="text-[13px] font-bold text-[#FFDE59]">
-                {RATE_LABEL} a ticket. Never more than {CAP_LABEL}.
+                {RATE_LABEL} a ticket. Never more than {CAP_MAX_LABEL}.
               </span>
             </div>
           </div>
@@ -461,7 +468,7 @@ export default function LandingPage() {
 
           <div className="mt-12 space-y-3">
             {[
-              { q: "What does it actually cost?", a: `${RATE_LABEL} of each paid ticket, and never more than ${CAP_LABEL} on a single one — so past about ₦75,000 a ticket the fee stops growing while a percentage competitor keeps taking its cut. Tickets under ${FREE_BELOW_LABEL}, and free events, cost nothing at all. No signup fee, no monthly plan. If you sell nothing, you pay nothing.` },
+              { q: "What does it actually cost?", a: `${RATE_LABEL} of each paid ticket, capped at ${CAP_LABEL} — so past about ${capBitesAtLabel()} a ticket the fee stops tracking the price while a percentage competitor keeps taking its cut. The cap steps up on genuinely expensive tickets (${formatKobo(PLATFORM_FEE_CAP_MAX_KOBO)} is the most we ever take from one, at any price). Tickets under ${FREE_BELOW_LABEL}, and free events, cost nothing at all. No signup fee, no monthly plan. If you sell nothing, you pay nothing.` },
               { q: "What about free events?", a: "Completely free. We don't charge a fee on a ₦0 ticket, so community nights, open days and RSVPs cost you nothing at all — and everyone still gets a real scannable ticket." },
               { q: "How do I get my money?", a: "Straight to your own bank account. The payment splits at the moment someone buys, so your share settles directly to you. We never hold it, which is also why there's nothing to withdraw." },
               { q: "Do my buyers need an account?", a: "No. They tap your link, pick their tickets, enter a name and email, and pay. Their tickets arrive by email seconds later." },

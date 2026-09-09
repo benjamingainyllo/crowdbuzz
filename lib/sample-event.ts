@@ -21,7 +21,7 @@ import type { PublicCohost, PublicProduct, PublicTicketType } from "@/app/action
  * The numbers are chosen to exercise the awkward cases rather than the happy
  * one: a sold-out tier, an unlimited tier, a tier that has not opened yet, a
  * tier priced under the free floor, and one priced high enough to hit the
- * ₦3,000 cap. If the page looks right against this, it looks right.
+ * cap. If the page looks right against this, it looks right.
  */
 
 export const SAMPLE_EVENT_ID = "demo";

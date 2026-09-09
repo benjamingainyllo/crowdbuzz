@@ -6,6 +6,7 @@ import {
   DEFAULT_PLATFORM_FEE_TYPE,
   DEFAULT_PLATFORM_FEE_VALUE,
   PLATFORM_FEE_CAP_KOBO,
+  PLATFORM_FEE_CAP_MAX_KOBO,
   PLATFORM_FEE_FREE_BELOW_KOBO,
   calculatePlatformFeeKobo,
   nairaToKobo,
@@ -26,6 +27,8 @@ const naira = (n: number) => `₦${Math.round(n).toLocaleString("en-NG")}`;
 
 export const RATE = `${DEFAULT_PLATFORM_FEE_VALUE / 100}%`;
 export const CAP = formatKobo(PLATFORM_FEE_CAP_KOBO);
+/** The ceiling. "Never more than" has to quote this, not CAP. */
+export const CAP_MAX = formatKobo(PLATFORM_FEE_CAP_MAX_KOBO);
 export const FREE_BELOW = formatKobo(PLATFORM_FEE_FREE_BELOW_KOBO);
 
 /** The table ticket the whole pitch rests on. */

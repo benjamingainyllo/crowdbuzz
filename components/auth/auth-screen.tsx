@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DEFAULT_PLATFORM_FEE_VALUE, PLATFORM_FEE_CAP_KOBO, formatKobo } from "@/lib/money";
+import {
+  DEFAULT_PLATFORM_FEE_VALUE,
+  PLATFORM_FEE_CAP_MAX_KOBO,
+  formatKobo,
+} from "@/lib/money";
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -430,7 +434,7 @@ export function AuthScreen() {
         <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-[var(--hairline)] pt-6">
           {[
             "Free to open",
-            `${DEFAULT_PLATFORM_FEE_VALUE / 100}% a ticket, capped at ${formatKobo(PLATFORM_FEE_CAP_KOBO)}`,
+            `${DEFAULT_PLATFORM_FEE_VALUE / 100}% a ticket, never more than ${formatKobo(PLATFORM_FEE_CAP_MAX_KOBO)}`,
             "Money to your own bank",
           ].map((f) => (
             <li

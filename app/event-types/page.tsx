@@ -6,18 +6,20 @@ import { EVENT_TYPES } from "@/components/marketing/event-types";
 import {
   DEFAULT_PLATFORM_FEE_VALUE,
   PLATFORM_FEE_CAP_KOBO,
+  PLATFORM_FEE_CAP_MAX_KOBO,
   PLATFORM_FEE_FREE_BELOW_KOBO,
   formatKobo,
 } from "@/lib/money";
 
 const RATE_LABEL = `${DEFAULT_PLATFORM_FEE_VALUE / 100}%`;
 const CAP_LABEL = formatKobo(PLATFORM_FEE_CAP_KOBO);
+const CAP_MAX_LABEL = formatKobo(PLATFORM_FEE_CAP_MAX_KOBO);
 const FREE_BELOW_LABEL = formatKobo(PLATFORM_FEE_FREE_BELOW_KOBO);
 
 export const metadata: Metadata = {
   title: "Every kind of event",
   description:
-    "Concerts, club nights, festivals, conferences, workshops, church programmes, weddings. If people come through a door, CrowdBuzz sells the ticket — 4% of it, and never more than ₦3,000.",
+    `Concerts, club nights, festivals, conferences, workshops, church programmes, weddings. If people come through a door, CrowdBuzz sells the ticket — ${RATE_LABEL} of it, and never more than ${CAP_MAX_LABEL}.`,
 };
 
 export default function EventTypesPage() {
@@ -45,8 +47,8 @@ export default function EventTypesPage() {
           <p className="mx-auto mt-6 max-w-lg text-[17px] leading-relaxed text-[var(--on-ground-soft)]">
             Thirty people in a room or three thousand in a field. Free entry or
             ₦120,000 a table. Same tickets, same scanner, and {RATE_LABEL} of a
-            ticket that never becomes more than {CAP_LABEL} however much it
-            costs — with nothing at all to pay under {FREE_BELOW_LABEL} a ticket,
+            ticket, capped at {CAP_LABEL} and never more than {CAP_MAX_LABEL}
+            however much it costs — with nothing to pay under {FREE_BELOW_LABEL} a ticket,
             or when it&apos;s free.
           </p>
           <div className="mt-9 flex justify-center">

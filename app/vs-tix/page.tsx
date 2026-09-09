@@ -7,8 +7,10 @@ import {
   DEFAULT_PLATFORM_FEE_TYPE,
   DEFAULT_PLATFORM_FEE_VALUE,
   PLATFORM_FEE_CAP_KOBO,
+  PLATFORM_FEE_CAP_MAX_KOBO,
   PLATFORM_FEE_FREE_BELOW_KOBO,
   calculatePlatformFeeKobo,
+  formatKobo,
   koboToNaira,
   nairaToKobo,
 } from "@/lib/money";
@@ -21,8 +23,7 @@ import {
 
 export const metadata: Metadata = {
   title: "CrowdBuzz vs Tix",
-  description:
-    "Tix charges 8% + ₦100 per seat, added on top so your buyer pays it. CrowdBuzz charges 4% of a ticket and stops at ₦3,000. Every figure worked out side by side.",
+  description: `Tix charges ${TYPICAL_RATE * 100}% + ₦${TYPICAL_FLAT_NAIRA} per seat, added on top so your buyer pays it. CrowdBuzz charges ${DEFAULT_PLATFORM_FEE_VALUE / 100}% of a ticket and stops at ${formatKobo(PLATFORM_FEE_CAP_KOBO)}, never above ${formatKobo(PLATFORM_FEE_CAP_MAX_KOBO)}. Every figure worked out side by side.`,
 };
 
 /**
@@ -58,6 +59,7 @@ const ourFee = (priceNaira: number) =>
 
 const RATE_PCT = DEFAULT_PLATFORM_FEE_VALUE / 100;
 const CAP = koboToNaira(PLATFORM_FEE_CAP_KOBO);
+const CAP_MAX = koboToNaira(PLATFORM_FEE_CAP_MAX_KOBO);
 const FREE_BELOW = koboToNaira(PLATFORM_FEE_FREE_BELOW_KOBO);
 const THEIR_PCT = TYPICAL_RATE * 100;
 
@@ -66,7 +68,7 @@ const THEIR_PCT = TYPICAL_RATE * 100;
  * so the reader finds their own ticket somewhere in the list rather than
  * being shown only the cases that flatter us.
  */
-const ROWS = [1500, 5000, 10000, 20000, 45000, 75000, 150000].map((price) => {
+const ROWS = [1500, 5000, 10000, 20000, 45000, 75000, 150000, 500000].map((price) => {
   const ours = ourFee(price);
   const theirs = typicalFeeNaira(price);
   return { price, ours, theirs, saved: theirs - ours };
@@ -88,7 +90,7 @@ const HONEST = [
   },
   {
     them: false,
-    text: "Our fee stops growing at ₦3,000 a ticket. Theirs does not stop.",
+    text: `Our fee holds at ${naira(CAP)} a ticket and never passes ${naira(CAP_MAX)}, whatever the price. Theirs does not stop at all.`,
   },
   {
     them: false,

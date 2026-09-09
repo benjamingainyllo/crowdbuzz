@@ -6,14 +6,17 @@ This README is the living product and execution document. We will update it cont
 
 ## Product Positioning
 
-**CrowdBuzz sells tickets. 4% a ticket capped at ₦3,000, and the
-money lands in your own bank account.**
+**CrowdBuzz sells tickets. 4.7% a ticket, capped at ₦3,500 and never more
+than ₦5,000, and the money lands in your own bank account.**
 
 Two things follow from that, and they are the product:
 
-1. **We don't take a percentage.** ₦200 a ticket whether it sells for ₦2,000 or
-   ₦50,000. Free events cost nothing. This is what separates us from Eventbrite
-   and Tix.Africa, both of which scale their cut with the organiser's success.
+1. **Our cut stops climbing; theirs doesn't.** 4.7% of a ticket, but held at
+   ₦3,500 and never above ₦5,000 — so on a ₦500,000 table we take ₦5,000 where
+   Tix.Africa takes ₦40,100. Free events cost nothing, and so does anything
+   under ₦2,000 a ticket. This is what separates us from Eventbrite and
+   Tix.Africa, both of which scale their cut with the organiser's success all
+   the way up.
 2. **We never hold the money.** Payments split at transaction time and the
    organiser's share settles directly to their bank. There is no wallet, no
    balance and no withdrawal anywhere in the product, by design.
@@ -109,8 +112,15 @@ the same creator — but ticketing is the wedge, and the thing we are best at.
 
 ## Pricing
 
-CrowdBuzz charges **4% of a ticket, and never more than ₦3,000 — no percentage of
-revenue**. Free tickets are never charged a fee. See `BUSINESS_MODEL.md` for
+CrowdBuzz charges **4.7% of a ticket, capped at ₦3,500 — and never more than
+₦5,000 on any single ticket**. Free tickets are never charged a fee.
+
+The cap is a staircase, not a line: ₦3,500 up to a ₦150,000 ticket, ₦4,000 up to
+₦500,000, ₦5,000 above that. Below about ₦74,000 the cap never binds, so the fee
+simply tracks the price. `PLATFORM_FEE_CAP_STEPS` in `lib/money.ts` is the only
+place that table lives — and note that `PLATFORM_FEE_CAP_KOBO` is the FIRST step,
+not the ceiling. Copy that says "never more than" has to quote
+`PLATFORM_FEE_CAP_MAX_KOBO`, or it is advertising a price we do not charge. See `BUSINESS_MODEL.md` for
 the reasoning and the one open decision (a floor for very cheap tickets).
 
 The rate is stored per creator in `platform_fee_type` / `platform_fee_value`, so

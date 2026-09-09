@@ -4,6 +4,7 @@ import { FOOTER_COLUMNS } from "./nav-links";
 import {
   DEFAULT_PLATFORM_FEE_VALUE,
   PLATFORM_FEE_CAP_KOBO,
+  PLATFORM_FEE_CAP_MAX_KOBO,
   PLATFORM_FEE_FREE_BELOW_KOBO,
   formatKobo,
 } from "@/lib/money";
@@ -62,7 +63,8 @@ export function SiteFooter() {
               that was false on every page of the site, footer included. */}
           <p className="text-[12.5px] text-[var(--on-ground-faint)]">
             {DEFAULT_PLATFORM_FEE_VALUE / 100}% a ticket, capped at{" "}
-            {formatKobo(PLATFORM_FEE_CAP_KOBO)}. Free under{" "}
+            {formatKobo(PLATFORM_FEE_CAP_KOBO)}, never above{" "}
+            {formatKobo(PLATFORM_FEE_CAP_MAX_KOBO)}. Free under{" "}
             {formatKobo(PLATFORM_FEE_FREE_BELOW_KOBO)}.
           </p>
         </div>

@@ -4,6 +4,23 @@ import { SiteNav, StartCta } from "@/components/marketing/site-nav";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { Squiggle, Underline } from "@/components/marketing/doodles";
 import { FeeCalculator } from "@/components/marketing/fee-calculator";
+import {
+  DEFAULT_PLATFORM_FEE_TYPE,
+  DEFAULT_PLATFORM_FEE_VALUE,
+  PLATFORM_FEE_BADGE,
+  PLATFORM_FEE_CAP_MAX_LABEL,
+  PLATFORM_FEE_FREE_BELOW_LABEL,
+  PLATFORM_FEE_RATE_LABEL,
+  calculatePlatformFeeKobo,
+  capBitesAtLabel,
+  formatKobo,
+  koboToNaira,
+  nairaToKobo,
+} from "@/lib/money";
+import { TYPICAL_FLAT_NAIRA, TYPICAL_RATE, typicalFeeNaira } from "@/lib/competitor";
+
+/** The table ticket the comparison rests on — the case the cap is for. */
+const TABLE_KOBO = nairaToKobo(500_000);
 
 /**
  * The page a forwarded ticket lands on.
@@ -20,8 +37,7 @@ import { FeeCalculator } from "@/components/marketing/fee-calculator";
  */
 export const metadata: Metadata = {
   title: "What you'd keep",
-  description:
-    "Work out what selling your tickets on CrowdBuzz would cost you, against a platform charging 8% + ₦100. 4% a ticket, capped at ₦3,000, free under ₦2,000, and the money reaches your bank the moment a ticket sells.",
+  description: `Work out what selling your tickets on CrowdBuzz would cost you, against a platform charging ${TYPICAL_RATE * 100}% + ₦${TYPICAL_FLAT_NAIRA}. ${PLATFORM_FEE_BADGE}, free under ${PLATFORM_FEE_FREE_BELOW_LABEL}, and the money reaches your bank the moment a ticket sells.`,
 };
 
 const REASONS = [
@@ -31,7 +47,7 @@ const REASONS = [
   },
   {
     title: "The fee stops. Theirs doesn't",
-    body: "We take 4% of a ticket and never more than ₦3,000 — so past ₦75,000 a ticket, the fee simply stops growing. A percentage platform keeps taking its cut all the way up: on a ₦500,000 table they take ₦40,100 and we take ₦3,000.",
+    body: `We take ${PLATFORM_FEE_RATE_LABEL} of a ticket and never more than ${PLATFORM_FEE_CAP_MAX_LABEL} — so past about ${capBitesAtLabel()} a ticket, the fee stops tracking the price. A percentage platform keeps taking its cut all the way up: on a ${formatKobo(TABLE_KOBO)} table they take ${formatKobo(nairaToKobo(typicalFeeNaira(koboToNaira(TABLE_KOBO))))} and we take ${formatKobo(calculatePlatformFeeKobo(TABLE_KOBO, DEFAULT_PLATFORM_FEE_TYPE, DEFAULT_PLATFORM_FEE_VALUE))}.`,
   },
   {
     title: "Tickets arrive on WhatsApp",
