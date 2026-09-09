@@ -9,6 +9,7 @@ import { getInterest } from "@/app/actions/interest";
 import { Logo } from "@/components/brand/logo";
 import { Poster, schemeFor } from "@/components/storefront/poster";
 import { coloursFromImage } from "@/lib/image-colour";
+import { themeFromColours, themeVars, type PageTheme } from "@/lib/page-theme";
 import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
 import { ReactionBar } from "@/components/storefront/reaction-bar";
 import { EventFeed } from "@/components/storefront/event-feed";
@@ -21,6 +22,9 @@ import { Loader2, MapPin, ExternalLink, CheckCircle2, Minus, Plus } from "lucide
 export function EventCheckoutPage({ params }: { params: { id: string } }) {
   const [event, setEvent] = useState<any>(null);
   const [host, setHost] = useState<any>(null);
+  /* The flyer's own theme, once its pixels have been read. Null until
+     then, and for any event without a cover. */
+  const [pageTheme, setPageTheme] = useState<PageTheme | null>(null);
   const [cohosts, setCohosts] = useState<PublicCohost[]>([]);
   const [ticketTypes, setTicketTypes] = useState<PublicTicketType[]>([]);
   const [products, setProducts] = useState<PublicProduct[]>([]);
@@ -62,17 +66,34 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
   useEffect(() => {
     const url = event?.cover_image_url;
     if (!url) {
-      setCoverScheme(null);
+      setPageTheme(null);
       return;
     }
     let alive = true;
     coloursFromImage(url).then((pair) => {
-      if (alive && pair) setCoverScheme(pair);
+      if (alive && pair) setPageTheme(themeFromColours(pair));
     });
     return () => {
       alive = false;
     };
   }, [event?.cover_image_url]);
+
+  /* The page element covers the viewport, but the document behind it does
+     not — so overscrolling on a phone, or a short page on a tall screen,
+     shows the .sf scope's standing near-black underneath a page that is
+     now olive or orange. Paint the document to match, and put it back on
+     the way out so the next page is not left wearing this one's colour. */
+  useEffect(() => {
+    if (!pageTheme) return;
+    const prevBody = document.body.style.background;
+    const prevHtml = document.documentElement.style.background;
+    document.body.style.background = pageTheme.bgTo;
+    document.documentElement.style.background = pageTheme.bgTo;
+    return () => {
+      document.body.style.background = prevBody;
+      document.documentElement.style.background = prevHtml;
+    };
+  }, [pageTheme]);
 
   useEffect(() => {
     getDeliveryChannels()
@@ -161,8 +182,6 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
      paints the generated poster too, so the page and the poster still
      agree. */
   const scheme = schemeFor(params.id);
-  const [coverScheme, setCoverScheme] = useState<{ from: string; to: string } | null>(null);
-  const tint = coverScheme ?? scheme;
   const goingCount = Number(event?.attendees_count ?? 0);
 
   // Clamp if the buyer picks a smaller tier after choosing a big quantity.
@@ -279,10 +298,24 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
          scroll area, but a phone that ever finds a horizontal scroll on a
          checkout page is a phone that loses the sale. */
       className="sf min-h-screen overflow-x-hidden font-[family-name:var(--font-bricolage-grotesque)]"
-      style={{ "--ev-from": tint.from, "--ev-to": tint.to } as React.CSSProperties}
+      /* When the cover has been read, its theme replaces the .sf scope's
+         own tokens — background, ink, panels, hairlines, all of it — so
+         every component already written against --dl-ink follows the page
+         without knowing any of this exists. Until then, and for an event
+         with no cover, the hashed pair paints the glow over the standing
+         dark scope exactly as before. */
+      style={
+        (pageTheme
+          ? themeVars(pageTheme)
+          : { "--ev-from": scheme.from, "--ev-to": scheme.to }) as React.CSSProperties
+      }
     >
-      <div className="sf-glow" aria-hidden="true" />
-      <div className="sf-glow-2" aria-hidden="true" />
+      {/* The drifting fields exist to give a flat dark page some life.
+          Once the page carries the flyer's own gradient they are no longer
+          doing that job — they are muddying it — so they step back rather
+          than stack on top. */}
+      <div className={`sf-glow ${pageTheme ? "opacity-[0.18]" : ""}`} aria-hidden="true" />
+      <div className={`sf-glow-2 ${pageTheme ? "opacity-[0.14]" : ""}`} aria-hidden="true" />
       {/* max-w-6xl left a third of a wide screen empty on either side —
           the page read as a narrow column floating in the dark. Wider,
           with the padding growing as the screen does so it never runs

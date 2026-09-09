@@ -24,6 +24,9 @@
 
 export type ColourPair = { from: string; to: string };
 
+/** The pair, plus how bright the picture is overall (0-255). */
+export type ImageColours = ColourPair & { luma: number };
+
 const SIZE = 48;
 
 function toHex(r: number, g: number, b: number): string {
@@ -47,7 +50,7 @@ function saturation(r: number, g: number, b: number): number {
  * Resolves null rather than throwing: a cover that cannot be read is a
  * normal outcome, not an error worth surfacing to anybody.
  */
-export function coloursFromImage(src: string): Promise<ColourPair | null> {
+export function coloursFromImage(src: string): Promise<ImageColours | null> {
   return new Promise((resolve) => {
     if (typeof window === "undefined" || !src) return resolve(null);
 
@@ -81,6 +84,12 @@ export function coloursFromImage(src: string): Promise<ColourPair | null> {
         // group "the reds" without merging a red into an orange.
         const buckets = new Map<string, { n: number; r: number; g: number; b: number }>();
 
+        // Overall brightness decides whether the page goes dark or light,
+        // which matters more than the hue does: a dark flyer on a light
+        // page looks like a mistake, and the reverse is unreadable.
+        let lumaTotal = 0;
+        let lumaCount = 0;
+
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i];
           const g = data[i + 1];
@@ -90,6 +99,11 @@ export function coloursFromImage(src: string): Promise<ColourPair | null> {
           if (a < 200) continue;
 
           const l = luma(r, g, b);
+          // Counted before the black/white skip: the page's lightness
+          // should reflect the WHOLE picture, including a flyer that is
+          // mostly cream or mostly black.
+          lumaTotal += l;
+          lumaCount += 1;
           // Skip the near-black and near-white: they carry no hue, and a
           // page washed in either is the flat page we started with.
           if (l < 26 || l > 232) continue;
@@ -139,6 +153,7 @@ export function coloursFromImage(src: string): Promise<ColourPair | null> {
         resolve({
           from: toHex(first.r, first.g, first.b),
           to: toHex(second.r, second.g, second.b),
+          luma: lumaCount ? lumaTotal / lumaCount : 128,
         });
       } catch {
         // Tainted canvas, or no canvas at all. The caller keeps its
