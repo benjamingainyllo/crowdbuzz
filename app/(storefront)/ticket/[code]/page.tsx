@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { TicketTwoTone } from "@/components/storefront/ticket-mark";
 import { TicketCard } from "@/components/storefront/ticket-card";
 import { getTicketByCode, ticketQrSvg } from "@/lib/ticket-lookup";
+import { ClaimTicket } from "@/components/storefront/claim-ticket";
 
 // The code is the credential, so this must never be cached or prerendered.
 export const dynamic = "force-dynamic";
@@ -38,6 +39,10 @@ export default async function TicketPage({ params }: { params: { code: string } 
   return (
     <main className="sf min-h-screen px-4 py-10 font-[family-name:var(--font-bricolage-grotesque)]">
       <div className="mx-auto w-full max-w-sm space-y-4">
+        {/* Opening your own ticket is what earns you a voice in the event's
+            feed. Renders nothing; see components/storefront/claim-ticket. */}
+        <ClaimTicket code={ticket.code} />
+
         <TicketCard ticket={ticket} qrSvg={qrSvg} />
 
         {ticket.totalOnOrder > 1 && (

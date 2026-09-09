@@ -10,6 +10,7 @@ import { Logo } from "@/components/brand/logo";
 import { Poster, schemeFor } from "@/components/storefront/poster";
 import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
 import { ReactionBar } from "@/components/storefront/reaction-bar";
+import { EventFeed } from "@/components/storefront/event-feed";
 import { InterestButton } from "@/components/storefront/interest-button";
 import { getDeliveryChannels } from "@/app/actions/delivery";
 import { bandFeeKobo, formatKobo } from "@/lib/money";
@@ -417,6 +418,11 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
             <div className="mt-7">
               <ReactionBar eventId={event.id} />
             </div>
+
+            {/* Read by anyone, written by ticket holders. Renders nothing at
+                all when there is neither a conversation to show nor a right
+                to start one — an empty box is not a feature. */}
+            <EventFeed eventId={event.id} />
 
             {/* An invitation's job is to say other people are coming. This was
                 a grey 15px line with an icon; it is the second-loudest thing
