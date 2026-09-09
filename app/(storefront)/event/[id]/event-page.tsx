@@ -289,9 +289,17 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               it the item stretches to the row's full height and there is
               nothing left to stick.
 
+              STICKY ALONE WAS NOT ENOUGH, and that is why it looked broken:
+              this column is taller than the viewport, and an element taller
+              than the screen has nothing left to pin — it scrolls with the
+              page until its bottom arrives, so both sides moved together.
+              Giving it the viewport's height and its own overflow makes it a
+              panel that genuinely holds while the buying column scrolls past
+              it. Anything below the fold inside it scrolls within the panel.
+
               Only above lg. On a phone there is one column and sticky would
               pin the title over the thing you are trying to read. */}
-          <div className="min-w-0 lg:sticky lg:top-8 lg:self-start">
+          <div className="min-w-0 lg:sticky lg:top-8 lg:h-[calc(100vh-4rem)] lg:self-start lg:overflow-y-auto lg:pr-3 [scrollbar-width:thin]">
             {/* One element. The clamp carries the face's own scale at both
                 ends, so a script shrinks from its larger size rather than
                 from everyone else's. */}

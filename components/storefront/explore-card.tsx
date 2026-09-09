@@ -127,8 +127,13 @@ export function ExploreCard({
   size?: "sm" | "lg";
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-[20px] border border-[var(--hairline)] bg-[var(--ground-deep)] transition-colors hover:border-[var(--hairline-firm)] hover:bg-[var(--ground-raised)]">
-      <Link href={`/event/${event.id}`} className="flex min-w-0 gap-3.5 p-3.5 sm:gap-4">
+    /* FULL WIDTH ON A PHONE, A CARD FROM sm UP. On one column a rounded
+       box with a gutter down both sides reads as a web page; a row that
+       touches both edges, separated from the next by a hairline, reads
+       as a feed. Only the bottom border survives on mobile — side and
+       top borders on a full-bleed row draw a box around nothing. */
+    <div className="group relative overflow-hidden border-b border-[var(--hairline)] bg-[var(--ground-deep)] transition-colors hover:bg-[var(--ground-raised)] sm:rounded-[20px] sm:border sm:hover:border-[var(--hairline-firm)]">
+      <Link href={`/event/${event.id}`} className="flex min-w-0 gap-3.5 px-5 py-3.5 sm:gap-4 sm:p-3.5">
         <Poster event={event} size={size} />
 
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">

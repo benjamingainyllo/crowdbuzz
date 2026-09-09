@@ -132,7 +132,10 @@ export function ExploreBoard({ blocks, total }: { blocks: CityBlock[]; total: nu
                   </span>
                 </div>
 
-                <div className="flex flex-col gap-3">
+                {/* -mx-5 cancels the section's own padding so the rows reach
+                    both edges of a phone; from sm the cards come back and so
+                    does the gap between them. */}
+                <div className="-mx-5 flex flex-col gap-0 sm:mx-0 sm:gap-3">
                   {block.events.slice(0, 8).map((e) => (
                     <ExploreCard key={e.id} event={e} size={size} />
                   ))}
@@ -167,7 +170,7 @@ export function ExploreBoard({ blocks, total }: { blocks: CityBlock[]; total: nu
                       {block.events.length}
                     </span>
                   </div>
-                  <div className="flex flex-col gap-3">
+                  <div className="-mx-5 flex flex-col gap-0 sm:mx-0 sm:gap-3">
                     {block.events.slice(0, 4).map((e) => (
                       <ExploreCard key={e.id} event={e} />
                     ))}
