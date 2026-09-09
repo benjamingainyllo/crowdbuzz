@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { ensureVisitorKey, readVisitorKey } from "@/lib/visitor";
@@ -134,8 +133,12 @@ export async function toggleReaction(
     }
   }
 
-  revalidatePath(`/event/${eventId}`);
-
+  // NO revalidatePath HERE, DELIBERATELY. It was refreshing the whole
+  // route on every tap, which remounts the bar and re-reads the server's
+  // truth — including every OTHER emoji this browser had tapped on a
+  // previous visit. They all lit up at once and it looked like one tap had
+  // pressed several buttons. The bar owns its own state and the counts
+  // come back in this response, so the route has nothing to re-fetch.
   return {
     ok: true,
     mine: !existing,

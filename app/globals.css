@@ -504,11 +504,46 @@ html:has(.sf) body { background: #12080F; }
   border-color: rgba(255, 222, 89, 0.5);
 }
 
+/* The emoji that flies off the button when you tap it. Absolutely
+   positioned over the button it came from, so it needs somewhere to
+   anchor. */
+.sf-reaction { position: relative; }
+
+.sf-float {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  font-size: 20px;
+  line-height: 1;
+  pointer-events: none;
+  /* Above the pill it launches from, below anything the page puts on top. */
+  z-index: 5;
+  opacity: 0;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .sf-reaction-pop { animation: sf-pop 0.34s cubic-bezier(0.22, 1, 0.36, 1); }
   @keyframes sf-pop {
     0%   { transform: scale(1); }
-    38%  { transform: scale(1.28) rotate(-7deg); }
+    32%  { transform: scale(1.42) rotate(-9deg); }
+    58%  { transform: scale(0.94) rotate(4deg); }
     100% { transform: scale(1); }
   }
+
+  /* A copy of the emoji lifts off, drifts, and fades. The tilt and the
+     horizontal drift are set per-tap as CSS variables so two taps never
+     take exactly the same path — identical repeats are what make an
+     animation read as canned. */
+  .sf-float { animation: sf-float 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  @keyframes sf-float {
+    0%   { opacity: 0; transform: translate(-50%, 0) scale(0.6) rotate(0deg); }
+    18%  { opacity: 1; transform: translate(-50%, -14px) scale(1.25) rotate(var(--tilt, 8deg)); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--drift, 12px)), -62px) scale(0.85) rotate(var(--tilt, 8deg)); }
+  }
+}
+
+/* With reduced motion the float never animates, so it must never be
+   visible either — otherwise it would sit frozen on top of the button. */
+@media (prefers-reduced-motion: reduce) {
+  .sf-float { display: none; }
 }

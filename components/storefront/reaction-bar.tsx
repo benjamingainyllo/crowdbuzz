@@ -33,6 +33,11 @@ export function ReactionBar({ eventId }: { eventId: string }) {
   const [counts, setCounts] = useState<ReactionCounts>(emptyCounts);
   const [mine, setMine] = useState<Reaction[]>([]);
   const [popped, setPopped] = useState<Reaction | null>(null);
+  /* Each tap adds a short-lived flyer keyed by an id, so tapping fast
+     stacks several in the air instead of restarting one animation. */
+  const [flyers, setFlyers] = useState<
+    { id: number; emoji: Reaction; tilt: number; drift: number }[]
+  >([]);
   const [, start] = useTransition();
 
   useEffect(() => {
@@ -60,6 +65,22 @@ export function ReactionBar({ eventId }: { eventId: string }) {
     setMine((m) => (held ? m.filter((e) => e !== emoji) : [...m, emoji]));
     setPopped(emoji);
     window.setTimeout(() => setPopped((p) => (p === emoji ? null : p)), 340);
+
+    // Only when adding one. Taking a reaction back should not celebrate.
+    if (!held) {
+      const id = Date.now() + Math.random();
+      setFlyers((f) => [
+        ...f,
+        {
+          id,
+          emoji,
+          // Randomised so two taps never trace the same arc.
+          tilt: Math.round(Math.random() * 36 - 18),
+          drift: Math.round(Math.random() * 44 - 22),
+        },
+      ]);
+      window.setTimeout(() => setFlyers((f) => f.filter((x) => x.id !== id)), 950);
+    }
 
     start(async () => {
       const res = await toggleReaction(eventId, emoji);
@@ -99,6 +120,24 @@ export function ReactionBar({ eventId }: { eventId: string }) {
               <span aria-hidden="true" className="text-[17px] leading-none">
                 {emoji}
               </span>
+
+              {flyers
+                .filter((f) => f.emoji === emoji)
+                .map((f) => (
+                  <span
+                    key={f.id}
+                    aria-hidden="true"
+                    className="sf-float"
+                    style={
+                      {
+                        "--tilt": `${f.tilt}deg`,
+                        "--drift": `${f.drift}px`,
+                      } as React.CSSProperties
+                    }
+                  >
+                    {emoji}
+                  </span>
+                ))}
               {n > 0 && (
                 <span className="text-[12.5px] font-extrabold tabular-nums leading-none">
                   {n}

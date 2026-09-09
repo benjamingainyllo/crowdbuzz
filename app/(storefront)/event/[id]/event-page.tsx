@@ -295,8 +295,19 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
             {/* One element. The clamp carries the face's own scale at both
                 ends, so a script shrinks from its larger size rather than
                 from everyone else's. */}
+            {/* FULL BLEED ON A PHONE. This wore the same 20px gutter as the
+                text and sat in a rounded card with dark bands down either
+                side — which is the single thing that made the page read as a
+                web page next to an app. Padding around words is right;
+                padding around a hero image is not. Negative margins cancel
+                the container's own padding at each breakpoint, and the
+                corners and border only appear once there is a column for the
+                card to be a card in.
+
+                mt-[-8px] pulls it up under the logo so the image starts at
+                the top of the scroll rather than after a strip of ground. */}
             <div
-              className={`${panel} sf-rise mb-7 aspect-[4/5] w-full overflow-hidden shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)] lg:hidden`}
+              className={`sf-rise -mx-5 -mt-2 mb-7 aspect-[4/5] w-[calc(100%+2.5rem)] overflow-hidden border-[var(--dl-line)] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)] sm:-mx-8 sm:w-[calc(100%+4rem)] sm:rounded-2xl sm:border lg:hidden`}
               style={{ containerType: "inline-size" }}
             >
               {event.cover_image_url ? (
