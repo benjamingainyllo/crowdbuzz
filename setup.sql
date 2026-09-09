@@ -29,8 +29,9 @@
 --   13  Split payments
 --   14  Interest: saving an event without an account
 --   15  What a refund gives back
+--   16  Reactions: how a page feels like a group chat
 --
--- Sixteen parts, ending at PART 15. If the copy you are holding ends
+-- Seventeen parts, ending at PART 16. If the copy you are holding ends
 -- somewhere earlier, it is out of date. Last verified end to end on
 -- 7 September 2026: three consecutive clean runs against an empty
 -- database, 26 tables and 36 policies, RLS on every one of them.
@@ -1990,3 +1991,63 @@ ALTER TABLE public.refunds
 
 COMMENT ON COLUMN public.refunds.platform_fee_returned_kobo IS
   'Our fee returned with this refund, in kobo. Proportional to the share of the order refunded.';
+
+
+-- ============================================================
+-- PART 16 — Reactions: how a page feels like a group chat
+-- ============================================================
+-- An event page was a notice. This makes it a room.
+--
+-- The whole point is that a guest who has not bought yet, and may never
+-- buy, can still leave a mark on the page — and that the next person sees
+-- it. Six people tapping 🔥 is the cheapest, truest social proof there
+-- is, and it costs the visitor nothing: no account, no email, one tap.
+--
+-- MODELLED ON event_interest, DELIBERATELY. Same visitor cookie, same
+-- service-key-only writes, same reasoning about what it does and does not
+-- protect against — see the note in app/actions/interest.ts, which
+-- applies here word for word. Two features with the same shape should
+-- have the same implementation, or the second one grows its own subtly
+-- different holes.
+
+CREATE TABLE IF NOT EXISTS public.event_reactions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+
+  event_id UUID NOT NULL REFERENCES public.events(id) ON DELETE CASCADE,
+
+  -- The same opaque, server-generated, cookie-held key event_interest
+  -- uses. Never derived from anything about the visitor.
+  visitor_key TEXT NOT NULL CHECK (char_length(visitor_key) BETWEEN 16 AND 64),
+
+  -- CONSTRAINED ON PURPOSE, and the list is duplicated in
+  -- lib/reactions.ts. An open text column here would be a public,
+  -- unmoderated, permanently-stored string attached to somebody's event —
+  -- which is a content moderation problem nobody asked for. Six fixed
+  -- emoji cannot be abused and cannot be misread.
+  emoji TEXT NOT NULL CHECK (emoji IN ('🔥', '😭', '💃', '🫡', '👀', '🐐')),
+
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+  -- One of each emoji per browser per event. Tapping again takes it back.
+  UNIQUE (event_id, visitor_key, emoji)
+);
+
+CREATE INDEX IF NOT EXISTS event_reactions_event_idx
+  ON public.event_reactions(event_id);
+CREATE INDEX IF NOT EXISTS event_reactions_visitor_idx
+  ON public.event_reactions(visitor_key);
+
+ALTER TABLE public.event_reactions ENABLE ROW LEVEL SECURITY;
+
+-- No policies, on purpose — exactly like event_interest. Row-level
+-- security cannot check a cookie, so granting anything here would let any
+-- browser claim any visitor key and delete other people's reactions.
+-- Every read and write goes through app/actions/reactions.ts, which takes
+-- the key from an httpOnly cookie the page cannot forge.
+--
+-- Counts are read with a grouped query rather than kept on the event row.
+-- A denormalised count needs a trigger per emoji and buys nothing: this
+-- is one indexed query on one event page, not thirty rows in a listing.
+

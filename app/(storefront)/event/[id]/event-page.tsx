@@ -9,6 +9,7 @@ import { getInterest } from "@/app/actions/interest";
 import { Logo } from "@/components/brand/logo";
 import { Poster, schemeFor } from "@/components/storefront/poster";
 import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
+import { ReactionBar } from "@/components/storefront/reaction-bar";
 import { InterestButton } from "@/components/storefront/interest-button";
 import { getDeliveryChannels } from "@/app/actions/delivery";
 import { bandFeeKobo, formatKobo } from "@/lib/money";
@@ -238,10 +239,15 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
 
   return (
     <div
-      className="sf min-h-screen font-[family-name:var(--font-bricolage-grotesque)]"
+      /* overflow-x-hidden because the drifting glow layers are scaled past
+         the viewport. They are position:fixed so they cannot extend the
+         scroll area, but a phone that ever finds a horizontal scroll on a
+         checkout page is a phone that loses the sale. */
+      className="sf min-h-screen overflow-x-hidden font-[family-name:var(--font-bricolage-grotesque)]"
       style={{ "--ev-from": scheme.from, "--ev-to": scheme.to } as React.CSSProperties}
     >
       <div className="sf-glow" aria-hidden="true" />
+      <div className="sf-glow-2" aria-hidden="true" />
       <div className="relative z-10 mx-auto max-w-6xl px-5 py-8 sm:px-8 lg:py-16">
         <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="CrowdBuzz">
           <Logo height={28} />
@@ -378,11 +384,33 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               </div>
             </div>
 
+            {/* THE HOST'S OWN WORDS, AS A MESSAGE — not a paragraph of body
+                copy. An invitation reads like a letter from an institution;
+                a flyer dropped in a group chat reads like a person talking,
+                and the second one is what actually gets people out of the
+                house. Same text, different frame: a bubble with a tail, a
+                name above it, and nothing else pretending to be typography. */}
             {event.description && (
-              <p className="mt-8 max-w-[62ch] whitespace-pre-line text-[16px] leading-[1.65] text-[var(--dl-ink-soft)]">
-                {event.description}
-              </p>
+              <div className="mt-8 max-w-[52ch]">
+                {hostName && (
+                  <p className="mb-2 pl-1 text-[12.5px] font-extrabold tracking-[0.01em] text-[var(--dl-ink-faint)]">
+                    {hostName}
+                  </p>
+                )}
+                <div className="relative rounded-[20px] rounded-bl-[6px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 py-4">
+                  <p className="whitespace-pre-line text-[16px] leading-[1.6] text-[var(--dl-ink)]">
+                    {event.description}
+                  </p>
+                </div>
+              </div>
             )}
+
+            {/* One tap, no account, no email. The cheapest true social proof
+                on the page — and the thing that makes it a room rather than
+                a notice board. */}
+            <div className="mt-7">
+              <ReactionBar eventId={event.id} />
+            </div>
 
             {/* An invitation's job is to say other people are coming. This was
                 a grey 15px line with an icon; it is the second-loudest thing

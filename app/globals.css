@@ -434,4 +434,81 @@ html:has(.sf) body { background: #12080F; }
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: none; }
   }
+
+  /* The glow breathes instead of sitting still.
+     TRANSFORM AND OPACITY ONLY, deliberately: those are the two things a
+     browser can animate on the compositor without repainting. Animating
+     the gradient itself (background-position, or the colour stops)
+     repaints a full-screen element every frame and turns a mid-range
+     Android phone into a slideshow -- which is most of the audience.
+     40s is long enough that nobody catches it looping. */
+  .sf-glow { animation: sf-drift 40s ease-in-out infinite alternate; }
+  @keyframes sf-drift {
+    from { transform: translate3d(-2%, -1%, 0) scale(1.06); opacity: 0.38; }
+    to   { transform: translate3d(2%, 2%, 0) scale(1.14); opacity: 0.5; }
+  }
+
+  /* A second, slower layer going the other way. Two drifting fields that
+     never quite line up read as alive; one reads as a broken animation. */
+  .sf-glow-2 { animation: sf-drift-2 56s ease-in-out infinite alternate; }
+  @keyframes sf-drift-2 {
+    from { transform: translate3d(3%, 2%, 0) scale(1.1); opacity: 0.3; }
+    to   { transform: translate3d(-3%, -2%, 0) scale(1.02); opacity: 0.44; }
+  }
+}
+
+/* The second field. Painted from the same per-event pair as .sf-glow but
+   mirrored, so an event's colour surrounds the page rather than sitting
+   in one corner. Same z-index reasoning as .sf-glow -- see above. */
+.sf-glow-2 {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 44% at 88% 96%, var(--ev-to) 0%, transparent 66%),
+    radial-gradient(54% 40% at 4% 88%, var(--ev-from) 0%, transparent 68%);
+  opacity: 0.34;
+}
+
+/* ============================================================
+   Reactions. The group-chat bit.
+   ============================================================ */
+.sf-reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--dl-line);
+  background: var(--dl-panel);
+  color: var(--dl-ink);
+  cursor: pointer;
+  /* Transform is listed first and separately so the pop below composites
+     rather than fighting the colour transition. */
+  transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.14s ease,
+              border-color 0.14s ease;
+}
+.sf-reaction:hover { border-color: rgba(253, 248, 240, 0.34); }
+.sf-reaction:active { transform: scale(0.94); }
+.sf-reaction:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+/* Held by this browser. Deliberately NOT the coral -- coral is the buy
+   button, and a reaction that looks like the buy button steals taps. */
+.sf-reaction-on {
+  background: rgba(255, 222, 89, 0.16);
+  border-color: rgba(255, 222, 89, 0.5);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sf-reaction-pop { animation: sf-pop 0.34s cubic-bezier(0.22, 1, 0.36, 1); }
+  @keyframes sf-pop {
+    0%   { transform: scale(1); }
+    38%  { transform: scale(1.28) rotate(-7deg); }
+    100% { transform: scale(1); }
+  }
 }
