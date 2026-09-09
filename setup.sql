@@ -32,8 +32,9 @@
 --   16  Reactions: how a page feels like a group chat
 --   17  An organiser's own audience, and its opt-in
 --   18  The activity feed, and Boop
+--   19  People who asked CrowdBuzz to tell them what is on
 --
--- Nineteen parts, ending at PART 18. If the copy you are holding ends
+-- Twenty parts, ending at PART 19. If the copy you are holding ends
 -- somewhere earlier, it is out of date. Last verified end to end on
 -- 7 September 2026: three consecutive clean runs against an empty
 -- database, 26 tables and 36 policies, RLS on every one of them.
@@ -2261,4 +2262,56 @@ ALTER TABLE public.event_boops ENABLE ROW LEVEL SECURITY;
 -- No policies at all. Who booped whom is nobody's business but the two
 -- guests', and both sides are read through the server action against the
 -- ticket cookie. A public read here would turn a wave into a social graph.
+
+
+-- ============================================================
+-- PART 19 — People who asked CrowdBuzz to tell them what is on
+-- ============================================================
+-- The discovery list. Somebody browsing /explore who does not want to
+-- check back every week leaves a WhatsApp number and the cities they care
+-- about, and hears when something is on.
+--
+-- THIS ONE IS OURS, AND THAT IS THE DIFFERENCE FROM PART 17.
+-- organiser_audience belongs to an organiser and CrowdBuzz never messages
+-- it. This list belongs to CrowdBuzz. Two separate relationships with two
+-- separate consents, and they must never be merged: somebody who agreed
+-- to hear from a promoter about that promoter's next night has not agreed
+-- to a weekly roundup from us, and the reverse is just as true.
+--
+-- SAME RULES AS PART 17, BECAUSE THE RULES ARE NOT ABOUT WHOSE LIST IT
+-- IS. Consent before a message, opted_in_at NOT NULL so a row cannot
+-- exist without the moment it was given, and unsubscribes marked rather
+-- than deleted so a stop stays stopped.
+
+CREATE TABLE IF NOT EXISTS public.discovery_subscribers (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+
+  -- E.164, normalised by lib/whatsapp/phone.ts before it gets here.
+  phone TEXT NOT NULL UNIQUE,
+
+  -- City keys from lib/cities.ts. An empty array means everywhere, which
+  -- is the honest reading of somebody who picked nothing.
+  cities TEXT[] NOT NULL DEFAULT '{}',
+
+  opted_in_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  unsubscribed_at TIMESTAMPTZ,
+  last_sent_at TIMESTAMPTZ,
+
+  -- Where they subscribed from. Useful for knowing which surface is
+  -- actually earning subscribers before spending effort on another.
+  source TEXT NOT NULL DEFAULT 'explore',
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS discovery_subscribers_live_idx
+  ON public.discovery_subscribers (created_at DESC) WHERE unsubscribed_at IS NULL;
+
+ALTER TABLE public.discovery_subscribers ENABLE ROW LEVEL SECURITY;
+
+-- No policies whatsoever. Nobody reads this from a browser: not an
+-- organiser, not a visitor, not the person who subscribed. Writes come
+-- through the server action with the service role, and the only thing
+-- that ever reads it is a send. A public SELECT here would be a list of
+-- phone numbers behind one bug.
 

@@ -196,6 +196,32 @@ export function cityOf(location: string | null | undefined): City {
   return ELSEWHERE;
 }
 
+/**
+ * The home market. CrowdBuzz is Nigeria-first and built to travel, so
+ * this is a constant rather than a hard-coded string in a picker — when
+ * the answer changes, it changes here and every picker follows.
+ */
+export const HOME_COUNTRY = "Nigeria";
+
+/**
+ * The cities to offer in a short picker, biggest first.
+ *
+ * DECLARATION ORDER, NOT ALPHABETICAL. The CITIES array above is written
+ * largest-first on purpose, and that ordering is the whole value here: a
+ * picker showing ten cities should show the ten people are most likely to
+ * be in. knownCities() sorts by country name instead, which is right for
+ * a full A-Z list and quietly wrong for a top ten — it put Calgary and
+ * Cotonou in front of Lagos, because Canada and Benin sort before
+ * Nigeria.
+ *
+ * Home country first, then everywhere else in the same declaration order.
+ */
+export function popularCities(limit = 10): City[] {
+  const home = CITIES.filter((c) => c.country === HOME_COUNTRY);
+  const away = CITIES.filter((c) => c.country !== HOME_COUNTRY);
+  return [...home, ...away].slice(0, limit);
+}
+
 /** All the cities we know, for a picker. Alphabetical within a country. */
 export function knownCities(): City[] {
   return [...CITIES].sort(
