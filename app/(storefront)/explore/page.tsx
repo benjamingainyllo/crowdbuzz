@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ExploreBoard } from "@/components/storefront/explore-board";
-import { DiscoveryPopup } from "@/components/storefront/discovery-popup";
 import { loadExplore } from "@/lib/explore";
 import { savedEventIds } from "@/app/actions/interest";
 
@@ -51,13 +50,9 @@ export default async function ExplorePage() {
   }));
 
   return (
-    <>
-      <ExploreBoard blocks={marked} total={total} />
-      {/* Waits nine seconds before asking, remembers a no for three
-          months, and never asks again once somebody has said yes. See the
-          note in the component: how a pop-up behaves matters more than
-          how it looks. */}
-      <DiscoveryPopup />
-    </>
+    // The pop-up lives inside ExploreBoard rather than here, because it
+    // has to sit inside the .lp scope to get the brand's colours. See the
+    // note at the top of that component.
+    <ExploreBoard blocks={marked} total={total} />
   );
 }

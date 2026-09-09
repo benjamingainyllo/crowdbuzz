@@ -3,6 +3,7 @@ import { SiteNav, StartCta } from "@/components/marketing/site-nav";
 import { SiteFooter } from "@/components/marketing/site-footer";
 import { Sparkle, Squiggle, Star } from "@/components/marketing/doodles";
 import { ExploreCard } from "@/components/storefront/explore-card";
+import { DiscoveryPopup } from "@/components/storefront/discovery-popup";
 import type { CityBlock } from "@/lib/explore";
 
 /**
@@ -47,6 +48,18 @@ export function ExploreBoard({ blocks, total }: { blocks: CityBlock[]; total: nu
 
   return (
     <main className="lp min-h-screen overflow-x-hidden font-[family-name:var(--font-bricolage-grotesque)]">
+      {/* INSIDE .lp, AND THAT IS THE WHOLE POINT. This used to be rendered
+          as a sibling of this <main> from the page, which put it outside
+          the .lp scope — so --coral, --paper, --ink, --ground-deep and
+          --hairline-firm all resolved to nothing. CSS drops a declaration
+          with an undefined custom property silently, so the pop-up did not
+          break: it just came out with a white eyebrow instead of a coral
+          one and a Subscribe button with no fill at all, which read as
+          "boring" rather than as "wrong". It is fixed-position, so nesting
+          it here costs nothing — a fixed box takes the viewport as its
+          containing block and is not clipped by this element's overflow. */}
+      <DiscoveryPopup />
+
       <SiteNav />
 
       {/* ══════════════ Hero ══════════════ */}
