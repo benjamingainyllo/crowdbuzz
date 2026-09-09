@@ -411,6 +411,19 @@ body {
 html:has(.sf),
 html:has(.sf) body { background: #12080F; }
 
+/* The horizontal clip a checkout page on a phone needs, ON THE DOCUMENT.
+   It used to sit on the .sf element itself, which was a bug rather than a
+   choice: overflow-x:hidden computes overflow-y to auto, that element
+   becomes a scroll container, and position:sticky inside a scroll
+   container ancestor pins to that container instead of the viewport --
+   i.e. it stops holding. The event page's left column is sticky, so the
+   guard was quietly disabling the layout it was meant to protect.
+
+   Overflow on the root element propagates to the viewport, so the clip
+   still happens, but the viewport stays the scroll container and sticky
+   keeps working. Anything added here must keep that property. */
+html:has(.sf) { overflow-x: hidden; }
+
 /* The event's colour, thrown up the page behind everything. Two stops
    set inline per event; the shape is the same every time so the brand
    stays recognisable while every event still looks like itself. */

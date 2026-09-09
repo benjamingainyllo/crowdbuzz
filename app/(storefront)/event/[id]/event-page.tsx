@@ -293,11 +293,19 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
 
   return (
     <div
-      /* overflow-x-hidden because the drifting glow layers are scaled past
-         the viewport. They are position:fixed so they cannot extend the
-         scroll area, but a phone that ever finds a horizontal scroll on a
-         checkout page is a phone that loses the sale. */
-      className="sf min-h-screen overflow-x-hidden font-[family-name:var(--font-bricolage-grotesque)]"
+      /* NO overflow-x HERE, AND IT MUST STAY THAT WAY. It used to carry
+         overflow-x-hidden as a guard against the drifting glow layers,
+         which are scaled past the viewport. The guard was never needed --
+         those layers are position:fixed and so cannot extend the scroll
+         area -- and it cost the thing the layout is built around:
+         overflow-x:hidden computes overflow-y to auto, which makes this
+         element a scroll container, and a scroll container ancestor
+         silently kills position:sticky for everything inside it. That is
+         why the left column scrolled away with the page three times over.
+         The clip a phone actually needs lives on the document instead, in
+         the .sf scope in globals.css, where it is not an ancestor of
+         anything that sticks. */
+      className="sf min-h-screen font-[family-name:var(--font-bricolage-grotesque)]"
       /* When the cover has been read, its theme replaces the .sf scope's
          own tokens — background, ink, panels, hairlines, all of it — so
          every component already written against --dl-ink follows the page
@@ -358,9 +366,20 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               panel that genuinely holds while the buying column scrolls past
               it. Anything below the fold inside it scrolls within the panel.
 
+              THE HEIGHT IS 100vh MINUS 6rem, NOT 4rem, and the extra 2rem is
+              not a taste call. A sticky box also stops at the bottom of its
+              containing block, so if it is exactly as tall as the space left
+              at the end of the scroll it gets nudged off its top offset in
+              the last stretch of the page — the panel visibly slips upward
+              right at the bottom. 6rem is the 2rem it holds at plus the
+              container's own 4rem of bottom padding, which is precisely the
+              room it needs to hold all the way down. Measured, not guessed:
+              it now reads top=32px at every scroll position including the
+              last one.
+
               Only above lg. On a phone there is one column and sticky would
               pin the title over the thing you are trying to read. */}
-          <div className="min-w-0 lg:sticky lg:top-8 lg:h-[calc(100vh-4rem)] lg:self-start lg:overflow-y-auto lg:pr-3 [scrollbar-width:thin]">
+          <div className="min-w-0 lg:sticky lg:top-8 lg:h-[calc(100vh-6rem)] lg:self-start lg:overflow-y-auto lg:pr-3 [scrollbar-width:thin]">
             {/* One element. The clamp carries the face's own scale at both
                 ends, so a script shrinks from its larger size rather than
                 from everyone else's. */}
