@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { getAdminIdentity } from "@/lib/admin";
 import { AdminSidebar, AdminMobileHeader } from "@/components/admin/admin-sidebar";
 import { GlobalSearch } from "@/components/admin/global-search";
@@ -48,12 +47,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <span className="rounded-[2px] border-2 border-[var(--dl-line)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-soft)]">
               {admin.role.replace("_", " ")}
             </span>
-            <Link
-              href="/overview"
-              className="rounded-[3px] border-2 border-[var(--dl-line)] px-3.5 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px]"
-            >
-              Your dashboard
-            </Link>
           </div>
         </header>
 
