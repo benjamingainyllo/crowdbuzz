@@ -81,7 +81,7 @@ export async function toggleReaction(
     .maybeSingle();
 
   if (!event || event.publish_status !== "published") {
-    return { ok: false, mine: false, counts, error: "That event isn't on sale." };
+    return { ok: false, mine: false, counts, error: "This is a preview event, so nothing here saves." };
   }
 
   const visitorKey = ensureVisitorKey();

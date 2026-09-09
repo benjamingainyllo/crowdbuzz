@@ -50,7 +50,15 @@ export async function toggleInterest(eventId: string): Promise<InterestResult> {
     .maybeSingle();
 
   if (!event || event.publish_status !== "published") {
-    return { ok: false, saved: false, count: 0, error: "That event isn't on sale." };
+    return {
+      ok: false,
+      saved: false,
+      count: 0,
+      // Named honestly. The demo event is not in the database, so this
+      // fires every time somebody taps the star on the preview page —
+      // and "check your connection" sent them debugging their wifi.
+      error: "This is a preview event, so nothing here saves.",
+    };
   }
 
   const visitorKey = ensureVisitorKey();

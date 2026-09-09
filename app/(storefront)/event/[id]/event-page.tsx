@@ -255,7 +255,11 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
     >
       <div className="sf-glow" aria-hidden="true" />
       <div className="sf-glow-2" aria-hidden="true" />
-      <div className="relative z-10 mx-auto max-w-6xl px-5 py-8 sm:px-8 lg:py-16">
+      {/* max-w-6xl left a third of a wide screen empty on either side —
+          the page read as a narrow column floating in the dark. Wider,
+          with the padding growing as the screen does so it never runs
+          edge to edge either. */}
+      <div className="relative z-10 mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-12 lg:py-16 xl:px-16">
         <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="CrowdBuzz">
           <Logo height={28} />
         </a>
@@ -269,9 +273,25 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
           </div>
         )}
 
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-16">
-          {/* ── What it is ─────────────────────────────────── */}
-          <div className="min-w-0">
+        {/* grid-cols-[minmax(0,1fr)] AT EVERY WIDTH, not just lg.
+            A grid item defaults to min-width:auto, so a single implicit
+            column refuses to shrink below its content's minimum — one
+            wide child inside then pushes the whole page past the
+            viewport. The desktop rule already guarded against this and
+            the mobile one did not, which is exactly why the phone layout
+            ran off the right edge. */}
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1fr)_390px] lg:gap-16">
+          {/* ── What it is ─────────────────────────────────────
+              THE LEFT SIDE HOLDS, THE RIGHT SIDE MOVES. What the night is
+              stays on screen while you scroll the tiers, the merch and the
+              form — so you never lose sight of what you are buying a ticket
+              to. self-start is what makes sticky work inside a grid: without
+              it the item stretches to the row's full height and there is
+              nothing left to stick.
+
+              Only above lg. On a phone there is one column and sticky would
+              pin the title over the thing you are trying to read. */}
+          <div className="min-w-0 lg:sticky lg:top-8 lg:self-start">
             {/* One element. The clamp carries the face's own scale at both
                 ends, so a script shrinks from its larger size rather than
                 from everyone else's. */}
@@ -451,7 +471,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               order-first on a phone: a flyer arrives picture-first, and
               scrolling past six lines of admin to reach the artwork is how
               a listing behaves, not an invitation. */}
-          <div className="lg:sticky lg:top-8 lg:self-start">
+          <div className="min-w-0">
             <div
               className={`${panel} hidden aspect-[4/5] w-full overflow-hidden shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)] lg:block`}
               style={{ containerType: "inline-size" }}

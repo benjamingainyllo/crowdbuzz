@@ -35,7 +35,11 @@ export function InterestButton({
     count: Math.max(0, state.count + (next ? 1 : -1)),
   }));
   const [pending, start] = useTransition();
-  const [failed, setFailed] = useState(false);
+  /* The server's own reason, not a guess. "Check your connection"
+     was shown for every failure including ones where the connection
+     was fine — on the preview event it reads as a broken site when
+     the truth is that a made-up event has nothing to save against. */
+  const [failed, setFailed] = useState<string | null>(null);
 
   const press = (e: React.MouseEvent) => {
     // The card around this is a link to the event.
@@ -45,11 +49,11 @@ export function InterestButton({
     start(async () => {
       const next = !shown.saved;
       apply(next);
-      setFailed(false);
+      setFailed(null);
 
       const res = await toggleInterest(eventId);
       if (res.ok) setTruth({ saved: res.saved, count: res.count });
-      else setFailed(true);
+      else setFailed(res.error ?? "That didn't save. Try again.");
     });
   };
 
@@ -84,9 +88,7 @@ export function InterestButton({
           )}
         </button>
         {failed && (
-          <p className="text-[12px] font-bold text-[var(--dl-danger)]">
-            That didn&apos;t save. Check your connection and try again.
-          </p>
+          <p className="text-[12px] font-bold text-[var(--dl-danger)]">{failed}</p>
         )}
       </div>
     );
@@ -99,7 +101,7 @@ export function InterestButton({
       disabled={pending}
       aria-pressed={shown.saved}
       aria-label={label}
-      title={failed ? "That didn't save — try again" : label}
+      title={failed ?? label}
       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-colors disabled:opacity-70 ${
         shown.saved
           ? "border-[var(--marker)] bg-[var(--marker)] text-[var(--ink)]"
