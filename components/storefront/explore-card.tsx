@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatKobo } from "@/lib/money";
 import type { ExploreEvent } from "@/lib/explore";
 import { InterestButton } from "@/components/storefront/interest-button";
+import { Tinted } from "@/components/storefront/tinted";
 
 /**
  * One event, as a stranger sees it.
@@ -131,8 +132,18 @@ export function ExploreCard({
        box with a gutter down both sides reads as a web page; a row that
        touches both edges, separated from the next by a hairline, reads
        as a feed. Only the bottom border survives on mobile — side and
-       top borders on a full-bleed row draw a box around nothing. */
-    <div className="group relative overflow-hidden border-b border-[var(--hairline)] bg-[var(--ground-deep)] transition-colors hover:bg-[var(--ground-raised)] sm:rounded-[20px] sm:border sm:hover:border-[var(--hairline-firm)]">
+       top borders on a full-bleed row draw a box around nothing.
+
+       Tinted wraps it in the flyer's own colours: the ::before below is a
+       faint wash of them behind the content, so a row of cards reads as a
+       row of different nights rather than a stack of identical boxes.
+       Faint on purpose — the picture is the loud part, and a card that
+       shouts its own background competes with the thing it is showing. */
+    <Tinted
+      src={event.cover}
+      fallback={{ from: tintFor(event.id)[0], to: tintFor(event.id)[1] }}
+      className="group relative isolate overflow-hidden border-b border-[var(--hairline)] bg-[var(--ground-deep)] transition-colors hover:bg-[var(--ground-raised)] sm:rounded-[20px] sm:border sm:hover:border-[var(--hairline-firm)] before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:opacity-[0.14] before:transition-opacity before:content-[''] group-hover:before:opacity-[0.22] before:[background:radial-gradient(120%_100%_at_0%_0%,var(--ev-from)_0%,transparent_62%),radial-gradient(110%_90%_at_100%_100%,var(--ev-to)_0%,transparent_66%)]"
+    >
       <Link href={`/event/${event.id}`} className="flex min-w-0 gap-3.5 px-5 py-3.5 sm:gap-4 sm:p-3.5">
         <Poster event={event} size={size} />
 
@@ -194,6 +205,6 @@ export function ExploreCard({
           initialCount={event.interested}
         />
       </div>
-    </div>
+    </Tinted>
   );
 }

@@ -8,6 +8,7 @@ import { createCheckoutSession } from "@/app/actions/checkout";
 import { getInterest } from "@/app/actions/interest";
 import { Logo } from "@/components/brand/logo";
 import { Poster, schemeFor } from "@/components/storefront/poster";
+import { coloursFromImage } from "@/lib/image-colour";
 import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
 import { ReactionBar } from "@/components/storefront/reaction-bar";
 import { EventFeed } from "@/components/storefront/event-feed";
@@ -52,6 +53,26 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
       .then(setInterest)
       .catch(() => {});
   }, [params.id]);
+
+  /* THE PAGE TAKES ITS COLOUR FROM THE FLYER. Runs once the event is
+     loaded and only when there is a cover to read; a failure leaves the
+     hashed pair in place, which is what the page looked like before this
+     existed. See lib/image-colour.ts for why it can fail and why that is
+     acceptable. */
+  useEffect(() => {
+    const url = event?.cover_image_url;
+    if (!url) {
+      setCoverScheme(null);
+      return;
+    }
+    let alive = true;
+    coloursFromImage(url).then((pair) => {
+      if (alive && pair) setCoverScheme(pair);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [event?.cover_image_url]);
 
   useEffect(() => {
     getDeliveryChannels()
@@ -134,7 +155,14 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
   const isPreview = params.id === SAMPLE_EVENT_ID;
 
   // The page wears the same two colours its poster is painted in.
+  /* The hashed pair is the floor, not the answer. When the event has a
+     cover, its real colours replace it as soon as they are read — see the
+     effect below. An event with no cover keeps the hash, which is what
+     paints the generated poster too, so the page and the poster still
+     agree. */
   const scheme = schemeFor(params.id);
+  const [coverScheme, setCoverScheme] = useState<{ from: string; to: string } | null>(null);
+  const tint = coverScheme ?? scheme;
   const goingCount = Number(event?.attendees_count ?? 0);
 
   // Clamp if the buyer picks a smaller tier after choosing a big quantity.
@@ -251,7 +279,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
          scroll area, but a phone that ever finds a horizontal scroll on a
          checkout page is a phone that loses the sale. */
       className="sf min-h-screen overflow-x-hidden font-[family-name:var(--font-bricolage-grotesque)]"
-      style={{ "--ev-from": scheme.from, "--ev-to": scheme.to } as React.CSSProperties}
+      style={{ "--ev-from": tint.from, "--ev-to": tint.to } as React.CSSProperties}
     >
       <div className="sf-glow" aria-hidden="true" />
       <div className="sf-glow-2" aria-hidden="true" />
