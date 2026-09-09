@@ -30,8 +30,10 @@
 --   14  Interest: saving an event without an account
 --   15  What a refund gives back
 --   16  Reactions: how a page feels like a group chat
+--   17  An organiser's own audience, and its opt-in
+--   18  The activity feed, and Boop
 --
--- Seventeen parts, ending at PART 16. If the copy you are holding ends
+-- Nineteen parts, ending at PART 18. If the copy you are holding ends
 -- somewhere earlier, it is out of date. Last verified end to end on
 -- 7 September 2026: three consecutive clean runs against an empty
 -- database, 26 tables and 36 policies, RLS on every one of them.
@@ -2050,4 +2052,213 @@ ALTER TABLE public.event_reactions ENABLE ROW LEVEL SECURITY;
 -- Counts are read with a grouped query rather than kept on the event row.
 -- A denormalised count needs a trigger per emoji and buys nothing: this
 -- is one indexed query on one event page, not thirty rows in a listing.
+
+
+-- ============================================================
+-- PART 17 — An organiser's own audience, and its opt-in
+-- ============================================================
+-- So that an organiser's second event can reach the people who came to
+-- their first, on WhatsApp, without anybody being spammed.
+--
+-- THE AUDIENCE BELONGS TO THE ORGANISER, NOT TO CROWDBUZZ. Keyed on
+-- creator_id, never queried across creators, and never used to send
+-- anything from us. It is the same principle as the money: we do not hold
+-- their funds and we do not hold their crowd. Anything that mixes two
+-- organisers' audiences together is a bug, not a feature.
+--
+-- OPT-IN IS NOT OPTIONAL, AND NOT ONLY FOR POLITENESS. WhatsApp requires
+-- consent before a business messages somebody. A number that blasts
+-- people who never agreed gets banned — and it is the SAME number that
+-- delivers tickets, so a ban does not cost us marketing, it breaks the
+-- product. Hence: no row exists here unless a buyer ticked a box, and
+-- opted_in_at is NOT NULL so a row cannot exist without the moment it was
+-- given.
+
+ALTER TABLE public.orders
+  ADD COLUMN IF NOT EXISTS marketing_opt_in BOOLEAN NOT NULL DEFAULT false;
+
+CREATE TABLE IF NOT EXISTS public.organiser_audience (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+
+  creator_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+
+  -- E.164, normalised by lib/whatsapp/phone.ts before it ever gets here.
+  -- Storing what the buyer typed would put "0803 123 4567" and
+  -- "+2348031234567" in as two people and message them both.
+  phone TEXT NOT NULL,
+  email TEXT,
+  name TEXT,
+
+  -- NOT NULL on purpose: a row without a moment of consent is not
+  -- evidence of consent, and this column is the evidence.
+  opted_in_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+  -- Which event they were buying when they said yes. Answers "why am I
+  -- getting this?" months later, which is the question that decides
+  -- whether somebody unsubscribes politely or reports the number.
+  source_event_id UUID REFERENCES public.events(id) ON DELETE SET NULL,
+
+  -- Set and the row stops being written to, rather than deleted: a
+  -- deleted row would be silently re-added by their next ticket purchase,
+  -- and somebody who has said stop must stay stopped.
+  unsubscribed_at TIMESTAMPTZ,
+
+  last_sent_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+  -- One row per person per organiser. Buying four times over two years
+  -- is one audience member, not four messages.
+  UNIQUE (creator_id, phone)
+);
+
+CREATE INDEX IF NOT EXISTS organiser_audience_creator_idx
+  ON public.organiser_audience (creator_id) WHERE unsubscribed_at IS NULL;
+
+ALTER TABLE public.organiser_audience ENABLE ROW LEVEL SECURITY;
+
+-- An organiser may read their own list and nobody else's. There is no
+-- INSERT, UPDATE or DELETE policy: rows are written only by the server,
+-- with the service role, at the moment a buyer ticks the box. An
+-- organiser who could insert here could add numbers nobody consented to,
+-- which is the whole thing this table exists to prevent.
+DROP POLICY IF EXISTS "Creators read own audience" ON public.organiser_audience;
+CREATE POLICY "Creators read own audience" ON public.organiser_audience
+  FOR SELECT USING (auth.uid() = creator_id);
+
+-- What was sent to an audience, and how it went. Same job as
+-- event_announcements in PART 10: stops a double send, gives the
+-- organiser a record, and answers "who told you about this?".
+CREATE TABLE IF NOT EXISTS public.audience_invites (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  event_id UUID NOT NULL REFERENCES public.events(id) ON DELETE CASCADE,
+  creator_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+
+  recipients_total INTEGER NOT NULL DEFAULT 0,
+  whatsapp_sent INTEGER NOT NULL DEFAULT 0,
+  whatsapp_failed INTEGER NOT NULL DEFAULT 0,
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+  -- ONE INVITE PER EVENT. Not a rate limit — a guarantee. An organiser
+  -- who taps twice, or a retried request, must not message the same
+  -- people twice about the same night.
+  UNIQUE (event_id)
+);
+
+ALTER TABLE public.audience_invites ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Creators read own invites" ON public.audience_invites;
+CREATE POLICY "Creators read own invites" ON public.audience_invites
+  FOR SELECT USING (auth.uid() = creator_id);
+
+
+-- ============================================================
+-- PART 18 — The activity feed, and Boop
+-- ============================================================
+-- What turns an event page from a notice into a room.
+--
+-- ONLY TICKET HOLDERS MAY POST. Anyone can read; only somebody holding a
+-- ticket to this event can write. That single rule does two jobs: it
+-- makes drive-by abuse on a stranger's event impossible, and it turns the
+-- feed into something you get for buying — which is worth more than a
+-- feed everybody can shout into.
+--
+-- Identity is the ticket code, which is already the secret that shows a
+-- ticket. Opening /ticket/<code> binds that browser to that ticket with
+-- an httpOnly cookie; the feed reads the cookie. No accounts, no
+-- passwords, nothing new for a guest to remember.
+
+ALTER TABLE public.events
+  ADD COLUMN IF NOT EXISTS feed_enabled BOOLEAN NOT NULL DEFAULT true;
+
+CREATE TABLE IF NOT EXISTS public.event_posts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+
+  event_id UUID NOT NULL REFERENCES public.events(id) ON DELETE CASCADE,
+
+  -- The proof of entry. ON DELETE CASCADE so a voided ticket takes its
+  -- posts with it: somebody refunded out of an event should not still be
+  -- talking in its room.
+  ticket_id UUID NOT NULL REFERENCES public.tickets(id) ON DELETE CASCADE,
+
+  -- Snapshotted, like ticket_type_name is on tickets. A display name
+  -- resolved at read time would rewrite history every time somebody
+  -- edited their name.
+  author_name TEXT,
+
+  kind TEXT NOT NULL DEFAULT 'text' CHECK (kind IN ('text', 'gif', 'photo')),
+
+  body TEXT CHECK (body IS NULL OR char_length(body) BETWEEN 1 AND 500),
+
+  -- For 'gif' and 'photo'. Nothing is fetched from here server-side; it
+  -- is rendered in an <img>, so it must be a URL we put there ourselves.
+  media_url TEXT,
+
+  -- A post must carry something. A row with neither text nor media is a
+  -- blank line in the room.
+  CHECK (
+    (kind = 'text' AND body IS NOT NULL) OR
+    (kind IN ('gif', 'photo') AND media_url IS NOT NULL)
+  ),
+
+  -- The organiser's delete. Hidden rather than removed, so a post taken
+  -- down at 2am is still there in the morning when somebody asks what was
+  -- said. Nothing reads a hidden post except the organiser.
+  hidden_at TIMESTAMPTZ,
+  hidden_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS event_posts_event_idx
+  ON public.event_posts (event_id, created_at DESC) WHERE hidden_at IS NULL;
+CREATE INDEX IF NOT EXISTS event_posts_ticket_idx
+  ON public.event_posts (ticket_id);
+
+ALTER TABLE public.event_posts ENABLE ROW LEVEL SECURITY;
+
+-- Readable by anyone with the page, once, and only the visible ones. The
+-- feed is public by design — that is the snowball. Writes go through the
+-- server action, which checks the ticket cookie; no INSERT policy exists,
+-- so a browser cannot post as a ticket it does not hold.
+DROP POLICY IF EXISTS "Anyone can read a visible post" ON public.event_posts;
+CREATE POLICY "Anyone can read a visible post" ON public.event_posts
+  FOR SELECT USING (hidden_at IS NULL);
+
+-- Boop: one emoji, sent to one other guest. Facebook Poke without the
+-- part that made it strange.
+--
+-- IT CARRIES NO MESSAGE AND NO CONTACT DETAILS, on purpose. A guest can
+-- send another guest exactly one of six emoji and nothing else — no text
+-- box, no phone number, no email, no way to reach them off the page. A
+-- feature that let strangers at a party message each other freely would
+-- be a safety problem before it was a growth loop.
+CREATE TABLE IF NOT EXISTS public.event_boops (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+
+  event_id UUID NOT NULL REFERENCES public.events(id) ON DELETE CASCADE,
+  from_ticket_id UUID NOT NULL REFERENCES public.tickets(id) ON DELETE CASCADE,
+  to_ticket_id UUID NOT NULL REFERENCES public.tickets(id) ON DELETE CASCADE,
+
+  emoji TEXT NOT NULL CHECK (emoji IN ('🔥', '😭', '💃', '🫡', '👀', '🐐')),
+
+  seen_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+
+  -- Nobody boops themselves.
+  CHECK (from_ticket_id <> to_ticket_id),
+
+  -- One boop per pair per event. It is a wave, not a channel — and this
+  -- is what stops it being used to pester somebody.
+  UNIQUE (event_id, from_ticket_id, to_ticket_id)
+);
+
+CREATE INDEX IF NOT EXISTS event_boops_to_idx
+  ON public.event_boops (to_ticket_id, created_at DESC);
+
+ALTER TABLE public.event_boops ENABLE ROW LEVEL SECURITY;
+
+-- No policies at all. Who booped whom is nobody's business but the two
+-- guests', and both sides are read through the server action against the
+-- ticket cookie. A public read here would turn a wave into a social graph.
 

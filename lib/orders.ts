@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { recordAudienceOptIn } from "@/lib/audience";
 import type { Kobo } from "@/lib/money";
 import type { PaymentChannel } from "@/lib/payments";
 import { issueTicketsForOrder, type IssuedTicket } from "@/lib/tickets";
@@ -128,6 +129,12 @@ async function fulfillOrder(order: any) {
     if (!issued.firstIssue || issued.tickets.length === 0) return;
 
     await deliverTickets(order, issued.tickets);
+
+    // The buyer has now actually paid, which is the only point at which a
+    // ticked box becomes a person on an organiser's list. Deliberately
+    // after delivery and independently guarded: a failure to file consent
+    // must never cost somebody the ticket they bought.
+    await recordAudienceOptIn(order);
   } catch (error) {
     console.error("Fulfilment failed for order", order?.reference, error);
   }

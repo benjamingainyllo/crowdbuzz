@@ -21,6 +21,12 @@ interface CheckoutPayload {
   buyerEmail: string;
   buyerName?: string;
   buyerPhone?: string;
+  /**
+   * Whether the buyer agreed to hear from THIS ORGANISER about their next
+   * event. Not a CrowdBuzz mailing list and never used as one — see
+   * lib/audience.ts. Defaults to false: a missing field is not consent.
+   */
+  marketingOptIn?: boolean;
   /** Which tier, for events. Falls back to the event's only tier. */
   ticketTypeId?: string;
   /** How many admissions. */
@@ -224,6 +230,10 @@ export async function createCheckoutSession(payload: CheckoutPayload): Promise<C
       buyer_email: payload.buyerEmail,
       buyer_name: payload.buyerName ?? null,
       buyer_phone: payload.buyerPhone ?? null,
+      // Recorded on the order now, acted on at settlement. Someone who
+      // ticks the box and then abandons the payment has not joined
+      // anything — see recordAudienceOptIn.
+      marketing_opt_in: payload.marketingOptIn === true && !!payload.buyerPhone,
       // Only ever set when the column exists: eventFlags answers false on
       // a database that hasn't been migrated, so this key stays absent.
       ...(isDemo ? { is_demo: true } : {}),

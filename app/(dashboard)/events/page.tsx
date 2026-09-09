@@ -12,6 +12,8 @@ import { EventDetailView } from "@/components/dashboard/event-detail-view";
 import { useAuth } from "@/components/auth/auth-provider";
 import { createClient } from "@/lib/supabase/client";
 import { formatKobo } from "@/lib/money";
+import { InviteAudienceButton } from "@/components/dashboard/invite-audience-button";
+import { getAudienceSize } from "@/app/actions/audience";
 import { buildDashboardShape, countdown } from "@/lib/dashboard-shape";
 import { TONE_HEX, TONE_TRACK } from "@/lib/tones";
 
@@ -80,6 +82,9 @@ export default function EventsPage() {
   const router = useRouter();
 
   const [events, setEvents] = useState<EventRow[]>([]);
+  /* One read for the whole page: the audience is per organiser, not
+     per event, so every card would otherwise ask the same question. */
+  const [audienceSize, setAudienceSize] = useState(0);
   const [stats, setStats] = useState<Record<string, EventStats>>({});
   const [orders, setOrders] = useState<any[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<EventRow | null>(null);
@@ -104,6 +109,7 @@ export default function EventsPage() {
 
       if (error) throw error;
       const rows = (data ?? []) as EventRow[];
+      getAudienceSize().then(setAudienceSize).catch(() => setAudienceSize(0));
       setEvents(rows);
 
       // Money comes from paid orders, never from a column on the event.
@@ -345,6 +351,7 @@ export default function EventsPage() {
               onOpen={() => setSelectedEvent(event)}
               onScanner={() => router.push(`/events/${event.id}/door` as never)}
               onNotify={() => router.push(`/events/${event.id}/message` as never)}
+              audienceSize={audienceSize}
             />
           ))}
 
@@ -397,13 +404,14 @@ export default function EventsPage() {
  * whether the gap is 12 seats or 180.
  */
 function EventCard({
-  event, stats, onOpen, onScanner, onNotify,
+  event, stats, onOpen, onScanner, onNotify, audienceSize,
 }: {
   event: EventRow;
   stats: EventStats;
   onOpen: () => void;
   onScanner: () => void;
   onNotify: () => void;
+  audienceSize: number;
 }) {
   const published = event.publish_status === "published";
   const past = isPast(event.date);
@@ -529,6 +537,20 @@ function EventCard({
           )}
         </p>
       </div>
+
+      {/* Only on a live event that has not happened yet, and only when
+          there is somebody to tell. Inviting people to last month's night,
+          or to a draft nobody can open, is not a button — it is a mistake
+          waiting to be tapped. */}
+      {published && !past && audienceSize > 0 && (
+        <div className="border-t-2 border-[var(--dl-line)] px-5 py-4">
+          <InviteAudienceButton
+            eventId={event.id}
+            eventTitle={event.title}
+            size={audienceSize}
+          />
+        </div>
+      )}
 
       <div className="mt-4 flex border-t-2 border-[var(--dl-line)]">
         <button

@@ -29,6 +29,11 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  /* Unticked by default, and it stays that way unless somebody chooses
+     otherwise. A pre-ticked consent box is not consent, and WhatsApp
+     bans numbers that message people who never agreed — the same number
+     that delivers every ticket. */
+  const [optIn, setOptIn] = useState(false);
   /** WhatsApp only leads once it can actually send. */
   const [whatsappLive, setWhatsappLive] = useState(false);
   const [emailLive, setEmailLive] = useState(false);
@@ -166,6 +171,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
         buyerEmail: email,
         buyerName: name || undefined,
         buyerPhone: phoneE164 ?? undefined,
+        marketingOptIn: optIn && !!phoneE164,
         ticketTypeId: selectedTierId ?? undefined,
         quantity,
         products: Object.entries(basket)
@@ -625,6 +631,30 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                         : "Your ticket arrives here on WhatsApp, the moment you pay."
                       : "WhatsApp tickets are coming. Leave your number and you'll get one there too."}
                   </p>
+
+                  {/* THE OPT-IN. Asked plainly, in the organiser's name, at
+                      the one moment somebody actually wants to hear from
+                      them again. Hidden until there is a number to send to,
+                      because a consent box for a channel you have not given
+                      us is just noise in a checkout. */}
+                  {phoneE164 && (
+                    <label className="mt-3.5 flex cursor-pointer items-start gap-2.5 rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] p-3">
+                      <input
+                        type="checkbox"
+                        checked={optIn}
+                        onChange={(e) => setOptIn(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 flex-none accent-[var(--coral)]"
+                      />
+                      <span className="text-[13px] leading-[1.45] text-[var(--dl-ink-soft)]">
+                        Tell me when{" "}
+                        <span className="font-bold text-[var(--dl-ink)]">
+                          {hostName || "this organiser"}
+                        </span>{" "}
+                        has another event. On WhatsApp, from them — not from
+                        CrowdBuzz. Stop any time.
+                      </span>
+                    </label>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="email" className={label}>
