@@ -1,5 +1,5 @@
 import { formatKobo, PLATFORM_FEE_RATE_LABEL, PLATFORM_FEE_CAP_MAX_LABEL } from "@/lib/money";
-import { panel, label, PageHead, Empty, Scroll, th, td, tdNum } from "@/components/admin/ui";
+import { panel, label, PageHead, Figures, Empty, Scroll, th, td, tdNum } from "@/components/admin/ui";
 import type { Analytics } from "@/lib/admin-analytics";
 
 /**
@@ -132,61 +132,36 @@ export function AnalyticsView({ a }: { a: Analytics }) {
       ) : (
         <>
           {/* ── Is it growing ─────────────────────────────────── */}
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="adm-grad-lime relative overflow-hidden rounded-[22px] p-5 shadow-[0_12px_32px_-12px_rgba(20,16,24,0.22)]">
-              <div className="flex items-start justify-between gap-4">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-[rgba(20,16,24,0.62)]">
-                  Fees this month
-                </p>
-                <div className="text-right">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[rgba(20,16,24,0.5)]">
-                    Last month
-                  </p>
-                  <p className="text-[13px] font-extrabold text-[rgba(20,16,24,0.8)] [font-variant-numeric:tabular-nums]">
-                    {formatKobo(a.feesLastMonthKobo)}
-                  </p>
-                </div>
-              </div>
-              <p className="mt-8 text-[42px] font-extrabold leading-none tracking-[-0.05em] text-white [font-variant-numeric:tabular-nums]">
-                {formatKobo(a.feesThisMonthKobo)}
-              </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <span className="text-[12.5px] font-semibold text-[rgba(255,255,255,0.82)]">
-                  {formatKobo(a.feesAllKobo)} all time
-                </span>
-                {/* No chip in a first trading month: there is no previous
-                    month, and "+0%" would be a comparison nobody made. */}
-                {feeDelta !== null && (
-                  <span className="rounded-full bg-[rgba(255,255,255,0.22)] px-2.5 py-[3px] text-[11.5px] font-extrabold text-white">
-                    {feeDelta >= 0 ? "+" : ""}
-                    {Math.round(feeDelta)}% vs last month
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="adm-grad-rose relative overflow-hidden rounded-[22px] p-5 shadow-[0_12px_32px_-12px_rgba(20,16,24,0.22)]">
-              <div className="flex items-start justify-between gap-4">
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-[rgba(20,16,24,0.62)]">
-                  Effective take
-                </p>
-                <div className="text-right">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[rgba(20,16,24,0.5)]">
-                    Headline rate
-                  </p>
-                  <p className="text-[13px] font-extrabold text-[rgba(20,16,24,0.8)]">
-                    {PLATFORM_FEE_RATE_LABEL}
-                  </p>
-                </div>
-              </div>
-              <p className="mt-8 text-[42px] font-extrabold leading-none tracking-[-0.05em] text-white [font-variant-numeric:tabular-nums]">
-                {pct(a.takeAllPct)}
-              </p>
-              <p className="mt-3 text-[12.5px] font-semibold text-[rgba(255,255,255,0.82)]">
-                {formatKobo(a.feesAllKobo)} earned on {formatKobo(a.grossAllKobo)} sold
-              </p>
-            </div>
-          </div>
+          <Figures
+            items={[
+              {
+                l: "Fees this month",
+                n: formatKobo(a.feesThisMonthKobo),
+                x: `${formatKobo(a.feesLastMonthKobo)} last month`,
+                tone: "fee",
+                spark: a.months.map((m) => m.feesKobo),
+              },
+              {
+                l: "Moved through, all time",
+                n: formatKobo(a.grossAllKobo),
+                x: `${a.paidOrders.toLocaleString("en-NG")} paid orders`,
+                tone: "money",
+                spark: a.months.map((m) => m.grossKobo),
+              },
+              {
+                l: "Effective take",
+                n: pct(a.takeAllPct),
+                x: `headline rate ${PLATFORM_FEE_RATE_LABEL}`,
+                tone: "fee",
+              },
+              {
+                l: "Fees all time",
+                n: formatKobo(a.feesAllKobo),
+                x: `${formatKobo(a.avgFeePerTicketKobo)} per ticket`,
+                tone: "fee",
+              },
+            ]}
+          />
 
           {/* THE GAP BETWEEN THE TWO RATES IS THE PRODUCT WORKING AS
               DESIGNED, and it is worth naming rather than leaving somebody
@@ -203,22 +178,34 @@ export function AnalyticsView({ a }: { a: Analytics }) {
           <MonthBars months={a.months} />
 
           {/* ── The plain figures ─────────────────────────────── */}
-          <div className="flex flex-wrap gap-3">
-            {[
-              { l: "Paid orders", n: a.paidOrders.toLocaleString("en-NG"), x: `${a.ticketsPaid.toLocaleString("en-NG")} tickets` },
-              { l: "Average order", n: formatKobo(a.avgOrderKobo), x: "gross, per order" },
-              { l: "Fee per ticket", n: formatKobo(a.avgFeePerTicketKobo), x: "average, paid tickets" },
-              { l: "Free registrations", n: a.freeRegistrations.toLocaleString("en-NG"), x: `${a.ticketsFree.toLocaleString("en-NG")} tickets · not revenue` },
-            ].map((f) => (
-              <div key={f.l} className="adm-card min-w-[172px] flex-1 px-5 py-4">
-                <p className={label}>{f.l}</p>
-                <p className="mt-2 text-[30px] font-extrabold leading-none tracking-[-0.045em] [font-variant-numeric:tabular-nums]">
-                  {f.n}
-                </p>
-                <p className="mt-2 text-[12px] text-[var(--dl-ink-soft)]">{f.x}</p>
-              </div>
-            ))}
-          </div>
+          <Figures
+            items={[
+              {
+                l: "Paid orders",
+                n: a.paidOrders.toLocaleString("en-NG"),
+                x: `${a.ticketsPaid.toLocaleString("en-NG")} tickets`,
+                tone: "count",
+              },
+              {
+                l: "Average order",
+                n: formatKobo(a.avgOrderKobo),
+                x: "gross, per order",
+                tone: "money",
+              },
+              {
+                l: "Fee per ticket",
+                n: formatKobo(a.avgFeePerTicketKobo),
+                x: "average, paid tickets",
+                tone: "fee",
+              },
+              {
+                l: "Free registrations",
+                n: a.freeRegistrations.toLocaleString("en-NG"),
+                x: `${a.ticketsFree.toLocaleString("en-NG")} tickets \u00B7 not revenue`,
+                tone: "group",
+              },
+            ]}
+          />
 
           <div className="grid gap-4 lg:grid-cols-2">
             {/* ── Does it depend on one person ───────────────── */}

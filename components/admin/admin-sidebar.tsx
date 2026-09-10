@@ -143,7 +143,7 @@ function visibleGroups(role: AdminRole) {
  */
 function SoonTag() {
   return (
-    <span className="ml-auto shrink-0 rounded-[2px] border border-[var(--dl-line)] px-1.5 py-[1px] text-[9px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-faint)]">
+    <span className="ml-auto shrink-0 rounded-full border border-[var(--dl-line)] bg-[#F6F7F8] px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.06em] text-[var(--dl-ink-faint)]">
       Soon
     </span>
   );
@@ -160,34 +160,36 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
   const [collapsed, setCollapsed] = useState(false);
 
   const item = (active: boolean) =>
-    `group flex h-[38px] items-center rounded-full text-[13.5px] transition-colors ${
-      active
-        ? "bg-[var(--dl-ink)] font-extrabold text-white"
-        : "font-semibold text-[var(--dl-ink-soft)] hover:bg-[rgba(255,255,255,0.7)] hover:text-[var(--dl-ink)]"
-    } ${collapsed ? "justify-center px-0" : "gap-3 px-3.5"}`;
+    `adm-nav ${active ? "adm-nav-on" : ""} ${collapsed ? "justify-center px-0" : ""}`;
 
   const icon = "h-[16px] w-[16px] shrink-0";
   const text = `truncate ${collapsed ? "hidden" : ""}`;
 
   return (
     <aside
-      className={`relative z-10 hidden h-screen shrink-0 flex-col overflow-y-auto overflow-x-hidden transition-[width] duration-200 lg:flex ${
-        collapsed ? "w-[76px]" : "w-[236px]"
+      className={`relative z-10 hidden h-screen shrink-0 flex-col overflow-y-auto overflow-x-hidden border-r border-[var(--dl-line)] bg-[var(--dl-panel)] transition-[width] duration-200 lg:flex ${
+        collapsed ? "w-[72px]" : "w-[228px]"
       }`}
     >
-      <div className="flex h-[68px] shrink-0 items-center justify-between px-4">
+      <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-[var(--dl-line)] px-4">
         <Link
           href="/admin"
-          className={`overflow-hidden whitespace-nowrap text-[16px] font-extrabold tracking-[-0.03em] ${
+          className={`flex items-center gap-2 overflow-hidden whitespace-nowrap text-[15px] font-extrabold tracking-[-0.03em] ${
             collapsed ? "hidden" : ""
           }`}
         >
-          CrowdBuzz <span className="text-[var(--dl-ink-faint)]">owner</span>
+          <span
+            aria-hidden="true"
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-[8px] bg-[var(--dl-acid)] text-[13px] font-black text-[var(--dl-ink)]"
+          >
+            C
+          </span>
+          CrowdBuzz
         </Link>
         <button
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? "Expand the menu" : "Collapse the menu"}
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[var(--dl-ink-faint)] transition-colors hover:bg-[rgba(255,255,255,0.7)] hover:text-[var(--dl-ink)] ${
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] text-[var(--dl-ink-faint)] transition-colors hover:bg-[#F1F2F4] hover:text-[var(--dl-ink)] ${
             collapsed ? "mx-auto" : ""
           }`}
         >
@@ -199,7 +201,7 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
         {visibleGroups(role).map((g, gi) => (
           <div key={g.label ?? "top"} className={gi !== 0 ? "mt-5" : ""}>
             {g.label && !collapsed && (
-              <p className="mb-1.5 px-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]">
+              <p className="mb-1 px-3 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[var(--dl-ink-faint)]">
                 {g.label}
               </p>
             )}
@@ -228,15 +230,15 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
         ))}
       </div>
 
-      <div className="mt-auto p-3">
+      <div className="mt-auto border-t border-[var(--dl-line)] p-3">
         <Link href="/overview" className={item(false)}>
           <ArrowUpRight strokeWidth={2} className={icon} />
           <span className={text}>Your own dashboard</span>
         </Link>
         <button
           onClick={() => signOut()}
-          className={`flex h-[38px] w-full items-center rounded-full text-[13.5px] font-semibold text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(255,75,99,0.12)] hover:text-[var(--dl-danger)] ${
-            collapsed ? "justify-center px-0" : "gap-3 px-3.5"
+          className={`adm-nav w-full hover:bg-[#FDEEF1] hover:text-[var(--dl-danger)] ${
+            collapsed ? "justify-center px-0" : ""
           }`}
         >
           <LogOut strokeWidth={2} className={icon} />
@@ -310,11 +312,7 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
                   <Link
                     key={i.href}
                     href={i.href as never}
-                    className={`flex h-11 items-center gap-3 rounded-full px-3.5 text-[14px] ${
-                      isOn(pathname, i.href)
-                        ? "bg-[var(--dl-ink)] font-extrabold text-white"
-                        : "font-semibold text-[var(--dl-ink-soft)]"
-                    }`}
+                    className={`adm-nav h-11 ${isOn(pathname, i.href) ? "adm-nav-on" : ""}`}
                   >
                     <i.icon strokeWidth={2} className="h-[16px] w-[16px] shrink-0" />
                     <span className="truncate">{i.label}</span>

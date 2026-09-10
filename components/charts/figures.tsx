@@ -51,7 +51,14 @@ export function Sparkline({
   const line = points.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
   const area = `${line} L${w},${h} L0,${h} Z`;
   const stroke = colour ?? (tone === "up" ? UP : tone === "down" ? DOWN : "#141018");
-  const id = `spark-${stroke.replace("#", "")}-${data.length}-${Math.round(max)}`;
+  /*
+   * The id has to survive being put inside url(#...), and an
+   * unresolvable paint reference does not warn — SVG silently falls back
+   * to solid black, so a caller who passes a CSS variable as `colour`
+   * gets a black blob and no clue why. That has happened once already.
+   * Everything but letters, digits and dashes is stripped.
+   */
+  const id = `spark-${stroke.replace(/[^a-zA-Z0-9-]/g, "")}-${data.length}-${Math.round(max)}`;
 
   return (
     <svg

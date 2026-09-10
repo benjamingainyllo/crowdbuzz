@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { TrendChip } from "@/components/charts/figures";
+import { Sparkline, TrendChip } from "@/components/charts/figures";
 import type { Trend } from "@/lib/dashboard-shape";
 // The badge tones below are named states (ok/warn/bad); these are the
 // figure tones (money/count/fee/risk/group). Different jobs, so the
 // import is renamed rather than merged.
-import { TONE_INK, TONE_WASH, type Tone as FigureTone } from "@/lib/tones";
+import { TONE_HEX, TONE_INK, TONE_WASH, type Tone as FigureTone } from "@/lib/tones";
 
 /**
  * The furniture every admin list is built from.
@@ -45,14 +45,14 @@ export function PageHead({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+    <div className="mb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
       <div className="min-w-0">
-        <h1 className="text-[30px] font-extrabold leading-none tracking-[-0.04em]">{title}</h1>
+        <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.035em]">{title}</h1>
         {sub && (
-          <p className="mt-2 text-[13.5px] text-[var(--dl-ink-soft)]">{sub}</p>
+          <p className="mt-1.5 text-[13.5px] text-[var(--dl-ink-soft)]">{sub}</p>
         )}
       </div>
-      {right}
+      {right && <div className="flex flex-wrap items-center gap-2">{right}</div>}
     </div>
   );
 }
@@ -71,41 +71,80 @@ export function PageHead({
 export function Figures({
   items,
 }: {
-  items: { n: string; l: string; x?: string; t?: Trend; invert?: boolean; tone?: FigureTone }[];
+  items: {
+    n: string;
+    l: string;
+    x?: string;
+    t?: Trend;
+    invert?: boolean;
+    tone?: FigureTone;
+    /** The shape behind the number. Drawn only when there is one. */
+    spark?: number[];
+    icon?: React.ReactNode;
+  }[];
 }) {
   /*
-   * Separate tiles, not one ruled grid.
+   * ONE CARD PER FIGURE, EACH CARRYING ITS OWN SHAPE.
    *
-   * The old strip was a single bordered block cut into cells by 2px
-   * rules, with a negative-margin trick so the outer rules tucked under
-   * the panel border. None of that survives a design with no rules in
-   * it: the tiles are their own cards now and the gap between them does
-   * what the rule used to.
+   * These were cells in a single ruled block, which is compact and says
+   * nothing: a fee total with no direction is a number you cannot act on,
+   * and the delta chip alone only says "up" — not whether it climbed
+   * steadily or spiked once and fell back. A sparkline answers that in
+   * the space the old rule occupied.
    *
-   * The numerals grow to 34px because on this screen they are the
-   * content. A tone still tints the tile, but at a fraction of its old
-   * strength — a saturated wash behind a large number fights it.
+   * A GRID, NOT A FLEX ROW. flex-1 with a min-width shares the leftover
+   * space between whatever fits on a line, so four cards on one row and
+   * one on the next made the fifth card three times the width of the
+   * others — the same number, three times louder, by accident.
    */
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {items.map((f) => (
-        <div
-          key={f.l}
-          className="adm-card min-w-[172px] flex-1 px-5 py-4"
-          style={f.tone ? { background: TONE_WASH[f.tone] } : undefined}
-        >
-          <p
-            className="text-[10.5px] font-extrabold uppercase tracking-[0.16em]"
-            style={{ color: f.tone ? TONE_INK[f.tone] : "var(--dl-ink-faint)" }}
-          >
-            {f.l}
-          </p>
-          <p className="mt-2 text-[34px] font-extrabold leading-none tracking-[-0.045em] [font-variant-numeric:tabular-nums]">
-            {f.n}
-          </p>
-          <div className="mt-2.5 flex flex-wrap items-center gap-2">
-            {f.t && <TrendChip trend={f.t} invert={f.invert} />}
-            {f.x && <span className="text-[12px] text-[var(--dl-ink-soft)]">{f.x}</span>}
+        <div key={f.l} className="adm-card p-4">
+          <div className="flex items-center gap-2">
+            {f.icon && (
+              <span
+                className="grid h-6 w-6 shrink-0 place-items-center rounded-[6px]"
+                style={{ background: f.tone ? TONE_WASH[f.tone] : "#F1F2F4" }}
+              >
+                {f.icon}
+              </span>
+            )}
+            <p
+              className="truncate text-[12.5px] font-bold"
+              style={{ color: f.tone ? TONE_INK[f.tone] : "var(--dl-ink-soft)" }}
+            >
+              {f.l}
+            </p>
+          </div>
+
+          <div className="mt-3 flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <p className="truncate text-[26px] font-extrabold leading-none tracking-[-0.04em] [font-variant-numeric:tabular-nums]">
+                {f.n}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                {f.t && <TrendChip trend={f.t} invert={f.invert} />}
+                {f.x && (
+                  <span className="text-[11.5px] text-[var(--dl-ink-faint)]">{f.x}</span>
+                )}
+              </div>
+            </div>
+
+            {f.spark && f.spark.length > 1 && (
+              /* TONE_HEX, NOT TONE_INK. TONE_INK is a CSS variable, and a
+                 variable cannot go inside an SVG gradient id — the id came
+                 out as "spark-var(--dl-money)-30-…", url(#…) could not
+                 resolve it, and SVG falls back to solid black for an
+                 unresolvable paint. The sparklines rendered as black
+                 blobs. lib/tones.ts says exactly this at the top of
+                 TONE_HEX; I used the wrong one. */
+              <Sparkline
+                data={f.spark}
+                colour={f.tone ? TONE_HEX[f.tone] : undefined}
+                className="shrink-0 opacity-90"
+              />
+            )}
           </div>
         </div>
       ))}
@@ -116,16 +155,16 @@ export function Figures({
 type Tone = "ok" | "warn" | "bad" | "flat";
 
 const TONES: Record<Tone, string> = {
-  ok: "bg-[#E8F7EE] text-[#146B45]",
-  warn: "bg-[#FDF1D8] text-[#7A5000]",
-  bad: "bg-[#FFEBEF] text-[#B32243]",
-  flat: "bg-[rgba(20,16,24,0.05)] text-[var(--dl-ink-soft)]",
+  ok: "border-[#B7E4CB] bg-[#EDF9F2] text-[#146B45]",
+  warn: "border-[#F3DCA6] bg-[#FDF6E7] text-[#7A5000]",
+  bad: "border-[#F5C2CE] bg-[#FDEEF1] text-[#B32243]",
+  flat: "border-[var(--dl-line)] bg-[#F6F7F8] text-[var(--dl-ink-soft)]",
 };
 
 export function Badge({ tone = "flat", children }: { tone?: Tone; children: React.ReactNode }) {
   return (
     <span
-      className={`inline-block whitespace-nowrap rounded-full px-2.5 py-[3px] text-[10.5px] font-extrabold uppercase tracking-[0.08em] ${TONES[tone]}`}
+      className={`inline-block whitespace-nowrap rounded-full border px-2.5 py-[2px] text-[11px] font-bold ${TONES[tone]}`}
     >
       {children}
     </span>
@@ -171,15 +210,14 @@ export function Band({
   tone?: FigureTone;
 }) {
   return (
-    <div
-      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-[var(--dl-line)] px-5 py-3.5"
-      style={{ background: TONE_WASH[tone] }}
-    >
+    /* A NEUTRAL GROUND, WITH THE TONE ONLY IN THE LABEL. A full-strength
+       wash behind a panel header was right on a design carried by colour;
+       on a bordered white card it reads as a highlighted row and pulls
+       the eye away from the table it is introducing. The tone still says
+       what kind of thing this is — it just says it in the text. */
+    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-[var(--dl-line)] bg-[#FAFBFB] px-4 py-3">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <p
-          className="text-[10.5px] font-extrabold uppercase tracking-[0.18em]"
-          style={{ color: TONE_INK[tone] }}
-        >
+        <p className="text-[12.5px] font-extrabold" style={{ color: TONE_INK[tone] }}>
           {title}
         </p>
         {note && <p className="text-[12px] text-[var(--dl-ink-soft)]">{note}</p>}
@@ -206,8 +244,8 @@ export function Scroll({ children }: { children: React.ReactNode }) {
 }
 
 export const th =
-  "border-b border-[var(--dl-line)] px-5 py-3 text-left text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--dl-ink-faint)] whitespace-nowrap";
-export const td = "border-b border-[var(--dl-line-soft)] px-5 py-3.5 text-[14px] align-top";
+  "bg-[#FAFBFB] border-b border-[var(--dl-line)] px-4 py-2.5 text-left text-[11.5px] font-bold text-[var(--dl-ink-faint)] whitespace-nowrap";
+export const td = "border-b border-[var(--dl-line-soft)] px-4 py-3 text-[13.5px] align-top";
 export const tdNum = `${td} text-right [font-variant-numeric:tabular-nums] whitespace-nowrap`;
 
 export function Pager({
@@ -233,7 +271,7 @@ export function Pager({
     return `${base}?${q.toString()}`;
   };
 
-  const btn = "adm-pill px-4 uppercase tracking-[0.04em] text-[12px]";
+  const btn = "adm-btn";
 
   return (
     <div className="mt-4 flex items-center justify-between gap-4">
@@ -275,12 +313,12 @@ export function SearchBar({
         name="q"
         defaultValue={q ?? ""}
         placeholder={placeholder}
-        className="h-[42px] min-w-[220px] flex-1 rounded-full border border-[rgba(20,16,24,0.08)] bg-[var(--dl-panel)] px-4 text-[14px] outline-none transition-shadow placeholder:text-[var(--dl-ink-faint)] focus:shadow-[0_0_0_3px_rgba(20,16,24,0.06)]"
+        className="adm-field min-w-[220px] flex-1"
       />
       {extra}
       <button
         type="submit"
-        className="h-[42px] rounded-full bg-[var(--dl-ink)] px-5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-white transition-transform hover:-translate-y-[1px]"
+        className="adm-btn adm-btn-primary"
       >
         Search
       </button>
@@ -301,7 +339,7 @@ export function FilterSelect({
     <select
       name={name}
       defaultValue={value ?? "all"}
-      className="h-[42px] rounded-full border border-[rgba(20,16,24,0.08)] bg-[var(--dl-panel)] px-4 text-[14px] font-semibold outline-none"
+      className="adm-field font-semibold"
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>

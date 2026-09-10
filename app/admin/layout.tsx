@@ -39,30 +39,35 @@ export default async function AdminLayout({ children }: { children: React.ReactN
        its overrides win. Drop either class and the screen is half a
        design. */
     <div className="dl adm relative flex h-screen flex-col overflow-hidden font-[family-name:var(--font-bricolage-grotesque)] lg:flex-row">
-      {/* The haze. Fixed and behind everything, so a scrolling table does
-          not drag it up the screen. */}
-      <div className="adm-aurora" aria-hidden="true" />
-
       <AdminMobileHeader role={admin.role} />
       <AdminSidebar role={admin.role} email={admin.email} />
 
       <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
-        {/* No rule under the header. The old 2px line was the divider
-            between chrome and work; here the work is a set of floating
-            cards and the chrome is simply the space above them. */}
-        <header className="flex h-[68px] shrink-0 items-center gap-4 px-5 md:px-7">
-          <div className="w-full max-w-[460px]">
+        {/* The bar is chrome and sits on white with a rule under it, so
+            the grey working area below reads as a separate surface. */}
+        <header className="flex h-[60px] shrink-0 items-center gap-4 border-b border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 md:px-6">
+          <p className="hidden shrink-0 text-[15px] font-extrabold tracking-[-0.02em] lg:block">
+            Owner console
+          </p>
+
+          <div className="mx-auto w-full max-w-[420px]">
             <GlobalSearch />
           </div>
 
-          <div className="ml-auto hidden items-center gap-3 md:flex">
-            <span className="rounded-full bg-[rgba(20,16,24,0.05)] px-3 py-[5px] text-[10.5px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-soft)]">
+          <div className="ml-auto hidden shrink-0 items-center gap-3 md:flex">
+            <span className="rounded-full border border-[var(--dl-line)] bg-[#F6F7F8] px-2.5 py-[3px] text-[11.5px] font-bold text-[var(--dl-ink-soft)]">
               {admin.role.replace("_", " ")}
+            </span>
+            <span
+              className="grid h-8 w-8 place-items-center rounded-full bg-[var(--dl-ink)] text-[12px] font-extrabold text-white"
+              title={admin.email ?? undefined}
+            >
+              {(admin.email ?? "?").charAt(0).toUpperCase()}
             </span>
           </div>
         </header>
 
-        <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-5 pb-8 pt-1 md:px-7">
+        <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-5 py-5 md:px-6 md:py-6">
           {children}
         </main>
       </div>
