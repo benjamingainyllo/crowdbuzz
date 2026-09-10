@@ -14,6 +14,7 @@ import { SAMPLE_EVENT_ID } from "@/lib/sample-event";
 import { ReactionBar } from "@/components/storefront/reaction-bar";
 import { EventFeed } from "@/components/storefront/event-feed";
 import { InterestButton } from "@/components/storefront/interest-button";
+import { DescriptionBubble } from "@/components/storefront/description-bubble";
 import { getDeliveryChannels } from "@/app/actions/delivery";
 import { bandFeeKobo, formatKobo } from "@/lib/money";
 import { formatE164, toE164 } from "@/lib/whatsapp/phone";
@@ -385,9 +386,19 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               and this has to move too. Measured, not guessed: it reads
               top=32px at every scroll position including the last.
 
+              AND IT DOES NOT SCROLL INSIDE ITSELF EITHER. It used to carry
+              overflow-y-auto, which meant a column taller than the screen
+              quietly got a scrollbar of its own — so the "fixed" side held
+              its position but its contents still moved under the reader,
+              which is the same complaint by a different route. It is
+              overflow-hidden now, and everything in here is responsible for
+              fitting: the one item with no natural limit is the host's
+              description, which is why that is clamped with a reader behind
+              it rather than allowed to run.
+
               Only above lg. On a phone there is one column and sticky would
               pin the title over the thing you are trying to read. */}
-          <div className="min-w-0 lg:sticky lg:top-8 lg:h-[calc(100vh-4.25rem)] lg:self-start lg:overflow-y-auto lg:pr-3 [scrollbar-width:thin]">
+          <div className="min-w-0 lg:sticky lg:top-8 lg:flex lg:h-[calc(100vh-4.25rem)] lg:flex-col lg:self-start lg:overflow-hidden lg:pr-3">
             {/* One element. The clamp carries the face's own scale at both
                 ends, so a script shrinks from its larger size rather than
                 from everyone else's. */}
@@ -525,18 +536,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                 house. Same text, different frame: a bubble with a tail, a
                 name above it, and nothing else pretending to be typography. */}
             {event.description && (
-              <div className="mt-8 max-w-[52ch]">
-                {hostName && (
-                  <p className="mb-2 pl-1 text-[12.5px] font-extrabold tracking-[0.01em] text-[var(--dl-ink-faint)]">
-                    {hostName}
-                  </p>
-                )}
-                <div className="relative rounded-[20px] rounded-bl-[6px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 py-4">
-                  <p className="whitespace-pre-line text-[14.5px] leading-[1.55] text-[var(--dl-ink)]">
-                    {event.description}
-                  </p>
-                </div>
-              </div>
+              <DescriptionBubble text={event.description} hostName={hostName} />
             )}
 
             {/* One tap, no account, no email. The cheapest true social proof
