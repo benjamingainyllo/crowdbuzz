@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getAdminIdentity } from "@/lib/admin";
+import { attentionSummary } from "@/lib/admin-queries";
 import { AdminSidebar, AdminMobileHeader } from "@/components/admin/admin-sidebar";
 import { GlobalSearch } from "@/components/admin/global-search";
 
@@ -32,6 +33,20 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const admin = await getAdminIdentity();
   if (!admin) notFound();
 
+  /*
+   * The alert count, read here rather than on the overview.
+   *
+   * It lives in the layout because the whole point of moving it out of
+   * the dashboard is that "is anything wrong" should be answerable from
+   * every screen, not only from the one screen somebody happens to open
+   * first. One small query per page load, of ids and severities only.
+   *
+   * A failed read comes back available:false with a zero, which the
+   * sidebar renders as no badge at all — the right behaviour, because a
+   * red "0" on a broken query is a worse lie than showing nothing.
+   */
+  const alerts = await attentionSummary();
+
   return (
     /* `dl` AND `adm`, in that order and both required. The console reads
        .dl's tokens like the rest of the signed-in product; .adm is the
@@ -39,8 +54,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
        its overrides win. Drop either class and the screen is half a
        design. */
     <div className="dl adm relative flex h-screen flex-col overflow-hidden font-[family-name:var(--font-bricolage-grotesque)] lg:flex-row">
-      <AdminMobileHeader role={admin.role} />
-      <AdminSidebar role={admin.role} email={admin.email} />
+      <AdminMobileHeader role={admin.role} alerts={alerts} />
+      <AdminSidebar role={admin.role} email={admin.email} alerts={alerts} />
 
       <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
         {/* The bar is chrome and sits on white with a rule under it, so

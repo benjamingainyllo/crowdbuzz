@@ -141,6 +141,63 @@ function visibleGroups(role: AdminRole) {
  * enough to stop somebody clicking it expecting figures, quiet enough
  * that six of them in a row do not shout over the six that work.
  */
+export interface AlertCount {
+  total: number;
+  critical: number;
+  high: number;
+  available: boolean;
+}
+
+/** Which menu item the alert count belongs to. */
+const ALERT_HREF = "/admin/attention";
+
+/**
+ * The count of things that need somebody.
+ *
+ * WHY IT IS HERE AND NOT ON THE DASHBOARD. The overview used to open
+ * with the whole queue — four identical "payment still pending" rows,
+ * each carrying a raw UUID — which pushed the actual numbers below the
+ * fold and made a glance at the dashboard into a wall of warnings. A
+ * count in the menu answers the same question ("is anything wrong?")
+ * from every screen instead of from one, and costs no space.
+ *
+ * RED ONLY WHEN SOMETHING IS ACTUALLY URGENT. A permanently red badge
+ * is a badge people stop seeing, and a queue with two low-severity
+ * items in it is not an emergency. Critical or high turns it red;
+ * anything else is a neutral count that still says "there is a list
+ * here" without crying wolf.
+ *
+ * Nothing renders at zero, and nothing renders when the read failed —
+ * a red "0" on a broken query is a worse lie than showing nothing.
+ */
+function AlertBadge({ alerts, dot = false }: { alerts: AlertCount; dot?: boolean }) {
+  if (!alerts.available || alerts.total <= 0) return null;
+  const urgent = alerts.critical > 0 || alerts.high > 0;
+  const tone = urgent
+    ? "bg-[var(--dl-danger)] text-white"
+    : "bg-[#E9EBEE] text-[var(--dl-ink-soft)]";
+
+  if (dot) {
+    return (
+      <span
+        aria-hidden="true"
+        className={`absolute right-[3px] top-[3px] h-2 w-2 rounded-full ${
+          urgent ? "bg-[var(--dl-danger)]" : "bg-[var(--dl-ink-faint)]"
+        }`}
+      />
+    );
+  }
+
+  return (
+    <span
+      className={`ml-auto min-w-[20px] shrink-0 rounded-full px-1.5 py-[1px] text-center text-[11px] font-extrabold tabular-nums ${tone}`}
+      title={`${alerts.total} open${urgent ? `, ${alerts.critical + alerts.high} urgent` : ""}`}
+    >
+      {alerts.total > 99 ? "99+" : alerts.total}
+    </span>
+  );
+}
+
 function SoonTag() {
   return (
     <span className="ml-auto shrink-0 rounded-full border border-[var(--dl-line)] bg-[#F6F7F8] px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.06em] text-[var(--dl-ink-faint)]">
@@ -154,13 +211,21 @@ function isOn(pathname: string, href: string) {
   return href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
 }
 
-export function AdminSidebar({ role, email }: { role: AdminRole; email: string | null }) {
+export function AdminSidebar({
+  role,
+  email,
+  alerts,
+}: {
+  role: AdminRole;
+  email: string | null;
+  alerts: AlertCount;
+}) {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
 
   const item = (active: boolean) =>
-    `adm-nav ${active ? "adm-nav-on" : ""} ${collapsed ? "justify-center px-0" : ""}`;
+    `adm-nav relative ${active ? "adm-nav-on" : ""} ${collapsed ? "justify-center px-0" : ""}`;
 
   const icon = "h-[16px] w-[16px] shrink-0";
   const text = `truncate ${collapsed ? "hidden" : ""}`;
@@ -221,6 +286,9 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
                   >
                     <i.icon strokeWidth={2} className={icon} />
                     <span className={text}>{i.label}</span>
+                    {i.href === ALERT_HREF && (
+                      <AlertBadge alerts={alerts} dot={collapsed} />
+                    )}
                     {i.soon && !collapsed && !on && <SoonTag />}
                   </Link>
                 );
@@ -259,7 +327,7 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
 }
 
 /** The same menu on a phone, behind one button. */
-export function AdminMobileHeader({ role }: { role: AdminRole }) {
+export function AdminMobileHeader({ role, alerts }: { role: AdminRole; alerts: AlertCount }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
@@ -277,10 +345,15 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
         </Link>
         <button
           onClick={() => setOpen(true)}
-          aria-label="Open the menu"
-          className="flex h-11 w-11 items-center justify-center rounded-[3px] text-[var(--dl-ink-soft)]"
+          aria-label={
+            alerts.available && alerts.total > 0
+              ? `Open the menu — ${alerts.total} need attention`
+              : "Open the menu"
+          }
+          className="relative flex h-11 w-11 items-center justify-center rounded-[8px] text-[var(--dl-ink-soft)]"
         >
           <Menu className="h-5 w-5" />
+          <AlertBadge alerts={alerts} dot />
         </button>
       </header>
 
@@ -316,6 +389,7 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
                   >
                     <i.icon strokeWidth={2} className="h-[16px] w-[16px] shrink-0" />
                     <span className="truncate">{i.label}</span>
+                    {i.href === ALERT_HREF && <AlertBadge alerts={alerts} />}
                     {i.soon && !isOn(pathname, i.href) && <SoonTag />}
                   </Link>
                 ))}

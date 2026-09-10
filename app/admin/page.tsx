@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getPlatformStats } from "@/lib/platform-stats";
-import { getOverviewShape, listAttention, attentionSummary } from "@/lib/admin-queries";
+import { getOverviewShape } from "@/lib/admin-queries";
 import { runDetectors } from "@/lib/attention";
 import { formatKobo } from "@/lib/money";
 import { TicketTypeSplit, WeekdayBars } from "@/components/charts/bars";
@@ -33,35 +33,13 @@ export const metadata = {
  * order, event or organiser it is about.
  */
 
-const SEVERITY_RANK: Record<string, number> = {
-  critical: 0, high: 1, medium: 2, low: 3,
-};
-
-/** Where an alert is actually about. */
-function alertHref(item: any): string {
-  if (item.order_id) return `/admin/orders/${item.order_id}`;
-  if (item.event_id) return `/admin/events/${item.event_id}`;
-  if (item.creator_id) return `/admin/organisers/${item.creator_id}`;
-  return "/admin/attention";
-}
-
 export default async function AdminPage() {
   await runDetectors();
 
-  const [s, shape, summary, top] = await Promise.all([
-    getPlatformStats(),
-    getOverviewShape(),
-    attentionSummary(),
-    listAttention({ page: 1, status: "open" }),
-  ]);
+  const [s, shape] = await Promise.all([getPlatformStats(), getOverviewShape()]);
 
   const takeRate =
     s.grossKobo > 0 ? `${((s.feesKobo / s.grossKobo) * 100).toFixed(1)}%` : "—";
-
-  const alerts = [...top.rows].sort(
-    (a: any, b: any) => (SEVERITY_RANK[a.severity] ?? 9) - (SEVERITY_RANK[b.severity] ?? 9)
-  );
-  const clear = !summary.available || alerts.length === 0;
 
   return (
     <section className="space-y-7">
@@ -76,86 +54,19 @@ export default async function AdminPage() {
         </p>
       </div>
 
-      {/* ── The queue. First, always. ───────────────────────── */}
-      <div>
-        <div className="mb-2.5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <p className={label}>Needs attention</p>
-            {!clear && (
-              <span className="flex items-center gap-1.5">
-                {summary.critical > 0 && (
-                  <span className="rounded-[2px] bg-[var(--dl-danger)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.08em] text-white">
-                    {summary.critical} critical
-                  </span>
-                )}
-                {summary.high > 0 && (
-                  <span className="rounded-[2px] bg-[#8A5A00] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.08em] text-white">
-                    {summary.high} high
-                  </span>
-                )}
-                <span className="text-[12.5px] text-[var(--dl-ink-soft)]">
-                  {summary.total} open
-                </span>
-              </span>
-            )}
-          </div>
-          <Link href="/admin/attention" className="text-[12.5px] font-bold underline underline-offset-2">
-            {clear ? "Open the queue" : `See all ${summary.total}`}
-          </Link>
-        </div>
+      {/* THE QUEUE IS NOT ON THIS SCREEN, AND THAT IS THE POINT.
+          Four "payment still pending" rows, each carrying a raw UUID,
+          filled the top of the overview and pushed the numbers below the
+          fold — so the screen you open to see how the platform is doing
+          opened instead with a wall of identical warnings. The queue
+          still matters; it just does not need to be read in full every
+          time somebody glances at the dashboard.
 
-        <div className={`${panel} overflow-hidden`}>
-          {clear ? (
-            <p className="px-4 py-3.5 text-[14px]">
-              <b>Nothing wrong.</b>{" "}
-              <span className="text-[var(--dl-ink-soft)]">
-                No stuck payments, no failed refunds, no chargebacks, nobody selling
-                without a bank connected.
-              </span>
-            </p>
-          ) : (
-            <>
-              {alerts.slice(0, 7).map((item: any, i: number) => (
-                <Link
-                  key={item.id}
-                  href={alertHref(item) as never}
-                  className={`flex items-start gap-3 px-4 py-2.5 text-[14px] transition-colors hover:bg-black/[0.03] ${
-                    i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""
-                  }`}
-                >
-                  <span
-                    className={`mt-[1px] grid h-[22px] min-w-[52px] shrink-0 place-items-center rounded-[2px] px-1 text-[9.5px] font-extrabold uppercase tracking-[0.06em] ${
-                      item.severity === "critical"
-                        ? "bg-[var(--dl-danger)] text-white"
-                        : item.severity === "high"
-                          ? "bg-[#8A5A00] text-white"
-                          : "bg-[var(--dl-ink)] text-[var(--dl-paper)]"
-                    }`}
-                  >
-                    {item.severity}
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <b>{item.title}</b>
-                    {item.detail ? (
-                      <span className="text-[var(--dl-ink-soft)]"> {item.detail}</span>
-                    ) : null}
-                  </span>
-                  <span className="hidden shrink-0 text-[12px] text-[var(--dl-ink-faint)] sm:block">
-                    {niceDate(item.last_seen_at)}
-                  </span>
-                </Link>
-              ))}
-              {summary.total > 7 && (
-                <div className="border-t-2 border-[var(--dl-line)] px-4 py-2.5">
-                  <Link href="/admin/attention" className="text-[13px] font-bold underline underline-offset-2">
-                    {summary.total - 7} more
-                  </Link>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      </div>
+          What replaced it is a red count on Fraud & Risk in the sidebar,
+          which is visible from every screen rather than only this one,
+          and is the normal place to look for "is anything wrong".
+          runDetectors() above still runs here, because the overview is
+          the landing page and that keeps the count fresh. */}
 
       {/* ── The numbers ───────────────────────────────────────
           ONE ROW OF CARDS, EACH CARRYING ITS OWN SHAPE. These were two
