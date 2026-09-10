@@ -3,6 +3,7 @@ import { formatKobo } from "@/lib/money";
 import type { ExploreEvent } from "@/lib/explore";
 import { InterestButton } from "@/components/storefront/interest-button";
 import { Tinted } from "@/components/storefront/tinted";
+import { whenLabel, tintFor } from "@/lib/event-display";
 
 /**
  * One event, as a stranger sees it.
@@ -22,49 +23,6 @@ import { Tinted } from "@/components/storefront/tinted";
  * read "886 interested" never comes back, and nor does the organiser.
  * Zero shows as absence, so a new event reads as new rather than unloved.
  */
-
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-
-/** "Today", "Tomorrow", then "Sat 12 Sep". Time appended when it is set. */
-function whenLabel(date: string | null, time: string | null, now = new Date()): string {
-  if (!date) return "Date to be announced";
-  const d = new Date(`${date}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return "Date to be announced";
-
-  const startOfDay = (x: Date) => new Date(x.getFullYear(), x.getMonth(), x.getDate());
-  const days = Math.round((startOfDay(d).getTime() - startOfDay(now).getTime()) / 86400000);
-
-  const day =
-    days === 0 ? "Today"
-    : days === 1 ? "Tomorrow"
-    : days < 7 ? `This ${DAYS[d.getDay()]}`
-    : days < 14 ? `Next ${DAYS[d.getDay()]}`
-    : `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`;
-
-  return time ? `${day} at ${time.replace(/:00\b/, "").toLowerCase()}` : day;
-}
-
-/**
- * A poster for an event with no artwork.
- *
- * MOST EVENTS ARRIVE WITHOUT A FLYER, and the reference's page is carried
- * almost entirely by artwork — so what fills that square when there is
- * none decides whether the page looks designed or looks broken. Setting
- * the title in caps inside a box looked like a missing image. This is a
- * deliberate poster instead: two-tone gradient chosen from the event's own
- * id so it is stable between visits, the host's initial set large, and a
- * grain of the title underneath. It reads as a choice, not a gap.
- */
-const PAIRS = [
-  ["#FF6A45", "#7A1F3D"], ["#DDBBF5", "#2B1B4A"], ["#9BE3C0", "#123A2E"],
-  ["#B7C4FF", "#1E2352"], ["#FFDE59", "#5A3B00"], ["#FFB3C7", "#4A1230"],
-];
-function tintFor(id: string): [string, string] {
-  let n = 0;
-  for (let i = 0; i < id.length; i++) n = (n * 31 + id.charCodeAt(i)) % 997;
-  return PAIRS[n % PAIRS.length] as [string, string];
-}
 
 function Poster({ event, size }: { event: ExploreEvent; size: "sm" | "lg" }) {
   const [a, b] = tintFor(event.id);

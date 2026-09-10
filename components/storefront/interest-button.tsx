@@ -26,8 +26,8 @@ export function InterestButton({
   eventId: string;
   initialSaved: boolean;
   initialCount: number;
-  /** "icon" for a card corner, "full" for the event page. */
-  variant?: "icon" | "full";
+  /** "icon" for a card footer, "pill" over artwork, "full" for the event page. */
+  variant?: "icon" | "pill" | "full";
 }) {
   const [truth, setTruth] = useState({ saved: initialSaved, count: initialCount });
   const [shown, apply] = useOptimistic(truth, (state, next: boolean) => ({
@@ -91,6 +91,40 @@ export function InterestButton({
           <p className="text-[12px] font-bold text-[var(--dl-danger)]">{failed}</p>
         )}
       </div>
+    );
+  }
+
+  /*
+   * The pill that sits ON the flyer, carrying the count with it.
+   *
+   * A bare star in the corner of a picture says nothing about whether
+   * anybody else is going, and the number is the whole point of the
+   * control on a discovery page: it is social proof first and a control
+   * second. Paper-on-artwork rather than a translucent overlay, because a
+   * frosted pill over a busy flyer is unreadable at this size.
+   */
+  if (variant === "pill") {
+    return (
+      <button
+        type="button"
+        onClick={press}
+        disabled={pending}
+        aria-pressed={shown.saved}
+        aria-label={label}
+        title={failed ?? label}
+        className={`flex h-8 shrink-0 items-center gap-1.5 rounded-full pl-2.5 pr-3 text-[12.5px] font-extrabold shadow-[0_3px_12px_rgba(0,0,0,0.35)] transition-transform active:scale-95 disabled:opacity-70 ${
+          shown.saved
+            ? "bg-[var(--marker)] text-[var(--ink)]"
+            : "bg-[var(--paper)] text-[var(--ink)]"
+        }`}
+      >
+        <Star
+          className="h-[14px] w-[14px]"
+          strokeWidth={2.5}
+          fill={shown.saved ? "currentColor" : "none"}
+        />
+        {shown.count > 0 ? shown.count.toLocaleString("en-NG") : "Save"}
+      </button>
     );
   }
 

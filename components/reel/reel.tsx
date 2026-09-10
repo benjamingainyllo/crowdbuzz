@@ -40,16 +40,19 @@ const DEMO: ExploreEvent[] = [
   {
     id: "reel-1", title: "Owambe Night: The Aunties Take Over", date: iso(0), time: "8:00 PM",
     location: "Victoria Island", cover: null, hostName: "Bodega Lagos", hostHandle: null,
+    description: "Live band, jollof, and the aunties on the mic until the generator gives up.",
     fromKobo: 1_500_000, going: 412, interested: 1284, saved: false,
   },
   {
     id: "reel-2", title: "Sunset Sessions Vol. 4", date: iso(1), time: "6:30 PM",
     location: "Lekki Phase 1", cover: null, hostName: "Field Notes NG", hostHandle: null,
+    description: "Rooftop, four DJs, and the last of the light over the lagoon.",
     fromKobo: 500_000, going: 188, interested: 96, saved: true,
   },
   {
     id: "reel-3", title: "Alté Sunday", date: iso(5), time: "2:00 PM",
     location: "Ikeja", cover: null, hostName: "Terra Kulture", hostHandle: null,
+    description: "Records, thrift stalls and small chops. Free in, bring cash.",
     fromKobo: 0, going: 64, interested: 210, saved: false,
   },
 ];

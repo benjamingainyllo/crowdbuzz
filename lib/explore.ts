@@ -28,6 +28,8 @@ export interface ExploreEvent {
   time: string | null;
   location: string | null;
   cover: string | null;
+  /** The organiser's own blurb, trimmed. Shown as two lines under a tile. */
+  description: string | null;
   hostName: string;
   hostHandle: string | null;
   /** Cheapest active tier, in kobo. Null when the event has no tier. */
@@ -103,7 +105,7 @@ export async function loadExplore(now = new Date()): Promise<{
 
   const { data: events, error } = await admin
     .from("events")
-    .select("id, title, date, time, location, cover_image_url, creator_id, publish_status")
+    .select("id, title, date, time, location, description, cover_image_url, creator_id, publish_status")
     .eq("publish_status", "published")
     .or(`date.gte.${today},date.is.null`)
     .order("date", { ascending: true, nullsFirst: false })
@@ -170,6 +172,11 @@ export async function loadExplore(now = new Date()): Promise<{
       time: (e.time as string) ?? null,
       location: (e.location as string) ?? null,
       cover: (e.cover_image_url as string) ?? null,
+      // Collapsed to one line here rather than in the card: a description
+      // written with blank lines between paragraphs renders as a tall gap
+      // inside a two-line clamp, so the clamp shows one word and empty
+      // space. Whitespace is not content at this size.
+      description: ((e.description as string) ?? "").replace(/\s+/g, " ").trim() || null,
       hostName: host?.name ?? "A CrowdBuzz organiser",
       hostHandle: host?.handle ?? null,
       fromKobo: cheapest.get(e.id as string) ?? null,
