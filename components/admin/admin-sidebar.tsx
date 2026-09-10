@@ -103,7 +103,7 @@ const GROUPS: {
     items: [
       { href: "/admin/promotions", label: "Promotions", icon: BadgePercent, soon: true },
       { href: "/admin/marketplace", label: "Marketplace", icon: Store, soon: true },
-      { href: "/admin/analytics", label: "Analytics", icon: BarChart3, soon: true },
+      { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
       { href: "/admin/reports", label: "Reports", icon: FileText, soon: true },
     ],
   },
