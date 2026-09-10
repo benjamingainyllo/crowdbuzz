@@ -328,8 +328,12 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
           the page read as a narrow column floating in the dark. Wider,
           with the padding growing as the screen does so it never runs
           edge to edge either. */}
-      <div className="relative z-10 mx-auto max-w-[1440px] px-5 py-8 sm:px-8 lg:px-12 lg:py-16 xl:px-16">
-        <a href="/" className="mb-10 inline-flex h-11 items-center" aria-label="CrowdBuzz">
+      {/* HALF THE TOP PADDING IT USED TO CARRY. lg:py-16 put 64px of
+          ground above the logo and another 64 below the fold, which on a
+          900px-tall laptop is a seventh of the screen spent on nothing
+          before the event has said its own name. */}
+      <div className="relative z-10 mx-auto max-w-[1440px] px-5 py-6 sm:px-8 lg:px-12 lg:py-9 xl:px-16">
+        <a href="/" className="mb-6 inline-flex h-10 items-center" aria-label="CrowdBuzz">
           <Logo height={28} />
         </a>
 
@@ -366,20 +370,24 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               panel that genuinely holds while the buying column scrolls past
               it. Anything below the fold inside it scrolls within the panel.
 
-              THE HEIGHT IS 100vh MINUS 6rem, NOT 4rem, and the extra 2rem is
-              not a taste call. A sticky box also stops at the bottom of its
-              containing block, so if it is exactly as tall as the space left
-              at the end of the scroll it gets nudged off its top offset in
-              the last stretch of the page — the panel visibly slips upward
-              right at the bottom. 6rem is the 2rem it holds at plus the
-              container's own 4rem of bottom padding, which is precisely the
-              room it needs to hold all the way down. Measured, not guessed:
-              it now reads top=32px at every scroll position including the
-              last one.
+              THE HEIGHT IS TIED TO TWO OTHER NUMBERS AND MUST BE CHANGED
+              WITH THEM. A sticky box also stops at the bottom of its
+              containing block, so if it is exactly as tall as the space
+              left at the end of the scroll it gets nudged off its top
+              offset over the last stretch of the page and the panel
+              visibly slips upward. The height it needs is:
+
+                  100vh - (this column's top offset + the container's
+                           bottom padding)
+
+              which today is 100vh - (2rem from lg:top-8 + 2.25rem from the
+              wrapper's lg:py-9) = 100vh - 4.25rem. Change either of those
+              and this has to move too. Measured, not guessed: it reads
+              top=32px at every scroll position including the last.
 
               Only above lg. On a phone there is one column and sticky would
               pin the title over the thing you are trying to read. */}
-          <div className="min-w-0 lg:sticky lg:top-8 lg:h-[calc(100vh-6rem)] lg:self-start lg:overflow-y-auto lg:pr-3 [scrollbar-width:thin]">
+          <div className="min-w-0 lg:sticky lg:top-8 lg:h-[calc(100vh-4.25rem)] lg:self-start lg:overflow-y-auto lg:pr-3 [scrollbar-width:thin]">
             {/* One element. The clamp carries the face's own scale at both
                 ends, so a script shrinks from its larger size rather than
                 from everyone else's. */}
@@ -408,12 +416,12 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
 
             <h1
               className="break-words"
-              style={titleStyleCssClamp(event.title_style, 40, 56)}
+              style={titleStyleCssClamp(event.title_style, 30, 40)}
             >
               {event.title}
             </h1>
 
-            <p className="mt-6 text-[19px] font-bold leading-[1.35] sm:text-[22px]">
+            <p className="mt-3 text-[16px] font-bold leading-[1.35] sm:text-[17px]">
               {formattedDate}
               {event.time ? (
                 <>
@@ -426,7 +434,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
             </p>
 
             {hostName && (
-              <div className="mt-8 flex items-center gap-3">
+              <div className="mt-5 flex items-center gap-3">
                 {host?.avatar_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -459,7 +467,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                 starts empty and fills a moment later reads as the page
                 undoing the visitor's tap. */}
             {interest && (
-              <div className="mt-6 flex">
+              <div className="mt-4 flex">
                 <InterestButton
                   eventId={params.id}
                   initialSaved={interest.saved}
@@ -524,7 +532,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                   </p>
                 )}
                 <div className="relative rounded-[20px] rounded-bl-[6px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 py-4">
-                  <p className="whitespace-pre-line text-[16px] leading-[1.6] text-[var(--dl-ink)]">
+                  <p className="whitespace-pre-line text-[14.5px] leading-[1.55] text-[var(--dl-ink)]">
                     {event.description}
                   </p>
                 </div>
@@ -547,16 +555,16 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                 a grey 15px line with an icon; it is the second-loudest thing
                 on the page now, and it says something true when the number is
                 zero rather than printing a dispiriting "0". */}
-            <div className="mt-10 border-t border-[var(--dl-line)] pt-7">
+            <div className="mt-7 border-t border-[var(--dl-line)] pt-5">
               <div className="flex items-baseline gap-3">
-                <span className="text-[44px] font-extrabold leading-none tracking-[-0.045em] sm:text-[54px]">
+                <span className="text-[32px] font-extrabold leading-none tracking-[-0.045em] sm:text-[38px]">
                   {goingCount}
                 </span>
-                <span className="text-[17px] font-bold text-[var(--dl-ink-soft)]">
+                <span className="text-[15px] font-bold text-[var(--dl-ink-soft)]">
                   {goingCount === 1 ? "person is going" : "people are going"}
                 </span>
               </div>
-              <p className="mt-2.5 text-[14.5px] text-[var(--dl-ink-faint)]">
+              <p className="mt-2 text-[13.5px] text-[var(--dl-ink-faint)]">
                 {goingCount === 0
                   ? "Nobody yet. Somebody has to be first — it may as well be you."
                   : interest && interest.count > 0
@@ -571,17 +579,40 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
               scrolling past six lines of admin to reach the artwork is how
               a listing behaves, not an invitation. */}
           <div className="min-w-0">
+            {/* A FIXED HEIGHT, NOT AN ASPECT RATIO, AND THE WHOLE FLYER
+                INSIDE IT. At aspect-[4/5] in a 390px column this box came
+                out 487px tall, which on a 900px laptop meant the ticket
+                tiers began below the fold: somebody landing on the page
+                could not see that there was anything to buy without
+                scrolling. The obvious fix — cap the height and keep
+                object-cover — crops the flyer, and a flyer is where the
+                line-up, the price and the address usually are, so cropping
+                it is destroying the content to save space.
+
+                So: a 300px box, the flyer set object-contain so all of it
+                survives whatever shape it is, and a blurred, scaled copy
+                of the same image behind it filling the gap either side.
+                Nothing is lost and nothing is a letterboxed black bar. */}
             <div
-              className={`${panel} hidden aspect-[4/5] w-full overflow-hidden shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)] lg:block`}
+              className={`${panel} relative hidden h-[300px] w-full overflow-hidden shadow-[0_18px_44px_-20px_rgba(0,0,0,0.7)] lg:block`}
               style={{ containerType: "inline-size" }}
             >
               {event.cover_image_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={event.cover_image_url}
-                  alt={event.title}
-                  className="h-full w-full object-cover"
-                />
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={event.cover_image_url}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full scale-125 object-cover opacity-55 blur-2xl"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={event.cover_image_url}
+                    alt={event.title}
+                    className="relative h-full w-full object-contain"
+                  />
+                </>
               ) : (
                 <Poster seed={event.id} title={event.title} caption={formattedDate} />
               )}
@@ -615,7 +646,7 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                 </p>
               </div>
             ) : (
-              <div className="mt-5 space-y-4">
+              <div className="mt-4 space-y-3">
                 {nothingOnSale ? (
                   <div className={`${panel} p-5 text-center`}>
                     <p className="text-[15px] font-extrabold">Nothing on sale right now</p>
@@ -639,19 +670,19 @@ export function EventCheckoutPage({ params }: { params: { id: string } }) {
                               type="button"
                               disabled={!tier.available}
                               onClick={() => setSelectedTierId(tier.id)}
-                              className={`flex w-full items-center justify-between gap-3 rounded-xl border-2 p-4 text-left transition-colors ${
+                              className={`flex w-full items-center justify-between gap-3 rounded-xl border-2 px-3.5 py-2.5 text-left transition-colors ${
                                 selected
                                   ? "border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]"
                                   : "border-[var(--dl-line)] bg-[var(--dl-panel)]"
                               } ${tier.available ? "" : "cursor-not-allowed opacity-45"}`}
                             >
                               <span className="min-w-0">
-                                <span className="block truncate text-[14.5px] font-extrabold">
+                                <span className="block truncate text-[13.5px] font-extrabold">
                                   {tier.name}
                                 </span>
                                 {tier.description && (
                                   <span
-                                    className={`mt-0.5 block truncate text-[12.5px] ${
+                                    className={`mt-0.5 block truncate text-[12px] ${
                                       selected ? "opacity-75" : "text-[var(--dl-ink-soft)]"
                                     }`}
                                   >
