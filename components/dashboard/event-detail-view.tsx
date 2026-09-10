@@ -10,7 +10,7 @@ import { createClient } from "@/lib/supabase/client";
 import { formatKobo } from "@/lib/money";
 import { buildDashboardShape, countdown } from "@/lib/dashboard-shape";
 import { TicketTypeSplit, WeekdayBars } from "@/components/charts/bars";
-import { PanelHead } from "@/components/charts/figures";
+import { PanelHead, StatTiles } from "@/components/charts/figures";
 import { TONE_HEX, TONE_TRACK } from "@/lib/tones";
 import { useOrigin } from "@/lib/use-origin";
 import { publishItem, unpublishItem } from "@/app/actions/publish";
@@ -191,10 +191,16 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
      * tabs are the same classes the owner console uses, so this screen
      * gains a structure without inventing a fifth look for the product.
      */
-    <div className="dl fixed inset-0 z-50 overflow-y-auto bg-[var(--dl-paper)] font-[family-name:var(--font-bricolage-grotesque)]">
+    /* A SECTION, NOT AN OVERLAY. This was `fixed inset-0 z-50`, so
+       opening an event covered the whole application — sidebar, top bar
+       and all — with something that looked like a modal and behaved like
+       a screen. It sits inside the dashboard shell now, at /events/[id],
+       which is also what gives it a URL you can link to and a back button
+       that works. */
+    <div>
       {/* ── Title row ──────────────────────────────────────────── */}
-      <div className="sticky top-0 z-20 border-b border-[var(--dl-line)] bg-[var(--dl-panel)]">
-        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-3 md:px-6">
+      <div className="-mx-5 -mt-5 mb-5 border-b border-[var(--dl-line)] bg-[var(--dl-panel)] md:-mx-6 md:-mt-6">
+        <div className="flex items-center gap-3 px-5 py-3 md:px-6">
           <button
             onClick={onBack}
             aria-label="Back to events"
@@ -240,7 +246,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1400px] px-4 py-5 md:px-6 md:py-6">
+      <div>
         {/* ── Tabs ─────────────────────────────────────────────── */}
         <div className="dl-tabs mb-5 w-fit max-w-full">
           {([
@@ -266,34 +272,30 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
           <div className="min-w-0">
         {tab === "overview" && (
           <div className="space-y-6">
-            {/* One ruled block. Same as Overview, Events and everywhere else —
-                no tinted icon chips, and the number does the talking. */}
-            <div className="dl-card flex flex-wrap">
-              {[
-                { label: "Taken", value: formatKobo(grossKobo) },
+            {/* THE SHARED TILES. This was one bordered block cut into four
+                by internal rules, with the label UNDER the value — while
+                every other screen in the product shows four separate
+                cards with the label on top. Two ways of drawing the same
+                four numbers in one app is the thing that keeps making
+                these screens look unrelated, so it uses the component
+                the rest of them use. */}
+            <StatTiles
+              items={[
+                { label: "Taken", value: formatKobo(grossKobo), tone: "money" },
                 {
                   label: "Tickets sold",
                   value: capacity ? `${sold} / ${capacity}` : String(sold),
+                  tone: "count",
                 },
                 {
                   label: "Turned up",
                   value: sold > 0 ? `${checkedIn} / ${sold}` : "—",
+                  note: sold > 0 ? "scanned at the door" : "nothing scanned yet",
+                  tone: "group",
                 },
-                { label: "Orders", value: String(orders.length) },
-              ].map((m) => (
-                <div
-                  key={m.label}
-                  className="min-w-[152px] flex-1 border-l border-[var(--dl-line)] px-5 py-4 first:border-l-0"
-                >
-                  <p className="text-[27px] font-extrabold tracking-[-0.035em] [font-variant-numeric:tabular-nums]">
-                    {m.value}
-                  </p>
-                  <p className="mt-1 text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]">
-                    {m.label}
-                  </p>
-                </div>
-              ))}
-            </div>
+                { label: "Orders", value: String(orders.length), tone: "fee" },
+              ]}
+            />
 
             {/* How full it is. The bar is the reason this tab exists —
                 a percentage on its own doesn't tell you whether to
@@ -474,7 +476,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
               being a banner you scroll past and become a column that
               stays. It is sticky above xl and simply the last block on a
               narrow window, where a pinned rail would eat the page. */}
-          <aside className="min-w-0 xl:sticky xl:top-[76px] xl:h-fit">
+          <aside className="min-w-0 xl:sticky xl:top-4 xl:h-fit">
             <div className="dl-card overflow-hidden">
               <div className="relative aspect-[16/10] w-full bg-[#ECEEF0]">
                 {event.cover_image_url ? (

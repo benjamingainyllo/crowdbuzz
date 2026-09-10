@@ -8,7 +8,6 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { StatTiles } from "@/components/charts/figures";
-import { EventDetailView } from "@/components/dashboard/event-detail-view";
 import { useAuth } from "@/components/auth/auth-provider";
 import { createClient } from "@/lib/supabase/client";
 import { formatKobo } from "@/lib/money";
@@ -87,7 +86,6 @@ export default function EventsPage() {
   const [audienceSize, setAudienceSize] = useState(0);
   const [stats, setStats] = useState<Record<string, EventStats>>({});
   const [orders, setOrders] = useState<any[]>([]);
-  const [selectedEvent, setSelectedEvent] = useState<EventRow | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -348,7 +346,7 @@ export default function EventsPage() {
                   capacity: event.capacity ?? null, interested: 0,
                 }
               }
-              onOpen={() => setSelectedEvent(event)}
+              onOpen={() => router.push(`/events/${event.id}` as never)}
               onScanner={() => router.push(`/events/${event.id}/door` as never)}
               onNotify={() => router.push(`/events/${event.id}/message` as never)}
               audienceSize={audienceSize}
@@ -356,7 +354,7 @@ export default function EventsPage() {
           ))}
 
           {visible.length === 0 && (
-            <div className="rounded-[8px] border border-dashed border-[var(--dl-line)] px-6 py-16 text-center md:col-span-2 xl:col-span-3">
+            <div className="rounded-[12px] border border-dashed border-[var(--dl-line)] px-6 py-16 text-center md:col-span-2 xl:col-span-3">
               <p className="text-[15px] font-bold">
                 {events.length === 0 ? "No events yet" : "Nothing under this filter"}
               </p>
@@ -370,7 +368,7 @@ export default function EventsPage() {
 
           <button
             onClick={() => router.push("/events/create")}
-            className="flex min-h-[280px] flex-col items-center justify-center rounded-[8px] border border-dashed border-[var(--dl-line)] transition-colors hover:bg-black/[0.02]"
+            className="flex min-h-[280px] flex-col items-center justify-center rounded-[12px] border border-dashed border-[var(--dl-line)] transition-colors hover:bg-black/[0.02]"
           >
             <div className="flex h-12 w-12 items-center justify-center rounded-[8px] border border-[var(--dl-line)]">
               <Plus className="h-6 w-6" />
@@ -383,13 +381,6 @@ export default function EventsPage() {
         </div>
       )}
 
-      {selectedEvent && (
-        <EventDetailView
-          event={selectedEvent}
-          onBack={() => setSelectedEvent(null)}
-          onChanged={fetchEvents}
-        />
-      )}
     </section>
   );
 }

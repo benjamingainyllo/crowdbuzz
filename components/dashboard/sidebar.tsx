@@ -54,9 +54,10 @@ const navGroups = [
  * two choices carry most of the direction: the ground is soft, everything
  * structural is hard.
  *
- * "New event" is the one acid control in the whole shell. Nothing else in
- * here may take that colour — the moment a second thing is acid, neither is
- * pointing at anything.
+ * ACID MARKS WHERE YOU ARE, NOT WHAT TO PRESS. The active menu row wears
+ * it, matching the owner console, and nothing else in this shell may — the
+ * moment a second thing is acid, neither is pointing at anything. "New
+ * event" is the one action, and it is solid ink.
  */
 export function Sidebar() {
   const pathname = usePathname();
@@ -85,15 +86,20 @@ export function Sidebar() {
       }`}
     >
       <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-[var(--dl-line)] px-4">
+        {/* flex, NOT a bare inline box. The mark below is display:grid, so
+            without a flex row on the link it sat as a block of its own and
+            pushed the wordmark onto a second line — which then burst the
+            60px header and dragged the collapse button out of line with
+            it. It is one row, and the mark and the word share it. */}
         <Link
           href="/overview"
-          className={`overflow-hidden text-[19px] font-extrabold tracking-[-0.03em] transition-all duration-300 ${
+          className={`flex items-center gap-2 overflow-hidden whitespace-nowrap text-[15px] font-extrabold tracking-[-0.03em] transition-all duration-300 ${
             isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
           }`}
         >
           <span
             aria-hidden="true"
-            className="mr-2 grid h-7 w-7 shrink-0 place-items-center rounded-[8px] bg-[var(--dl-acid)] text-[13px] font-black text-[var(--dl-ink)]"
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-[8px] bg-[var(--dl-acid)] text-[13px] font-black text-[var(--dl-ink)]"
           >
             C
           </span>
@@ -119,7 +125,14 @@ export function Sidebar() {
         <Link
           href="/events/create"
           title={isCollapsed ? "New event" : undefined}
-          className={`flex h-10 items-center rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-acid)] text-[13.5px] font-bold text-[var(--dl-ink)] transition-transform hover:-translate-y-[1px] ${
+          /* INK, NOT ACID, AND THAT IS A CHANGE. Acid used to mark this
+             button and nothing else in the shell. Then the active menu row
+             took acid too — matching the owner console, where the row is
+             the only acid thing — and the sidebar ended up with two lime
+             blocks stacked on top of each other, neither of which was
+             pointing at anything. Acid marks WHERE YOU ARE; the one action
+             is solid ink. One of each, and they cannot be confused. */
+          className={`flex h-10 items-center rounded-[8px] bg-[var(--dl-ink)] text-[13.5px] font-bold text-white transition-transform hover:-translate-y-[1px] ${
             isCollapsed ? "justify-center px-0" : "gap-2 px-3"
           }`}
         >

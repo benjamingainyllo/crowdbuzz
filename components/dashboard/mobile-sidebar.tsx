@@ -87,7 +87,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           <Link
             href="/events/create"
             onClick={onClose}
-            className="flex h-11 items-center justify-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-acid)] text-[15px] font-extrabold text-[var(--dl-ink)]"
+            className="flex h-11 items-center justify-center gap-2 rounded-[8px] bg-[var(--dl-ink)] text-[15px] font-extrabold text-white"
           >
             <Plus strokeWidth={2.5} className="h-[18px] w-[18px]" />
             New event
