@@ -92,6 +92,7 @@ const GROUPS: {
   {
     label: "Operations",
     items: [
+      { href: "/admin/check-ins", label: "Check-ins", icon: ScanLine },
       { href: "/admin/attention", label: "Fraud & Risk", icon: AlertTriangle },
     ],
   },
@@ -110,6 +111,7 @@ const GROUPS: {
     label: "System",
     items: [
       { href: "/admin/admins", label: "Admin Users", icon: ShieldCheck, needs: ["super_admin"] },
+      { href: "/admin/roles", label: "Roles & Permissions", icon: KeyRound, needs: ["super_admin"] },
       { href: "/admin/settings", label: "Settings", icon: Settings2, needs: ["super_admin"] },
       { href: "/admin/roadmap", label: "Roadmap", icon: Map },
     ],

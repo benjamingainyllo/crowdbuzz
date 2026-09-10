@@ -91,6 +91,12 @@ export function Sidebar() {
             isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
           }`}
         >
+          <span
+            aria-hidden="true"
+            className="mr-2 grid h-7 w-7 shrink-0 place-items-center rounded-[8px] bg-[var(--dl-acid)] text-[13px] font-black text-[var(--dl-ink)]"
+          >
+            C
+          </span>
           CrowdBuzz
         </Link>
 

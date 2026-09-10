@@ -84,6 +84,25 @@ export interface Analytics {
   feesThisMonthKobo: Kobo;
   feesLastMonthKobo: Kobo;
 
+  /*
+   * REVENUE AND GMV ARE TWO DIFFERENT NUMBERS AND THE PAGE MUST NEVER
+   * BLUR THEM. Revenue is CrowdBuzz's fee income — money that belongs to
+   * the company. GMV is the face value of every ticket sold, most of
+   * which is the organiser's and settles straight to their bank; the
+   * platform never holds it. Quoting GMV as revenue is the oldest
+   * marketplace flattery there is, and on this screen it would be
+   * self-deception rather than marketing.
+   */
+  /** Fee income — the company's actual revenue. */
+  revenueThisMonthKobo: Kobo;
+  revenueThisYearKobo: Kobo;
+  revenueLastYearKobo: Kobo;
+  /** Face value of tickets sold. Not ours. */
+  gmvThisMonthKobo: Kobo;
+  gmvThisYearKobo: Kobo;
+  gmvLastYearKobo: Kobo;
+  thisYear: number;
+
   paidOrders: number;
   freeRegistrations: number;
   ticketsPaid: number;
@@ -174,6 +193,9 @@ export async function getAnalytics(now = new Date()): Promise<Analytics> {
   const thisMonthKey = key(new Date(now.getFullYear(), now.getMonth(), 1));
   const lastMonthKey = key(new Date(now.getFullYear(), now.getMonth() - 1, 1));
   let feesThisMonth = 0, feesLastMonth = 0;
+  let gmvThisMonth = 0;
+  let revThisYear = 0, revLastYear = 0, gmvThisYear = 0, gmvLastYear = 0;
+  const thisYear = now.getFullYear();
 
   for (const o of orders) {
     const gross = toNum(o.gross_kobo);
@@ -201,8 +223,20 @@ export async function getAnalytics(now = new Date()): Promise<Analytics> {
     if (Number.isNaN(when.getTime())) continue;
 
     const k = key(when);
-    if (k === thisMonthKey) feesThisMonth += fee;
+    if (k === thisMonthKey) {
+      feesThisMonth += fee;
+      gmvThisMonth += gross;
+    }
     if (k === lastMonthKey) feesLastMonth += fee;
+
+    const y = when.getFullYear();
+    if (y === thisYear) {
+      revThisYear += fee;
+      gmvThisYear += gross;
+    } else if (y === thisYear - 1) {
+      revLastYear += fee;
+      gmvLastYear += gross;
+    }
 
     const b = buckets.get(k);
     if (b) {
@@ -341,6 +375,14 @@ export async function getAnalytics(now = new Date()): Promise<Analytics> {
 
     feesThisMonthKobo: feesThisMonth,
     feesLastMonthKobo: feesLastMonth,
+
+    revenueThisMonthKobo: feesThisMonth,
+    revenueThisYearKobo: revThisYear,
+    revenueLastYearKobo: revLastYear,
+    gmvThisMonthKobo: gmvThisMonth,
+    gmvThisYearKobo: gmvThisYear,
+    gmvLastYearKobo: gmvLastYear,
+    thisYear,
 
     paidOrders,
     freeRegistrations,

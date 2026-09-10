@@ -240,13 +240,10 @@ export default function OverviewPage() {
 
     return (
       <section>
-        <h1 className="text-[38px] font-extrabold leading-[1] tracking-[-0.04em] sm:text-[46px]">
-          Welcome,{" "}
-          <span className="font-[family-name:var(--font-instrument-serif)] font-normal italic tracking-[-0.01em]">
-            {firstName}.
-          </span>
+        <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.035em]">
+          Welcome, {firstName}
         </h1>
-        <p className="mt-3 text-[15px] text-[var(--dl-ink-soft)]">
+        <p className="mt-1.5 text-[13.5px] text-[var(--dl-ink-soft)]">
           Four steps to your first sale. You&apos;ve done {completed} of {steps.length}.
         </p>
 
@@ -325,13 +322,14 @@ export default function OverviewPage() {
     <section>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[38px] font-extrabold leading-[1] tracking-[-0.04em] sm:text-[46px]">
-            Welcome back,{" "}
-            <span className="font-[family-name:var(--font-instrument-serif)] font-normal italic tracking-[-0.01em]">
-              {firstName}.
-            </span>
+          {/* Console scale, not editorial. See the note on the other
+              heading in this file: 46px display type with an italic serif
+              is a magazine cover, and the owner console labels the very
+              same kind of screen at 24px. */}
+          <h1 className="text-[24px] font-extrabold leading-none tracking-[-0.035em]">
+            Welcome back, {firstName}
           </h1>
-          <p className="mt-3 text-[15px] text-[var(--dl-ink-soft)]">
+          <p className="mt-1.5 text-[13.5px] text-[var(--dl-ink-soft)]">
             {publishedCount === 1 ? "One event on" : `${publishedCount} events on`}
             {draftCount > 0 && `, ${draftCount} still in draft`}.
           </p>
@@ -342,7 +340,7 @@ export default function OverviewPage() {
             href={`/${profile.handle}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-10 shrink-0 items-center gap-2 self-start rounded-[8px] border border-[var(--dl-line)] px-4 text-[12.5px] font-bold transition-transform hover:-translate-y-[1px] sm:self-auto"
+            className="dl-btn shrink-0 self-start sm:self-auto"
           >
             Your public page <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </a>

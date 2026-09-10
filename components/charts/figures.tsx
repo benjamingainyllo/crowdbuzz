@@ -134,7 +134,13 @@ export function StatTiles({
   }[];
 }) {
   return (
-    <div className="dl-card grid gap-0 overflow-hidden sm:grid-cols-2 lg:grid-cols-4">
+    /* SEPARATE CARDS, NOT ONE JOINED BLOCK. These were a single bordered
+       grid divided by internal rules, which is a table of figures; the
+       owner console shows the same four numbers as four cards with a gap
+       between them, and one product cannot show its headline figures two
+       different ways. The 3px keyline stays — it is what tells the four
+       apart now that they are all white. */
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {items.map((f, i) => {
         const tone = f.tone ?? "neutral";
         const toned = Boolean(f.tone);
@@ -185,11 +191,7 @@ export function StatTiles({
         // any column count rather than a stack of cards. The 3px keyline
         // along the top is the tone: enough colour to tell four tiles
         // apart at a glance, not enough to fight the figure.
-        const edges = `relative px-5 pb-4 pt-[18px] ${i % 2 === 1 ? "sm:border-l" : ""} ${
-          i >= 2 ? "sm:border-t" : ""
-        } lg:border-t-0 ${i > 0 ? "lg:border-l" : "lg:border-l-0"} ${
-          i > 0 ? "border-t sm:border-t-0" : ""
-        } border-[var(--dl-line)]`;
+        const edges = "dl-card relative overflow-hidden px-5 pb-4 pt-[18px]";
 
         /*
          * WHITE, WITH THE TONE IN THE KEYLINE AND THE LABEL.

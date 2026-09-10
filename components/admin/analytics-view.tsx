@@ -131,6 +131,89 @@ export function AnalyticsView({ a }: { a: Analytics }) {
         </div>
       ) : (
         <>
+          {/* ── Revenue and GMV, said plainly ────────────────────
+              THESE TWO NUMBERS GET CONFUSED AND THE CONFUSION IS
+              EXPENSIVE. "Moved through" is the face value of every ticket
+              sold; almost all of it is the organiser's and settles
+              straight to their own bank, because CrowdBuzz never holds
+              it. Revenue is the fee on top. A marketplace that quotes the
+              first as the second is flattering itself, and on the screen
+              the pricing gets argued from, that would be self-deception
+              rather than marketing. So they are labelled, separated, and
+              the relationship between them is written underneath. */}
+          <div className={`${panel} overflow-hidden`}>
+            <div className="border-b border-[var(--dl-line)] bg-[#FAFBFB] px-4 py-3">
+              <p className={label}>Revenue and volume</p>
+            </div>
+            <div className="grid divide-y divide-[var(--dl-line)] sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+              <div className="p-5">
+                <p className="text-[12.5px] font-extrabold text-[#8A5A00]">
+                  YOUR REVENUE
+                </p>
+                <p className="mt-1 text-[13px] text-[var(--dl-ink-soft)]">
+                  The fee CrowdBuzz keeps. This is the company&rsquo;s money.
+                </p>
+                <dl className="mt-4 space-y-2.5">
+                  {[
+                    ["This month", formatKobo(a.revenueThisMonthKobo)],
+                    [`${a.thisYear} so far`, formatKobo(a.revenueThisYearKobo)],
+                    [`${a.thisYear - 1}`, formatKobo(a.revenueLastYearKobo)],
+                    ["All time", formatKobo(a.feesAllKobo)],
+                  ].map(([k, v], i) => (
+                    <div key={k} className="flex items-baseline justify-between gap-3">
+                      <dt className="text-[13px] text-[var(--dl-ink-soft)]">{k}</dt>
+                      <dd
+                        className={`[font-variant-numeric:tabular-nums] ${
+                          i === 1
+                            ? "text-[24px] font-extrabold leading-none tracking-[-0.03em]"
+                            : "text-[14.5px] font-bold"
+                        }`}
+                      >
+                        {v}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+
+              <div className="p-5">
+                <p className="text-[12.5px] font-extrabold text-[#17714A]">
+                  GMV / MOVED THROUGH
+                </p>
+                <p className="mt-1 text-[13px] text-[var(--dl-ink-soft)]">
+                  Face value of tickets sold. Mostly the organisers&rsquo;, and it
+                  never touches a CrowdBuzz account.
+                </p>
+                <dl className="mt-4 space-y-2.5">
+                  {[
+                    ["This month", formatKobo(a.gmvThisMonthKobo)],
+                    [`${a.thisYear} so far`, formatKobo(a.gmvThisYearKobo)],
+                    [`${a.thisYear - 1}`, formatKobo(a.gmvLastYearKobo)],
+                    ["All time", formatKobo(a.grossAllKobo)],
+                  ].map(([k, v], i) => (
+                    <div key={k} className="flex items-baseline justify-between gap-3">
+                      <dt className="text-[13px] text-[var(--dl-ink-soft)]">{k}</dt>
+                      <dd
+                        className={`[font-variant-numeric:tabular-nums] ${
+                          i === 1
+                            ? "text-[24px] font-extrabold leading-none tracking-[-0.03em]"
+                            : "text-[14.5px] font-bold"
+                        }`}
+                      >
+                        {v}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+            <p className="border-t border-[var(--dl-line)] px-4 py-3 text-[12.5px] leading-relaxed text-[var(--dl-ink-soft)]">
+              Revenue is <b>{pct(a.takeAllPct)}</b> of GMV, all time. That is the
+              effective take — below the headline {PLATFORM_FEE_RATE_LABEL} because
+              the cap and the free floor are doing their job.
+            </p>
+          </div>
+
           {/* ── Is it growing ─────────────────────────────────── */}
           <Figures
             items={[
@@ -176,6 +259,56 @@ export function AnalyticsView({ a }: { a: Analytics }) {
           )}
 
           <MonthBars months={a.months} />
+
+          {/* THE CHART SHOWS THE SHAPE; THIS SHOWS THE NUMBERS. A bar you
+              can only read by hovering is not a figure you can put in a
+              deck or check against a bank statement. */}
+          <div className={`${panel} overflow-hidden`}>
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-[var(--dl-line)] bg-[#FAFBFB] px-4 py-3">
+              <p className={label}>Month by month</p>
+              <p className="text-[12px] text-[var(--dl-ink-faint)]">
+                Newest last. A month with no trading shows as a dash, not a zero.
+              </p>
+            </div>
+            <Scroll>
+              <table className="w-full min-w-[520px] border-collapse">
+                <thead>
+                  <tr>
+                    <th className={th}>Month</th>
+                    <th className={`${th} text-right`}>Tickets</th>
+                    <th className={`${th} text-right`}>GMV</th>
+                    <th className={`${th} text-right`}>Your revenue</th>
+                    <th className={`${th} text-right`}>Take</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {a.months.map((m) => {
+                    const quiet = m.grossKobo === 0;
+                    return (
+                      <tr key={m.label} className={quiet ? "text-[var(--dl-ink-faint)]" : undefined}>
+                        <td className={td}><b>{m.label}</b></td>
+                        <td className={tdNum}>{quiet ? "—" : m.ticketsPaid.toLocaleString("en-NG")}</td>
+                        <td className={tdNum}>{quiet ? "—" : formatKobo(m.grossKobo)}</td>
+                        <td className={tdNum}>
+                          {quiet ? "—" : <b>{formatKobo(m.feesKobo)}</b>}
+                        </td>
+                        <td className={tdNum}>{pct(m.takePct)}</td>
+                      </tr>
+                    );
+                  })}
+                  <tr className="bg-[#FAFBFB]">
+                    <td className={td}><b>{a.thisYear} so far</b></td>
+                    <td className={tdNum}>—</td>
+                    <td className={tdNum}><b>{formatKobo(a.gmvThisYearKobo)}</b></td>
+                    <td className={tdNum}><b>{formatKobo(a.revenueThisYearKobo)}</b></td>
+                    <td className={tdNum}>
+                      {pct(a.gmvThisYearKobo > 0 ? (a.revenueThisYearKobo / a.gmvThisYearKobo) * 100 : null)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </Scroll>
+          </div>
 
           {/* ── The plain figures ─────────────────────────────── */}
           <Figures

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkline, TrendChip } from "@/components/charts/figures";
+import { StatTiles, TrendChip } from "@/components/charts/figures";
 import type { Trend } from "@/lib/dashboard-shape";
 // The badge tones below are named states (ok/warn/bad); these are the
 // figure tones (money/count/fee/risk/group). Different jobs, so the
@@ -68,6 +68,18 @@ export function PageHead({
  * delta stays, because a fee total with no direction still says nothing;
  * the picture goes.
  */
+/**
+ * The console's headline figures.
+ *
+ * IT IS THE ORGANISER'S StatTiles, NOT A COPY OF IT. These were two
+ * components rendering the same four numbers in the same product, and
+ * they had already drifted: this one put the sparkline BESIDE the value,
+ * which truncated "₦175,150" to "₦1…" as soon as a card got narrow —
+ * a bug StatTiles had found and fixed months earlier, with the fix
+ * written in a comment nobody here could see. Two implementations of one
+ * idea always ends this way, so there is one now and the props map onto
+ * it.
+ */
 export function Figures({
   items,
 }: {
@@ -78,77 +90,23 @@ export function Figures({
     t?: Trend;
     invert?: boolean;
     tone?: FigureTone;
-    /** The shape behind the number. Drawn only when there is one. */
     spark?: number[];
-    icon?: React.ReactNode;
+    href?: string;
   }[];
 }) {
-  /*
-   * ONE CARD PER FIGURE, EACH CARRYING ITS OWN SHAPE.
-   *
-   * These were cells in a single ruled block, which is compact and says
-   * nothing: a fee total with no direction is a number you cannot act on,
-   * and the delta chip alone only says "up" — not whether it climbed
-   * steadily or spiked once and fell back. A sparkline answers that in
-   * the space the old rule occupied.
-   *
-   * A GRID, NOT A FLEX ROW. flex-1 with a min-width shares the leftover
-   * space between whatever fits on a line, so four cards on one row and
-   * one on the next made the fifth card three times the width of the
-   * others — the same number, three times louder, by accident.
-   */
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {items.map((f) => (
-        <div key={f.l} className="dl-card p-4">
-          <div className="flex items-center gap-2">
-            {f.icon && (
-              <span
-                className="grid h-6 w-6 shrink-0 place-items-center rounded-[6px]"
-                style={{ background: f.tone ? TONE_WASH[f.tone] : "#F1F2F4" }}
-              >
-                {f.icon}
-              </span>
-            )}
-            <p
-              className="truncate text-[12.5px] font-bold"
-              style={{ color: f.tone ? TONE_INK[f.tone] : "var(--dl-ink-soft)" }}
-            >
-              {f.l}
-            </p>
-          </div>
-
-          <div className="mt-3 flex items-end justify-between gap-3">
-            <div className="min-w-0">
-              <p className="truncate text-[26px] font-extrabold leading-none tracking-[-0.04em] [font-variant-numeric:tabular-nums]">
-                {f.n}
-              </p>
-              <div className="mt-2 flex flex-wrap items-center gap-2">
-                {f.t && <TrendChip trend={f.t} invert={f.invert} />}
-                {f.x && (
-                  <span className="text-[11.5px] text-[var(--dl-ink-faint)]">{f.x}</span>
-                )}
-              </div>
-            </div>
-
-            {f.spark && f.spark.length > 1 && (
-              /* TONE_HEX, NOT TONE_INK. TONE_INK is a CSS variable, and a
-                 variable cannot go inside an SVG gradient id — the id came
-                 out as "spark-var(--dl-money)-30-…", url(#…) could not
-                 resolve it, and SVG falls back to solid black for an
-                 unresolvable paint. The sparklines rendered as black
-                 blobs. lib/tones.ts says exactly this at the top of
-                 TONE_HEX; I used the wrong one. */
-              <Sparkline
-                data={f.spark}
-                colour={f.tone ? TONE_HEX[f.tone] : undefined}
-                className="shrink-0 opacity-90"
-              />
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
+    <StatTiles
+      items={items.map((f) => ({
+        label: f.l,
+        value: f.n,
+        note: f.x,
+        trend: f.t,
+        invert: f.invert,
+        tone: f.tone,
+        spark: f.spark,
+        href: f.href,
+      }))}
+    />
   );
 }
 

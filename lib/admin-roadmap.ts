@@ -40,19 +40,6 @@ export const PLANNED_SCREENS: PlannedScreen[] = [
     ],
   },
   {
-    slug: "check-ins",
-    title: "Check-ins",
-    sub: "Who was scanned in, where, and by whom.",
-    will: [
-      "Every scan across every event, newest first, with the ticket code, the door staff who scanned it and the moment.",
-      "Duplicate-scan attempts, which are the single most useful fraud signal a ticketing platform has.",
-      "Per-event totals: issued, scanned, still outside.",
-    ],
-    needs: [
-      "Nothing new — tickets already record their scanned state. This is a view over data that exists.",
-    ],
-  },
-  {
     slug: "cms",
     title: "CMS",
     sub: "The words on the public site, without a deploy.",
@@ -156,19 +143,6 @@ export const PLANNED_SCREENS: PlannedScreen[] = [
     ],
   },
   {
-    slug: "roles",
-    title: "Roles & Permissions",
-    sub: "What each kind of admin can do.",
-    will: [
-      "The capability matrix as a table: every role down one side, every action across the top, so a permission question has an answer you can point at.",
-      "Changing a role's capabilities without a deploy.",
-      "Who granted whom what, and when.",
-    ],
-    needs: [
-      "The roles and their capabilities are defined in code today (lib/admin-roles.ts) and are correct — showing them here is straightforward. Editing them means moving the definition into the database.",
-    ],
-  },
-  {
     slug: "support",
     title: "Support",
     sub: "Buyers and organisers who need a human.",
@@ -208,9 +182,7 @@ export function plannedScreen(slug: string): PlannedScreen | undefined {
  * product that does not exist yet.
  */
 export const READY_TO_BUILD = new Set([
-  "check-ins",
   "live-events",
-  "roles",
   "health",
   "integrations",
 ]);

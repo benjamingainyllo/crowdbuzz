@@ -47,6 +47,26 @@ export type Capability =
   /** Append an internal note. */
   | "write:notes";
 
+/**
+ * Every capability in the order it should be read, with a name a person
+ * can act on.
+ *
+ * EXPORTED SO THE CONSOLE CAN SHOW THE MATRIX RATHER THAN DESCRIBE IT.
+ * "What can Finance do" used to be answerable only by reading this file,
+ * which meant in practice it was answered from memory and sometimes
+ * wrongly. The Roles screen renders straight from here, so the table
+ * cannot disagree with the check that actually runs.
+ */
+export const CAPABILITY_LABELS: { key: Capability; label: string; note: string }[] = [
+  { key: "read:customers", label: "See customers", note: "Buyer names, emails and phone numbers." },
+  { key: "read:finance", label: "See the money", note: "Takings, fees and settlements across the platform." },
+  { key: "write:event_state", label: "Change an event", note: "Suspend, flag or cancel an event." },
+  { key: "write:organiser_state", label: "Change an organiser", note: "Restrict or restore an account." },
+  { key: "write:money", label: "Move money", note: "Hold or retry a payment. Nothing implements this yet." },
+  { key: "write:admins", label: "Manage admins", note: "Add or remove admins and change their roles." },
+  { key: "write:notes", label: "Write notes", note: "Append an internal note to anything." },
+];
+
 const CAPABILITIES: Record<AdminRole, Capability[]> = {
   super_admin: [
     "read:customers", "read:finance", "write:event_state",
