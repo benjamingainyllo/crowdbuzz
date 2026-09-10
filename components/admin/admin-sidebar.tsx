@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Activity, AlertTriangle, ArrowUpRight, Calendar, ChevronsLeft, ChevronsRight,
-  CreditCard, Gavel, LayoutGrid, LogOut, Menu, Receipt, RotateCcw, Settings2,
-  ShieldCheck, Ticket, UserRound, UsersRound, Wallet, X,
+  Activity, AlertTriangle, ArrowLeftRight, ArrowUpRight, BadgePercent, BarChart3,
+  Bell, Calendar, ChevronsLeft, ChevronsRight, CreditCard, FileText, Gavel,
+  HeartPulse, KeyRound, LayoutGrid, LifeBuoy, LogOut, Menu, Plug, Radio, Receipt,
+  RotateCcw, ScanLine, ScrollText, Settings2, ShieldCheck, Store, Ticket,
+  UserRound, UsersRound, Wallet, X,
 } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 import type { AdminRole } from "@/lib/admin-roles";
@@ -31,45 +33,95 @@ import type { AdminRole } from "@/lib/admin-roles";
  * a permanent green button would be pointing at nothing.
  */
 
+/**
+ * THE MENU IS THE SHAPE OF THE PLATFORM, NOT THE SHAPE OF WHAT IS BUILT.
+ * These seven groups are the structure the console is being built to, so
+ * a screen that arrives later has a place already waiting rather than
+ * being wedged into whichever group happened to have room.
+ *
+ * `soon` marks a screen that is in the menu but not yet real. Those route
+ * to a page that says so and says what it will hold — never to a page of
+ * invented figures, and never to a dead link. When one becomes real, the
+ * flag comes off and nothing else about this file changes.
+ *
+ * Two labels differ from the obvious name and both are deliberate:
+ * "Chargebacks" is the existing disputes screen, which is what a
+ * chargeback becomes once a buyer's bank is involved, and "Fraud & Risk"
+ * is the needs-attention queue, which is already exactly that.
+ */
 const GROUPS: {
   label: string | null;
-  items: { href: string; label: string; icon: typeof LayoutGrid; needs?: AdminRole[] }[];
+  items: {
+    href: string;
+    label: string;
+    icon: typeof LayoutGrid;
+    needs?: AdminRole[];
+    soon?: boolean;
+  }[];
 }[] = [
-  { label: null, items: [{ href: "/admin", label: "Overview", icon: LayoutGrid }] },
-  { label: "Events", items: [{ href: "/admin/events", label: "All events", icon: Calendar }] },
   {
-    label: "People",
+    label: "Overview",
     items: [
-      { href: "/admin/organisers", label: "Organisers", icon: UsersRound },
-      { href: "/admin/customers", label: "Customers", icon: UserRound },
+      { href: "/admin", label: "Dashboard", icon: LayoutGrid },
+      { href: "/admin/activity", label: "Live Activity", icon: Activity },
     ],
   },
   {
-    label: "Commerce",
+    label: "Business",
     items: [
-      { href: "/admin/orders", label: "Orders", icon: Receipt },
+      { href: "/admin/events", label: "Events", icon: Calendar },
+      { href: "/admin/organisers", label: "Organisers", icon: UsersRound },
+      { href: "/admin/customers", label: "Customers", icon: UserRound },
       { href: "/admin/tickets", label: "Tickets", icon: Ticket },
+      { href: "/admin/orders", label: "Orders", icon: Receipt },
+    ],
+  },
+  {
+    label: "Finance",
+    items: [
+      { href: "/admin/transactions", label: "Transactions", icon: ArrowLeftRight, soon: true },
       { href: "/admin/payments", label: "Payments", icon: CreditCard },
       { href: "/admin/payouts", label: "Payouts", icon: Wallet },
       { href: "/admin/refunds", label: "Refunds", icon: RotateCcw },
+      { href: "/admin/disputes", label: "Chargebacks", icon: Gavel },
+      // Not in the tree that was asked for, but it is a real screen over
+      // real rows and dropping it from the menu would strand it.
+      { href: "/admin/splits", label: "Split payments", icon: UsersRound },
     ],
   },
   {
-    label: "Split payments",
-    items: [{ href: "/admin/splits", label: "All groups", icon: UsersRound }],
+    label: "Operations",
+    items: [
+      { href: "/admin/check-ins", label: "Check-ins", icon: ScanLine, soon: true },
+      { href: "/admin/live-events", label: "Live Events", icon: Radio, soon: true },
+      { href: "/admin/attention", label: "Fraud & Risk", icon: AlertTriangle },
+      { href: "/admin/support", label: "Support", icon: LifeBuoy, soon: true },
+    ],
   },
   {
-    label: "Risk",
+    label: "Growth",
     items: [
-      { href: "/admin/attention", label: "Needs attention", icon: AlertTriangle },
-      { href: "/admin/disputes", label: "Disputes", icon: Gavel },
+      { href: "/admin/promotions", label: "Promotions", icon: BadgePercent, soon: true },
+      { href: "/admin/marketplace", label: "Marketplace", icon: Store, soon: true },
+      { href: "/admin/analytics", label: "Analytics", icon: BarChart3, soon: true },
+      { href: "/admin/reports", label: "Reports", icon: FileText, soon: true },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { href: "/admin/cms", label: "CMS", icon: ScrollText, soon: true },
+      { href: "/admin/notifications", label: "Notifications", icon: Bell, soon: true },
     ],
   },
   {
     label: "System",
     items: [
-      { href: "/admin/admins", label: "Admin users", icon: ShieldCheck, needs: ["super_admin"] },
-      { href: "/admin/activity", label: "Activity log", icon: Activity },
+      { href: "/admin/admins", label: "Admin Users", icon: ShieldCheck, needs: ["super_admin"] },
+      { href: "/admin/roles", label: "Roles & Permissions", icon: KeyRound, needs: ["super_admin"], soon: true },
+      { href: "/admin/audit", label: "Audit Logs", icon: ScrollText, soon: true },
+      { href: "/admin/health", label: "System Health", icon: HeartPulse, soon: true },
+      { href: "/admin/integrations", label: "Integrations", icon: Plug, soon: true },
       { href: "/admin/settings", label: "Settings", icon: Settings2, needs: ["super_admin"] },
     ],
   },
@@ -80,6 +132,21 @@ function visibleGroups(role: AdminRole) {
     ...g,
     items: g.items.filter((i) => !i.needs || i.needs.includes(role)),
   })).filter((g) => g.items.length > 0);
+}
+
+/**
+ * The mark on a menu item whose screen is not built yet.
+ *
+ * Quiet on purpose: it is a note about the roadmap, not a warning. Loud
+ * enough to stop somebody clicking it expecting figures, quiet enough
+ * that six of them in a row do not shout over the six that work.
+ */
+function SoonTag() {
+  return (
+    <span className="ml-auto shrink-0 rounded-[2px] border border-[var(--dl-line)] px-1.5 py-[1px] text-[9px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-faint)]">
+      Soon
+    </span>
+  );
 }
 
 /** Exact match for /admin so it isn't lit on every page. */
@@ -152,6 +219,7 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
                   >
                     <i.icon strokeWidth={2} className={icon} />
                     <span className={text}>{i.label}</span>
+                    {i.soon && !collapsed && !on && <SoonTag />}
                   </Link>
                 );
               })}
@@ -249,7 +317,8 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
                     }`}
                   >
                     <i.icon strokeWidth={2} className="h-[16px] w-[16px] shrink-0" />
-                    {i.label}
+                    <span className="truncate">{i.label}</span>
+                    {i.soon && !isOn(pathname, i.href) && <SoonTag />}
                   </Link>
                 ))}
               </div>
