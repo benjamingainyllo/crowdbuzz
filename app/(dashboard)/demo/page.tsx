@@ -96,7 +96,7 @@ export default function DemoPage() {
     }
   };
 
-  const panel = "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
 
   if (loading) {
     return (
@@ -114,7 +114,7 @@ export default function DemoPage() {
         </p>
         <button
           onClick={() => void load()}
-          className="mt-4 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em]"
+          className="mt-4 rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-bold"
         >
           Try again
         </button>
@@ -156,7 +156,7 @@ export default function DemoPage() {
         </div>
         <button
           onClick={() => void load(true)}
-          className="flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em]"
+          className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-bold"
         >
           <RotateCw className="h-3.5 w-3.5" />
           Refresh
@@ -174,12 +174,12 @@ export default function DemoPage() {
       {state.siteUrlMisconfigured && (
         <Banner tone="warn">
           <b>Your site address setting is wrong, and it affects real tickets.</b>{" "}
-          <code className="rounded-[2px] bg-black/[0.07] px-1.5 py-0.5 font-mono text-[13px]">
+          <code className="rounded-[6px] bg-black/[0.07] px-1.5 py-0.5 font-mono text-[13px]">
             NEXT_PUBLIC_SITE_URL
           </code>{" "}
           in Vercel is set to a placeholder, so it is being ignored and links
           fall back to your Vercel address. Set it to{" "}
-          <code className="rounded-[2px] bg-black/[0.07] px-1.5 py-0.5 font-mono text-[13px]">
+          <code className="rounded-[6px] bg-black/[0.07] px-1.5 py-0.5 font-mono text-[13px]">
             {origin || "your site address"}
           </code>{" "}
           and redeploy.
@@ -189,7 +189,7 @@ export default function DemoPage() {
       {state.available && state.needsMigration && (
         <Banner tone="warn">
           <b>Your database needs updating first.</b> Run{" "}
-          <code className="rounded-[2px] bg-black/[0.07] px-1.5 py-0.5 font-mono text-[13px]">
+          <code className="rounded-[6px] bg-black/[0.07] px-1.5 py-0.5 font-mono text-[13px]">
             setup.sql
           </code>{" "}
           in Supabase, then come back and refresh this page.
@@ -213,7 +213,7 @@ export default function DemoPage() {
               <button
                 onClick={() => void start()}
                 disabled={working}
-                className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)] disabled:opacity-50"
+                className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-2.5 text-[12.5px] font-bold text-[var(--dl-paper)] disabled:opacity-50"
               >
                 {working ? "Setting up…" : "Set it up"}
               </button>
@@ -230,13 +230,13 @@ export default function DemoPage() {
             {ev && (
               <div className="space-y-3">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                  <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-paper)] px-3 py-2.5 font-mono text-[13px] font-semibold">
+                  <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-paper)] px-3 py-2.5 font-mono text-[13px] font-semibold">
                     {publicUrl}
                   </code>
                   <div className="flex gap-2">
                     <button
                       onClick={() => void copy(publicUrl)}
-                      className="flex h-[42px] items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] px-4 text-[12px] font-extrabold uppercase tracking-[0.04em]"
+                      className="flex h-[42px] items-center gap-2 rounded-[8px] border border-[var(--dl-line)] px-4 text-[12px] font-bold"
                     >
                       {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                       {copied ? "Copied" : "Copy"}
@@ -245,7 +245,7 @@ export default function DemoPage() {
                       href={publicUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex h-[42px] items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 text-[12px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)]"
+                      className="flex h-[42px] items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 text-[12px] font-bold text-[var(--dl-paper)]"
                     >
                       Open <ExternalLink className="h-3.5 w-3.5" />
                     </a>
@@ -291,7 +291,7 @@ export default function DemoPage() {
                 href={doorUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)]"
+                className="inline-flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-2.5 text-[12px] font-bold text-[var(--dl-paper)]"
               >
                 Open the door scanner <ExternalLink className="h-3.5 w-3.5" />
               </a>
@@ -314,7 +314,7 @@ export default function DemoPage() {
               <button
                 onClick={() => void clear()}
                 disabled={working}
-                className="inline-flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-danger)] px-5 py-2.5 text-[12px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-danger)] disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-[8px] border border-[var(--dl-danger)] px-5 py-2.5 text-[12px] font-bold text-[var(--dl-danger)] disabled:opacity-50"
               >
                 <Trash2 className="h-3.5 w-3.5" />
                 {working ? "Deleting…" : "Delete the test data"}
@@ -342,7 +342,7 @@ export default function DemoPage() {
 
 function Banner({ tone, children }: { tone: "warn"; children: React.ReactNode }) {
   return (
-    <div className="flex items-start gap-3 rounded-[3px] border-2 border-[var(--dl-line)] bg-[#FFDE59] px-4 py-3.5">
+    <div className="flex items-start gap-3 rounded-[8px] border border-[var(--dl-line)] bg-[#FFDE59] px-4 py-3.5">
       <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-[var(--dl-ink)]" />
       <p className="text-[14px] leading-relaxed text-[var(--dl-ink)]">{children}</p>
     </div>
@@ -366,12 +366,12 @@ function Step({
 }) {
   return (
     <li
-      className={`flex gap-4 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-5 sm:p-6 ${
+      className={`flex gap-4 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-5 sm:p-6 ${
         muted ? "opacity-55" : ""
       }`}
     >
       <span
-        className={`grid h-8 w-8 shrink-0 place-items-center rounded-[2px] font-mono text-[13px] font-semibold ${
+        className={`grid h-8 w-8 shrink-0 place-items-center rounded-[6px] font-mono text-[13px] font-semibold ${
           done
             ? "bg-[var(--mint)] text-white"
             : "bg-[var(--dl-ink)] text-[var(--dl-paper)]"

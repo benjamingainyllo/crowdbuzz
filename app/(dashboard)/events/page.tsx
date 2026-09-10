@@ -237,7 +237,7 @@ export default function EventsPage() {
   }, [events, search, filter]);
 
   const chip =
-    "rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";
+    "rounded-[8px] border border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";
 
   return (
     <section className="space-y-6">
@@ -258,7 +258,7 @@ export default function EventsPage() {
               placeholder="Search events"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-9 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-transparent pl-9 pr-3 text-[13px] focus:outline-none sm:w-56"
+              className="h-9 w-full rounded-[8px] border border-[var(--dl-line)] bg-transparent pl-9 pr-3 text-[13px] focus:outline-none sm:w-56"
             />
           </div>
           {/* Ink, not acid. The sidebar's "New event" is already the one
@@ -266,7 +266,7 @@ export default function EventsPage() {
               screen means neither is pointing at anything. */}
           <button
             onClick={() => router.push("/events/create")}
-            className="flex h-9 items-center justify-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 text-[12px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-panel)] transition-transform hover:-translate-y-[1px]"
+            className="flex h-9 items-center justify-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 text-[12px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-panel)] transition-transform hover:-translate-y-[1px]"
           >
             <Plus className="h-4 w-4" /> New event
           </button>
@@ -328,11 +328,11 @@ export default function EventsPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] py-20">
+        <div className="flex items-center justify-center rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] py-20">
           <Loader2 className="h-6 w-6 animate-spin text-[var(--dl-ink-faint)]" />
         </div>
       ) : loadError ? (
-        <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] py-16 text-center">
+        <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] py-16 text-center">
           <p className="text-[14px]">{loadError}</p>
           <button onClick={fetchEvents} className={`${chip} mt-4`}>Retry</button>
         </div>
@@ -356,7 +356,7 @@ export default function EventsPage() {
           ))}
 
           {visible.length === 0 && (
-            <div className="rounded-[3px] border-2 border-dashed border-[var(--dl-line)] px-6 py-16 text-center md:col-span-2 xl:col-span-3">
+            <div className="rounded-[8px] border border-dashed border-[var(--dl-line)] px-6 py-16 text-center md:col-span-2 xl:col-span-3">
               <p className="text-[15px] font-bold">
                 {events.length === 0 ? "No events yet" : "Nothing under this filter"}
               </p>
@@ -370,9 +370,9 @@ export default function EventsPage() {
 
           <button
             onClick={() => router.push("/events/create")}
-            className="flex min-h-[280px] flex-col items-center justify-center rounded-[3px] border-2 border-dashed border-[var(--dl-line)] transition-colors hover:bg-black/[0.02]"
+            className="flex min-h-[280px] flex-col items-center justify-center rounded-[8px] border border-dashed border-[var(--dl-line)] transition-colors hover:bg-black/[0.02]"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-[8px] border border-[var(--dl-line)]">
               <Plus className="h-6 w-6" />
             </div>
             <p className="mt-4 text-[14px] font-bold">Create new event</p>
@@ -433,9 +433,9 @@ function EventCard({
           : TONE_HEX.count;
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+    <div className="flex flex-col overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
       <button onClick={onOpen} className="group block text-left">
-        <div className="relative h-36 w-full overflow-hidden border-b-2 border-[var(--dl-line)] bg-black/[0.04]">
+        <div className="relative h-36 w-full overflow-hidden border-b border-[var(--dl-line)] bg-black/[0.04]">
           {event.cover_image_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -450,7 +450,7 @@ function EventCard({
           )}
 
           <span
-            className={`absolute right-3 top-3 inline-flex items-center gap-1 rounded-[2px] border-2 border-[var(--dl-line)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${
+            className={`absolute right-3 top-3 inline-flex items-center gap-1 rounded-[6px] border border-[var(--dl-line)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${
               past
                 ? "bg-[var(--dl-panel)] text-[var(--dl-ink-soft)]"
                 : published
@@ -461,7 +461,7 @@ function EventCard({
             {past ? "Done" : published ? <><Globe className="h-2.5 w-2.5" /> Live</> : <><Lock className="h-2.5 w-2.5" /> Draft</>}
           </span>
 
-          <span className="absolute bottom-3 left-3 rounded-[2px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em]">
+          <span className="absolute bottom-3 left-3 rounded-[6px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em]">
             {priceKobo === 0 ? "Free" : `${formatKobo(priceKobo)} a ticket`}
           </span>
         </div>
@@ -501,11 +501,11 @@ function EventCard({
         </div>
 
         <div
-          className="mt-2 h-2.5 w-full overflow-hidden rounded-[2px]"
+          className="mt-2 h-2.5 w-full overflow-hidden rounded-[6px]"
           style={{ background: TONE_TRACK.neutral }}
         >
           <div
-            className="h-full rounded-[2px]"
+            className="h-full rounded-[6px]"
             style={{
               // No capacity means no ceiling to be a fraction of, so the
               // bar shows nothing rather than a made-up proportion.
@@ -543,7 +543,7 @@ function EventCard({
           or to a draft nobody can open, is not a button — it is a mistake
           waiting to be tapped. */}
       {published && !past && audienceSize > 0 && (
-        <div className="border-t-2 border-[var(--dl-line)] px-5 py-4">
+        <div className="border-t border-[var(--dl-line)] px-5 py-4">
           <InviteAudienceButton
             eventId={event.id}
             eventTitle={event.title}
@@ -552,7 +552,7 @@ function EventCard({
         </div>
       )}
 
-      <div className="mt-4 flex border-t-2 border-[var(--dl-line)]">
+      <div className="mt-4 flex border-t border-[var(--dl-line)]">
         <button
           onClick={onOpen}
           className="flex h-12 flex-1 items-center justify-center px-3 text-[12px] font-extrabold uppercase tracking-[0.06em] transition-colors hover:bg-black/[0.03]"
@@ -561,13 +561,13 @@ function EventCard({
         </button>
         <button
           onClick={onNotify}
-          className="flex h-12 flex-1 items-center justify-center border-l-2 border-[var(--dl-line)] px-3 text-[12px] font-extrabold uppercase tracking-[0.06em] transition-colors hover:bg-black/[0.03]"
+          className="flex h-12 flex-1 items-center justify-center border-l border-[var(--dl-line)] px-3 text-[12px] font-extrabold uppercase tracking-[0.06em] transition-colors hover:bg-black/[0.03]"
         >
           <Megaphone className="mr-1.5 inline h-3.5 w-3.5" /> Notify
         </button>
         <button
           onClick={onScanner}
-          className="flex h-12 flex-1 items-center justify-center border-l-2 border-[var(--dl-line)] px-3 text-[12px] font-extrabold uppercase tracking-[0.06em] transition-colors hover:bg-black/[0.03]"
+          className="flex h-12 flex-1 items-center justify-center border-l border-[var(--dl-line)] px-3 text-[12px] font-extrabold uppercase tracking-[0.06em] transition-colors hover:bg-black/[0.03]"
         >
           <QrCode className="mr-1.5 inline h-3.5 w-3.5" /> Door
         </button>

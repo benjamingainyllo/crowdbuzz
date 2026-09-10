@@ -60,9 +60,9 @@ export default function IntegrationsPage() {
         {connected.map((item) => (
           <div
             key={item.name}
-            className="flex flex-col gap-3 rounded-[3px] border-2 border-[var(--dl-line)] bg-surface p-5 sm:flex-row sm:items-center"
+            className="flex flex-col gap-3 rounded-[8px] border border-[var(--dl-line)] bg-surface p-5 sm:flex-row sm:items-center"
           >
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[3px] bg-muted text-subtle">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[8px] bg-muted text-subtle">
               <item.icon className="h-5 w-5" />
             </div>
 
@@ -78,7 +78,7 @@ export default function IntegrationsPage() {
       </div>
 
       {demo && (
-        <div className="flex items-start gap-3 rounded-[3px] border border-[#FFDE5940] bg-[#FFDE591a] p-4">
+        <div className="flex items-start gap-3 rounded-[8px] border border-[#FFDE5940] bg-[#FFDE591a] p-4">
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-[var(--marker)]" />
           <p className="text-xs leading-relaxed text-subtle">
             Demo mode ends the moment a payment gateway key is added — no code changes, no
@@ -91,15 +91,15 @@ export default function IntegrationsPage() {
         <p className="text-[10px] font-bold uppercase tracking-widest text-subtle">Not built yet</p>
 
         {planned.map((item) => (
-          <div key={item.name} className="flex items-center gap-3 rounded-[3px] border-2 border-[var(--dl-line)] bg-surface/50 p-5">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[3px] bg-muted/50 text-subtle/60">
+          <div key={item.name} className="flex items-center gap-3 rounded-[8px] border border-[var(--dl-line)] bg-surface/50 p-5">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[8px] bg-muted/50 text-subtle/60">
               <item.icon className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-bold text-subtle">{item.name}</p>
               <p className="text-xs text-subtle/70">{item.role}</p>
             </div>
-            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-subtle">
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-[8px] border border-[var(--dl-line)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-subtle">
               <Hammer className="h-3 w-3" />
               Planned
             </span>
@@ -109,7 +109,7 @@ export default function IntegrationsPage() {
 
       <Link
         href="/payouts"
-        className="inline-flex h-10 items-center justify-center rounded-[3px] bg-text px-5 text-xs font-bold text-background transition-transform hover:scale-[1.02]"
+        className="inline-flex h-10 items-center justify-center rounded-[8px] bg-text px-5 text-xs font-bold text-background transition-transform hover:scale-[1.02]"
       >
         Go to payouts
       </Link>
@@ -128,7 +128,7 @@ function StatusPill({ status }: { status: "live" | "demo" | "missing" }) {
 
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1.5 self-start rounded-[3px] border px-3 py-1 text-[10px] font-bold uppercase tracking-wider sm:self-auto ${styles}`}
+      className={`inline-flex shrink-0 items-center gap-1.5 self-start rounded-[8px] border px-3 py-1 text-[10px] font-bold uppercase tracking-wider sm:self-auto ${styles}`}
     >
       {status === "live" ? <Check className="h-3 w-3" /> : <TriangleAlert className="h-3 w-3" />}
       {label}

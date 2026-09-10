@@ -99,15 +99,15 @@ export function SalesChart({ orders }: { orders: readonly SalesOrderRow[] }) {
       : `${totals.tickets === 1 ? "ticket" : "tickets"} sold in the last ${days} days`;
 
   const chip =
-    "rounded-[3px] border-2 border-[var(--dl-line)] px-2.5 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)] focus-visible:ring-offset-2";
+    "rounded-[8px] border border-[var(--dl-line)] px-2.5 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)] focus-visible:ring-offset-2";
   const chipOn = "bg-[var(--dl-ink)] text-[var(--dl-panel)]";
   const label =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
 
   return (
-    <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+    <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
       {/* Controls in one row above the plot, never floating over it. */}
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-[var(--dl-line)] p-5">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--dl-line)] p-5">
         <div>
           <p className={label}>Sales</p>
           <p
@@ -217,7 +217,7 @@ export function SalesChart({ orders }: { orders: readonly SalesOrderRow[] }) {
                   if (!active || !payload?.length) return null;
                   const p = payload[0].payload as SalesPoint;
                   return (
-                    <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 shadow-[3px_3px_0_var(--dl-line)]">
+                    <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 shadow-[3px_3px_0_var(--dl-line)]">
                       <p className={label}>{p.label}</p>
                       <p
                         className="mt-1 text-[16px] font-extrabold [font-variant-numeric:tabular-nums]"

@@ -134,7 +134,7 @@ export function StatTiles({
   }[];
 }) {
   return (
-    <div className="grid gap-0 overflow-hidden rounded-[3px] border-2 border-[var(--dl-line)] sm:grid-cols-2 lg:grid-cols-4">
+    <div className="dl-card grid gap-0 overflow-hidden sm:grid-cols-2 lg:grid-cols-4">
       {items.map((f, i) => {
         const tone = f.tone ?? "neutral";
         const toned = Boolean(f.tone);
@@ -185,15 +185,25 @@ export function StatTiles({
         // any column count rather than a stack of cards. The 3px keyline
         // along the top is the tone: enough colour to tell four tiles
         // apart at a glance, not enough to fight the figure.
-        const edges = `relative px-5 pb-4 pt-[18px] ${i % 2 === 1 ? "sm:border-l-2" : ""} ${
-          i >= 2 ? "sm:border-t-2" : ""
-        } lg:border-t-0 ${i > 0 ? "lg:border-l-2" : "lg:border-l-0"} ${
-          i > 0 ? "border-t-2 sm:border-t-0" : ""
+        const edges = `relative px-5 pb-4 pt-[18px] ${i % 2 === 1 ? "sm:border-l" : ""} ${
+          i >= 2 ? "sm:border-t" : ""
+        } lg:border-t-0 ${i > 0 ? "lg:border-l" : "lg:border-l-0"} ${
+          i > 0 ? "border-t sm:border-t-0" : ""
         } border-[var(--dl-line)]`;
 
-        const style = {
-          background: toned ? TONE_WASH[tone] : "var(--dl-panel)",
-        };
+        /*
+         * WHITE, WITH THE TONE IN THE KEYLINE AND THE LABEL.
+         *
+         * The whole tile used to be washed in its tone, which was right
+         * on a lilac-and-gradient ground where a plain white tile would
+         * have disappeared. On the flat grey ground these four tiles
+         * became four coloured blocks — the loudest thing on a screen
+         * whose job is to show figures — and the console's own cards,
+         * which are plain white, no longer matched them. The 3px keyline
+         * already tells four tiles apart at a glance; that is enough
+         * colour for the job.
+         */
+        const style = { background: "var(--dl-panel)" };
 
         const inner = (
           <>
@@ -243,14 +253,14 @@ export function PanelHead({
 }) {
   return (
     <div
-      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b-2 border-[var(--dl-line)] px-5 py-3.5"
-      style={{ background: TONE_WASH[tone] }}
+      /* A neutral ground with the tone only in the label — the same
+         decision as the console's Band, and for the same reason: a full
+         wash behind a panel header reads as a highlighted row and pulls
+         the eye off the thing it introduces. */
+      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-[var(--dl-line)] bg-[#FAFBFB] px-4 py-3"
     >
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <p
-          className="text-[10.5px] font-extrabold uppercase tracking-[0.18em]"
-          style={{ color: TONE_INK[tone] }}
-        >
+        <p className="text-[12.5px] font-extrabold" style={{ color: TONE_INK[tone] }}>
           {title}
         </p>
         {note && <p className="text-[12.5px] text-[var(--dl-ink-soft)]">{note}</p>}

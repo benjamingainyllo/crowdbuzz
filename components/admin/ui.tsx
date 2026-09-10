@@ -23,7 +23,7 @@ import { TONE_HEX, TONE_INK, TONE_WASH, type Tone as FigureTone } from "@/lib/to
  * a hairline that only stops a white card dissolving into a near-white
  * page, and the lift does the rest. See the .adm block in globals.css.
  */
-export const panel = "adm-card";
+export const panel = "dl-card";
 export const label =
   "text-[10.5px] font-extrabold uppercase tracking-[0.16em] text-[var(--dl-ink-faint)]";
 
@@ -100,7 +100,7 @@ export function Figures({
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {items.map((f) => (
-        <div key={f.l} className="adm-card p-4">
+        <div key={f.l} className="dl-card p-4">
           <div className="flex items-center gap-2">
             {f.icon && (
               <span
@@ -271,7 +271,7 @@ export function Pager({
     return `${base}?${q.toString()}`;
   };
 
-  const btn = "adm-btn";
+  const btn = "dl-btn";
 
   return (
     <div className="mt-4 flex items-center justify-between gap-4">
@@ -313,12 +313,12 @@ export function SearchBar({
         name="q"
         defaultValue={q ?? ""}
         placeholder={placeholder}
-        className="adm-field min-w-[220px] flex-1"
+        className="dl-field min-w-[220px] flex-1"
       />
       {extra}
       <button
         type="submit"
-        className="adm-btn adm-btn-primary"
+        className="dl-btn dl-btn-primary"
       >
         Search
       </button>
@@ -339,7 +339,7 @@ export function FilterSelect({
     <select
       name={name}
       defaultValue={value ?? "all"}
-      className="adm-field font-semibold"
+      className="dl-field font-semibold"
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>

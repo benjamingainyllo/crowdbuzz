@@ -2,7 +2,7 @@ import { MapPin } from "lucide-react";
 
 export function TopLocations() {
   return (
-    <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-surface p-5">
+    <div className="rounded-[8px] border border-[var(--dl-line)] bg-surface p-5">
       <h3 className="mb-6 text-sm font-semibold text-text">Top Locations</h3>
       
       <div className="flex items-center gap-4">
@@ -12,7 +12,7 @@ export function TopLocations() {
         </div>
         
         <div className="flex-1">
-          <div className="h-1.5 w-full overflow-hidden rounded-[3px] bg-muted">
+          <div className="h-1.5 w-full overflow-hidden rounded-[8px] bg-muted">
             <div className="h-full w-[80%] bg-[var(--dl-ink)]"></div>
           </div>
         </div>

@@ -71,7 +71,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
   const label =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
   const panel =
-    "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+    "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
 
   if (loading) {
     return (
@@ -85,7 +85,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
     return (
       <section className={`${panel} py-14 text-center`}>
         <p className="text-[15px] font-semibold">{loadError}</p>
-        <Link href="/events" className="mt-4 inline-block rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[13px] font-extrabold">
+        <Link href="/events" className="mt-4 inline-block rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[13px] font-extrabold">
           Back to your events
         </Link>
       </section>
@@ -96,7 +96,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
 
   return (
     <section>
-      <Link href="/events" className="mb-8 inline-flex items-center gap-2 text-[13px] font-extrabold uppercase tracking-[0.04em]">
+      <Link href="/events" className="mb-8 inline-flex items-center gap-2 text-[13px] font-bold">
         <ArrowLeft className="h-4 w-4" strokeWidth={2.5} /> Your events
       </Link>
 
@@ -127,14 +127,14 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
               </p>
               <p className={`${label} mt-1`}>Guests</p>
             </div>
-            <div className="min-w-[150px] flex-1 border-l-2 border-[var(--dl-line)] px-5 py-4">
+            <div className="min-w-[150px] flex-1 border-l border-[var(--dl-line)] px-5 py-4">
               <p className="flex items-center gap-2 text-[27px] font-extrabold tracking-[-0.035em] [font-variant-numeric:tabular-nums]">
                 <Mail className="h-4 w-4 text-[var(--dl-ink-faint)]" strokeWidth={2.5} />
                 {audience.reachableByEmail}
               </p>
               <p className={`${label} mt-1`}>By email</p>
             </div>
-            <div className="min-w-[150px] flex-1 border-l-2 border-[var(--dl-line)] px-5 py-4">
+            <div className="min-w-[150px] flex-1 border-l border-[var(--dl-line)] px-5 py-4">
               <p className="flex items-center gap-2 text-[27px] font-extrabold tracking-[-0.035em] [font-variant-numeric:tabular-nums]">
                 <MessageCircle className="h-4 w-4 text-[var(--dl-ink-faint)]" strokeWidth={2.5} />
                 {audience.whatsappConfigured ? audience.reachableByWhatsApp : 0}
@@ -144,7 +144,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
           </div>
 
           {!audience.whatsappConfigured && audience.reachableByWhatsApp > 0 && (
-            <div className="mt-3 rounded-[3px] border-2 border-[#8A5A00] bg-[#FFF3D6] px-4 py-3">
+            <div className="mt-3 rounded-[8px] border border-[#8A5A00] bg-[#FFF3D6] px-4 py-3">
               <p className="text-[13.5px] leading-relaxed">
                 <strong>{audience.reachableByWhatsApp}</strong> of them gave a WhatsApp
                 number, but WhatsApp can&apos;t carry this yet — Meta has to approve a
@@ -154,7 +154,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
           )}
 
           {sentSummary && (
-            <div className="mt-6 flex items-start gap-3 rounded-[3px] border-2 border-[var(--mint)] bg-[#E4F5EC] px-4 py-3.5">
+            <div className="mt-6 flex items-start gap-3 rounded-[8px] border border-[var(--mint)] bg-[#E4F5EC] px-4 py-3.5">
               <Check className="mt-[2px] h-[18px] w-[18px] shrink-0 text-[var(--mint)]" strokeWidth={3} />
               <p className="text-[14px] font-semibold">{sentSummary}</p>
             </div>
@@ -171,7 +171,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
               rows={7}
               maxLength={2000}
               placeholder={`The venue has changed. We're now at Landmark Beach instead of Hard Rock — same date, same time. Your ticket still works, just come to the new place.`}
-              className="mt-2.5 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-[var(--dl-ink-faint)]"
+              className="mt-2.5 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-[var(--dl-ink-faint)]"
             />
             <p className="mt-1.5 text-[12.5px] text-[var(--dl-ink-soft)]">
               {body.length}/2000. Their ticket stays valid — the message says so at the bottom.
@@ -190,13 +190,13 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
               type="button"
               disabled={!body.trim() || blocked}
               onClick={() => setConfirming(true)}
-              className="mt-6 flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-3.5 text-[13px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-paper)] transition-transform hover:-translate-y-[1px] disabled:opacity-40"
+              className="mt-6 flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-3.5 text-[13px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-paper)] transition-transform hover:-translate-y-[1px] disabled:opacity-40"
             >
               <Send className="h-4 w-4" strokeWidth={2.5} />
               Review and send
             </button>
           ) : (
-            <div className="mt-6 rounded-[3px] border-2 border-[var(--dl-danger)] bg-[#FFF1F3] p-5">
+            <div className="mt-6 rounded-[8px] border border-[var(--dl-danger)] bg-[#FFF1F3] p-5">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="mt-[2px] h-[18px] w-[18px] shrink-0 text-[var(--dl-danger)]" strokeWidth={2.5} />
                 <div className="min-w-0">
@@ -207,7 +207,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
                   <p className="mt-1.5 text-[13.5px] leading-relaxed text-[var(--dl-ink-soft)]">
                     It can&apos;t be unsent or edited afterwards. Read it once more.
                   </p>
-                  <div className="mt-3.5 whitespace-pre-wrap rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3 text-[14px] leading-relaxed">
+                  <div className="mt-3.5 whitespace-pre-wrap rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3 text-[14px] leading-relaxed">
                     {body}
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2.5">
@@ -215,7 +215,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
                       type="button"
                       onClick={send}
                       disabled={sending}
-                      className="flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-3 text-[13px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-paper)] disabled:opacity-60"
+                      className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-3 text-[13px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-paper)] disabled:opacity-60"
                     >
                       {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" strokeWidth={2.5} />}
                       {sending ? "Sending" : `Send to ${audience.guests}`}
@@ -224,7 +224,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
                       type="button"
                       onClick={() => setConfirming(false)}
                       disabled={sending}
-                      className="rounded-[3px] border-2 border-[var(--dl-line)] px-5 py-3 text-[13px] font-extrabold uppercase tracking-[0.06em]"
+                      className="rounded-[8px] border border-[var(--dl-line)] px-5 py-3 text-[13px] font-extrabold uppercase tracking-[0.06em]"
                     >
                       Go back
                     </button>
@@ -239,7 +239,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
               <p className={label}>Already sent</p>
               <div className={`${panel} mt-3`}>
                 {audience.recent.map((r, i) => (
-                  <div key={i} className={`px-5 py-4 ${i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""}`}>
+                  <div key={i} className={`px-5 py-4 ${i !== 0 ? "border-t border-[var(--dl-line)]" : ""}`}>
                     <p className="text-[12px] font-bold text-[var(--dl-ink-faint)]">
                       {new Date(r.created_at).toLocaleString("en-NG", {
                         day: "numeric", month: "short", hour: "numeric", minute: "2-digit",

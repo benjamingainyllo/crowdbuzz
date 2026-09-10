@@ -203,10 +203,10 @@ export default function RevenuePage() {
     URL.revokeObjectURL(url);
   };
 
-  const panel = "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
   const capLabel = "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
   const chip =
-    "rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";
+    "rounded-[8px] border border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";
 
   if (loading) {
     return (
@@ -324,7 +324,7 @@ export default function RevenuePage() {
               <Row label="Ticket sales" value={formatKobo(lifetime.gross)} />
               <Row label="CrowdBuzz fee" value={`−${formatKobo(lifetime.platform)}`} />
               <Row label="Card processing" value={`−${formatKobo(lifetime.provider)}`} />
-              <div className="border-t-2 border-[var(--dl-line)] pt-3">
+              <div className="border-t border-[var(--dl-line)] pt-3">
                 <Row
                   label="Reached your bank"
                   value={formatKobo(lifetime.net)}
@@ -355,7 +355,7 @@ export default function RevenuePage() {
       {/* The ledger. */}
       <div className={panel}>
         <div
-          className="flex flex-col gap-4 border-b-2 border-[var(--dl-line)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-col gap-4 border-b border-[var(--dl-line)] px-5 py-4 sm:flex-row sm:items-center sm:justify-between"
           style={{ background: "var(--dl-neutral-wash)" }}
         >
           <div>
@@ -372,7 +372,7 @@ export default function RevenuePage() {
                 placeholder="Name, email or reference"
                 value={search}
                 onChange={(e) => { setSearch(e.target.value); setShown(25); }}
-                className="h-9 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-transparent pl-9 pr-3 text-[13px] focus:outline-none sm:w-64"
+                className="h-9 w-full rounded-[8px] border border-[var(--dl-line)] bg-transparent pl-9 pr-3 text-[13px] focus:outline-none sm:w-64"
               />
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -407,7 +407,7 @@ export default function RevenuePage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-[13.5px]">
                 <thead>
-                  <tr className="border-b-2 border-[var(--dl-line)]">
+                  <tr className="border-b border-[var(--dl-line)]">
                     <Th>Buyer</Th>
                     <Th>What</Th>
                     <Th right>Paid</Th>
@@ -468,7 +468,7 @@ export default function RevenuePage() {
             </div>
 
             {filtered.length > shown && (
-              <div className="border-t-2 border-[var(--dl-line)] p-4 text-center">
+              <div className="border-t border-[var(--dl-line)] p-4 text-center">
                 <button onClick={() => setShown((n) => n + 50)} className={chip}>
                   Show 50 more
                 </button>
@@ -514,7 +514,7 @@ function StatusPill({ status }: { status: string }) {
   };
   return (
     <span
-      className={`inline-block rounded-[2px] border-2 px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${
+      className={`inline-block rounded-[6px] border px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${
         tone[status] ?? tone.abandoned
       }`}
     >

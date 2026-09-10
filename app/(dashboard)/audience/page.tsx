@@ -275,9 +275,9 @@ export default function AttendeesPage() {
     toast.success(`${tab === "tickets" ? "Tickets" : "Attendees"} exported`);
   };
 
-  const panel = "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
   const chip =
-    "rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";
+    "rounded-[8px] border border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";
   const chipOn = "bg-[var(--dl-ink)] text-[var(--dl-panel)]";
 
   if (loading) {
@@ -344,7 +344,7 @@ export default function AttendeesPage() {
       />
 
       {live.length === 0 && orders.length > 0 && (
-        <p className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 py-4 text-[13.5px] text-[var(--dl-ink-soft)]">
+        <p className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 py-4 text-[13.5px] text-[var(--dl-ink-soft)]">
           These sales happened before individual tickets were issued, so
           there is nothing to scan at the door yet — the list below is built
           from the orders themselves.
@@ -384,7 +384,7 @@ export default function AttendeesPage() {
             <select
               value={eventId}
               onChange={(e) => { setEventId(e.target.value); setShown(30); }}
-              className="h-9 rounded-[3px] border-2 border-[var(--dl-line)] bg-transparent px-2 text-[13px] font-bold focus:outline-none"
+              className="h-9 rounded-[8px] border border-[var(--dl-line)] bg-transparent px-2 text-[13px] font-bold focus:outline-none"
             >
               <option value="all">All events</option>
               {eventOptions.map((e) => (
@@ -400,7 +400,7 @@ export default function AttendeesPage() {
               placeholder={tab === "tickets" ? "Name, email or ticket code" : "Name or email"}
               value={search}
               onChange={(e) => { setSearch(e.target.value); setShown(30); }}
-              className="h-9 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-transparent pl-9 pr-3 text-[13px] focus:outline-none sm:w-60"
+              className="h-9 w-full rounded-[8px] border border-[var(--dl-line)] bg-transparent pl-9 pr-3 text-[13px] focus:outline-none sm:w-60"
             />
           </div>
         </div>
@@ -421,7 +421,7 @@ export default function AttendeesPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-[13.5px]">
                 <thead>
-                  <tr className="border-b-2 border-[var(--dl-line)]">
+                  <tr className="border-b border-[var(--dl-line)]">
                     <Th>Person</Th>
                     <Th right>Tickets</Th>
                     <Th right>At the door</Th>
@@ -484,7 +484,7 @@ export default function AttendeesPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-[13.5px]">
               <thead>
-                <tr className="border-b-2 border-[var(--dl-line)]">
+                <tr className="border-b border-[var(--dl-line)]">
                   <Th>Ticket</Th>
                   <Th>Holder</Th>
                   <Th>Event</Th>
@@ -525,11 +525,11 @@ export default function AttendeesPage() {
                       </td>
                       <td className="px-5 py-3">
                         {isIn ? (
-                          <span className="inline-flex items-center gap-1 rounded-[2px] border-2 border-[#17714A] px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] text-[#17714A]">
+                          <span className="inline-flex items-center gap-1 rounded-[6px] border border-[#17714A] px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] text-[#17714A]">
                             <CheckCircle2 className="h-3 w-3" /> in
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-[2px] border-2 border-[var(--dl-line)] px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-ink-soft)]">
+                          <span className="inline-flex items-center gap-1 rounded-[6px] border border-[var(--dl-line)] px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] text-[var(--dl-ink-soft)]">
                             <QrCode className="h-3 w-3" /> not yet
                           </span>
                         )}
@@ -550,7 +550,7 @@ export default function AttendeesPage() {
         )}
 
         {((tab === "people" ? filteredPeople.length : filteredTickets.length) > shown) && (
-          <div className="border-t-2 border-[var(--dl-line)] p-4 text-center">
+          <div className="border-t border-[var(--dl-line)] p-4 text-center">
             <button onClick={() => setShown((n) => n + 50)} className={chip}>
               Show 50 more
             </button>
@@ -586,7 +586,7 @@ function Th({ children, right }: { children: React.ReactNode; right?: boolean })
 function Empty({ title, body }: { title: string; body: string }) {
   return (
     <div className="px-6 py-16 text-center">
-      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)]">
+      <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-[8px] border border-[var(--dl-line)]">
         <UsersRound className="h-6 w-6" />
       </div>
       <p className="text-[15px] font-bold">{title}</p>
@@ -601,7 +601,7 @@ function Avatar({ name, email }: { name: string | null; email: string }) {
     : email.slice(0, 2).toUpperCase();
 
   return (
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] text-[11.5px] font-extrabold">
+    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border border-[var(--dl-line)] text-[11.5px] font-extrabold">
       {initials}
     </div>
   );
@@ -620,7 +620,7 @@ function PersonDrawer({
     <div className="fixed inset-0 z-50 flex justify-end bg-black/40" onClick={onClose}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="h-full w-full max-w-md overflow-y-auto border-l-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-6"
+        className="h-full w-full max-w-md overflow-y-auto border-l border-[var(--dl-line)] bg-[var(--dl-panel)] p-6"
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
@@ -637,7 +637,7 @@ function PersonDrawer({
           </button>
         </div>
 
-        <div className="mt-6 grid grid-cols-3 rounded-[3px] border-2 border-[var(--dl-line)]">
+        <div className="mt-6 grid grid-cols-3 rounded-[8px] border border-[var(--dl-line)]">
           <Cell label="Tickets" value={String(person.tickets)} />
           <Cell label="Checked in" value={String(person.checkedIn)} bordered />
           <Cell label="Spent" value={formatKobo(person.spentKobo)} bordered />
@@ -645,7 +645,7 @@ function PersonDrawer({
 
         <a
           href={`mailto:${person.email}`}
-          className="mt-3 flex h-10 items-center justify-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] text-[12px] font-extrabold uppercase tracking-[0.06em] transition-colors hover:bg-black/[0.03]"
+          className="mt-3 flex h-10 items-center justify-center gap-2 rounded-[8px] border border-[var(--dl-line)] text-[12px] font-extrabold uppercase tracking-[0.06em] transition-colors hover:bg-black/[0.03]"
         >
           <Mail className="h-3.5 w-3.5" /> Email {person.name?.split(" ")[0] || "them"}
         </a>
@@ -664,7 +664,7 @@ function PersonDrawer({
             {tickets.map((t) => {
               const isIn = t.status === "checked_in" || !!t.checked_in_at;
               return (
-                <div key={t.id} className="rounded-[3px] border-2 border-[var(--dl-line)] p-3">
+                <div key={t.id} className="rounded-[8px] border border-[var(--dl-line)] p-3">
                   <div className="flex items-baseline justify-between gap-3">
                     <p className="font-mono text-[13px] font-bold tracking-[0.04em]">{t.code}</p>
                     <span className={`text-[11px] font-extrabold uppercase tracking-[0.06em] ${isIn ? "text-[#17714A]" : "text-[var(--dl-ink-faint)]"}`}>
@@ -687,7 +687,7 @@ function PersonDrawer({
 
 function Cell({ label, value, bordered }: { label: string; value: string; bordered?: boolean }) {
   return (
-    <div className={`px-4 py-3 ${bordered ? "border-l-2 border-[var(--dl-line)]" : ""}`}>
+    <div className={`px-4 py-3 ${bordered ? "border-l border-[var(--dl-line)]" : ""}`}>
       <p className="text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[var(--dl-ink-faint)]">
         {label}
       </p>

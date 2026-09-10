@@ -199,7 +199,7 @@ export function AdminSidebar({
   const [collapsed, setCollapsed] = useState(false);
 
   const item = (active: boolean) =>
-    `adm-nav relative ${active ? "adm-nav-on" : ""} ${collapsed ? "justify-center px-0" : ""}`;
+    `dl-nav relative ${active ? "dl-nav-on" : ""} ${collapsed ? "justify-center px-0" : ""}`;
 
   const icon = "h-[16px] w-[16px] shrink-0";
   const text = `truncate ${collapsed ? "hidden" : ""}`;
@@ -278,7 +278,7 @@ export function AdminSidebar({
         </Link>
         <button
           onClick={() => signOut()}
-          className={`adm-nav w-full hover:bg-[#FDEEF1] hover:text-[var(--dl-danger)] ${
+          className={`dl-nav w-full hover:bg-[#FDEEF1] hover:text-[var(--dl-danger)] ${
             collapsed ? "justify-center px-0" : ""
           }`}
         >
@@ -358,7 +358,7 @@ export function AdminMobileHeader({ role, alerts }: { role: AdminRole; alerts: A
                   <Link
                     key={i.href}
                     href={i.href as never}
-                    className={`adm-nav h-11 ${isOn(pathname, i.href) ? "adm-nav-on" : ""}`}
+                    className={`dl-nav h-11 ${isOn(pathname, i.href) ? "dl-nav-on" : ""}`}
                   >
                     <i.icon strokeWidth={2} className="h-[16px] w-[16px] shrink-0" />
                     <span className="truncate">{i.label}</span>

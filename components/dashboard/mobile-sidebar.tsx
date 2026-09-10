@@ -51,7 +51,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   const userPhoto = profile?.avatar_url || null;
 
   const item = (active: boolean) =>
-    `flex h-11 items-center gap-3 rounded-[3px] px-3 text-[15px] transition-colors ${
+    `flex h-11 items-center gap-3 rounded-[8px] px-3 text-[15px] transition-colors ${
       active
         ? "bg-[var(--dl-ink)] font-extrabold text-[var(--dl-paper)]"
         : "font-semibold text-[var(--dl-ink-soft)] hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)]"
@@ -68,16 +68,16 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       />
 
       <aside
-        className={`dl fixed inset-y-0 right-0 z-50 flex w-[280px] flex-col overflow-y-auto border-l-2 border-[var(--dl-line)] font-[family-name:var(--font-bricolage-grotesque)] transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`dl fixed inset-y-0 right-0 z-50 flex w-[280px] flex-col overflow-y-auto border-l border-[var(--dl-line)] font-[family-name:var(--font-bricolage-grotesque)] transition-transform duration-300 ease-in-out lg:hidden ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex h-16 shrink-0 items-center justify-between border-b-2 border-[var(--dl-line)] px-4">
+        <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--dl-line)] px-4">
           <span className="text-[15px] font-extrabold">Menu</span>
           <button
             onClick={onClose}
             aria-label="Close the menu"
-            className="flex h-11 w-11 items-center justify-center rounded-[3px] text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)]"
+            className="flex h-11 w-11 items-center justify-center rounded-[8px] text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)]"
           >
             <X className="h-5 w-5" />
           </button>
@@ -87,7 +87,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           <Link
             href="/events/create"
             onClick={onClose}
-            className="flex h-11 items-center justify-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-acid)] text-[15px] font-extrabold text-[var(--dl-ink)]"
+            className="flex h-11 items-center justify-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-acid)] text-[15px] font-extrabold text-[var(--dl-ink)]"
           >
             <Plus strokeWidth={2.5} className="h-[18px] w-[18px]" />
             New event
@@ -124,7 +124,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           ))}
         </div>
 
-        <div className="mt-auto border-t-2 border-[var(--dl-line)] p-3">
+        <div className="mt-auto border-t border-[var(--dl-line)] p-3">
           <Link href="/settings" onClick={onClose} className={item(pathname === "/settings")}>
             <Settings2 strokeWidth={1.75} className="h-[18px] w-[18px] shrink-0" />
             Settings
@@ -144,23 +144,23 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
 
           <button
             onClick={() => signOut()}
-            className="flex h-11 w-full items-center gap-3 rounded-[3px] px-3 text-[15px] font-semibold text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(255,75,99,0.12)] hover:text-[var(--dl-danger)]"
+            className="flex h-11 w-full items-center gap-3 rounded-[8px] px-3 text-[15px] font-semibold text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(255,75,99,0.12)] hover:text-[var(--dl-danger)]"
           >
             <LogOut strokeWidth={1.75} className="h-[18px] w-[18px] shrink-0" />
             Log out
           </button>
 
-          <div className="mt-3 flex items-center gap-3 border-t-2 border-[var(--dl-line)] pt-3">
+          <div className="mt-3 flex items-center gap-3 border-t border-[var(--dl-line)] pt-3">
             {userPhoto ? (
               <Image
                 src={userPhoto}
                 alt=""
                 width={36}
                 height={36}
-                className="h-9 w-9 shrink-0 rounded-[3px] object-cover"
+                className="h-9 w-9 shrink-0 rounded-[8px] object-cover"
               />
             ) : (
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[3px] bg-[var(--dl-panel)] text-[13px] font-extrabold text-[var(--dl-ink-soft)]">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] bg-[var(--dl-panel)] text-[13px] font-extrabold text-[var(--dl-ink-soft)]">
                 {(userName[0] || "P").toUpperCase()}
               </span>
             )}

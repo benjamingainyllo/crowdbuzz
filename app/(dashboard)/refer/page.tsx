@@ -82,7 +82,7 @@ export default function ReferPage() {
     setBusyEvent(null);
   };
 
-  const panel = "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
   const label =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
 
@@ -102,7 +102,7 @@ export default function ReferPage() {
         </p>
         <button
           onClick={() => void load()}
-          className="mt-4 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em]"
+          className="mt-4 rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-bold"
         >
           Try again
         </button>
@@ -134,13 +134,13 @@ export default function ReferPage() {
       <div className={`${panel} p-5 sm:p-6`}>
         <p className={label}>Your link</p>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 py-3 font-mono text-[14px] font-semibold">
+          <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 py-3 font-mono text-[14px] font-semibold">
             {summary.link ?? "—"}
           </code>
           <button
             onClick={() => void copyLink()}
             disabled={!summary.link}
-            className="flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)] disabled:opacity-50"
+            className="flex h-[46px] shrink-0 items-center justify-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 text-[12.5px] font-bold text-[var(--dl-paper)] disabled:opacity-50"
           >
             {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             {copied ? "Copied" : "Copy"}
@@ -203,7 +203,7 @@ export default function ReferPage() {
                     <button
                       onClick={() => void remove(e.id)}
                       disabled={busyEvent === e.id}
-                      className="shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[12px] font-extrabold uppercase tracking-[0.04em] disabled:opacity-50"
+                      className="shrink-0 rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[12px] font-bold disabled:opacity-50"
                     >
                       {busyEvent === e.id ? "…" : "Move it"}
                     </button>
@@ -224,7 +224,7 @@ export default function ReferPage() {
                     <button
                       onClick={() => void apply(e.id)}
                       disabled={busyEvent === e.id}
-                      className="shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2 text-[12px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)] disabled:opacity-50"
+                      className="shrink-0 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2 text-[12px] font-bold text-[var(--dl-paper)] disabled:opacity-50"
                     >
                       {busyEvent === e.id ? "…" : "Use it here"}
                     </button>
@@ -258,7 +258,7 @@ function Figure({
   x: string;
 }) {
   return (
-    <div className="min-w-[150px] flex-1 border-l-2 border-[var(--dl-line)] px-5 py-4 first:border-l-0">
+    <div className="min-w-[150px] flex-1 border-l border-[var(--dl-line)] px-5 py-4 first:border-l-0">
       <span className="text-[var(--dl-ink-faint)]">{icon}</span>
       <p className="mt-2 text-[26px] font-extrabold tracking-[-0.035em] [font-variant-numeric:tabular-nums]">
         {n}
@@ -285,12 +285,12 @@ function EventRow({
   on?: boolean;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 border-t-2 border-[var(--dl-line)] px-5 py-4 first:border-t-0">
+    <div className="flex flex-wrap items-center gap-3 border-t border-[var(--dl-line)] px-5 py-4 first:border-t-0">
       <div className="min-w-[180px] flex-1">
         <p className="text-[15px] font-bold">
           {title}
           {on && (
-            <span className="ml-2 rounded-[2px] bg-[var(--mint)] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-white">
+            <span className="ml-2 rounded-[6px] bg-[var(--mint)] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-white">
               Free
             </span>
           )}

@@ -75,7 +75,7 @@ export function TicketTypeSplit({
               <span className="flex min-w-0 items-center gap-2">
                 <span
                   aria-hidden="true"
-                  className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                  className="h-2.5 w-2.5 shrink-0 rounded-[6px]"
                   style={{ background: hue }}
                 />
                 <span className="truncate font-extrabold">{d.name}</span>
@@ -86,11 +86,11 @@ export function TicketTypeSplit({
               </span>
             </div>
             <div
-              className="mt-1.5 h-2.5 w-full overflow-hidden rounded-[2px]"
+              className="mt-1.5 h-2.5 w-full overflow-hidden rounded-[6px]"
               style={{ background: TONE_TRACK.neutral }}
             >
               <div
-                className="h-full rounded-[2px]"
+                className="h-full rounded-[6px]"
                 style={{
                   width: `${Math.max(2, (d.tickets / max) * 100)}%`,
                   background: hue,
@@ -167,7 +167,7 @@ export function WeekdayBars({ data }: { data: { day: string; tickets: number }[]
           );
         })}
       </div>
-      <p className="mt-3 border-t-2 border-[var(--dl-line)] pt-3 text-[13px] text-[var(--dl-ink-soft)]">
+      <p className="mt-3 border-t border-[var(--dl-line)] pt-3 text-[13px] text-[var(--dl-ink-soft)]">
         <strong className="text-[var(--dl-ink)]">{best.day}</strong> is the busiest day to sell —{" "}
         {best.tickets} of {total} tickets in the last 30 days.
       </p>

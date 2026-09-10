@@ -69,26 +69,22 @@ export function Sidebar() {
   const userPhoto = profile?.avatar_url || null;
 
   const item = (active: boolean) =>
-    `group flex h-10 items-center rounded-[3px] text-[14.5px] transition-colors ${
-      active
-        ? "bg-[var(--dl-ink)] font-extrabold text-[var(--dl-paper)]"
-        : "font-semibold text-[var(--dl-ink-soft)] hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)]"
-    } ${isCollapsed ? "justify-center px-0" : "gap-3 px-3"}`;
+    `dl-nav ${active ? "dl-nav-on" : ""} ${isCollapsed ? "justify-center px-0" : ""}`;
 
   const icon = `shrink-0 ${isCollapsed ? "h-5 w-5" : "h-[17px] w-[17px]"}`;
   const label = `truncate transition-all duration-300 ${
     isCollapsed ? "w-0 opacity-0" : "w-auto opacity-100"
   }`;
   const groupLabel =
-    "mb-2 px-2 text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
+    "mb-1 px-3 text-[10.5px] font-extrabold uppercase tracking-[0.14em] text-[var(--dl-ink-faint)]";
 
   return (
     <aside
-      className={`relative hidden h-screen shrink-0 flex-col overflow-y-auto overflow-x-hidden border-r-2 border-[var(--dl-line)] transition-[width] duration-300 ease-in-out lg:flex ${
-        isCollapsed ? "w-[84px]" : "w-[248px]"
+      className={`relative hidden h-screen shrink-0 flex-col overflow-y-auto overflow-x-hidden border-r border-[var(--dl-line)] bg-[var(--dl-panel)] transition-[width] duration-300 ease-in-out lg:flex ${
+        isCollapsed ? "w-[80px]" : "w-[240px]"
       }`}
     >
-      <div className="flex h-[68px] shrink-0 items-center justify-between px-4">
+      <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-[var(--dl-line)] px-4">
         <Link
           href="/overview"
           className={`overflow-hidden text-[19px] font-extrabold tracking-[-0.03em] transition-all duration-300 ${
@@ -101,7 +97,7 @@ export function Sidebar() {
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           aria-label={isCollapsed ? "Expand the menu" : "Collapse the menu"}
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] text-[var(--dl-ink-faint)] transition-colors hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)] ${
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[8px] text-[var(--dl-ink-faint)] transition-colors hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)] ${
             isCollapsed ? "mx-auto" : ""
           }`}
         >
@@ -117,7 +113,7 @@ export function Sidebar() {
         <Link
           href="/events/create"
           title={isCollapsed ? "New event" : undefined}
-          className={`flex h-10 items-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-acid)] text-[13.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-ink)] transition-transform hover:-translate-y-[1px] ${
+          className={`flex h-10 items-center rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-acid)] text-[13.5px] font-bold text-[var(--dl-ink)] transition-transform hover:-translate-y-[1px] ${
             isCollapsed ? "justify-center px-0" : "gap-2 px-3"
           }`}
         >
@@ -162,7 +158,7 @@ export function Sidebar() {
         ))}
       </div>
 
-      <div className="mt-auto border-t-2 border-[var(--dl-line)] p-3">
+      <div className="mt-auto border-t border-[var(--dl-line)] p-3">
         {/* Down here with Settings rather than up in the daily work: a test
             sale is something you run once to see how the thing behaves, not
             a place you go every morning. */}
@@ -190,7 +186,7 @@ export function Sidebar() {
 
         <button
           onClick={() => signOut()}
-          className={`flex h-10 w-full items-center rounded-[3px] text-[14.5px] font-semibold text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(255,75,99,0.12)] hover:text-[var(--dl-danger)] ${
+          className={`dl-nav w-full hover:bg-[#FDEEF1] hover:text-[var(--dl-danger)] ${
             isCollapsed ? "justify-center px-0" : "gap-3 px-3"
           }`}
         >
@@ -199,7 +195,7 @@ export function Sidebar() {
         </button>
 
         <div
-          className={`mt-3 flex w-full items-center border-t-2 border-[var(--dl-line)] pt-3 ${
+          className={`mt-3 flex w-full items-center border-t border-[var(--dl-line)] pt-3 ${
             isCollapsed ? "justify-center" : "gap-3 text-left"
           }`}
         >
@@ -209,10 +205,10 @@ export function Sidebar() {
               alt=""
               width={34}
               height={34}
-              className="h-[34px] w-[34px] shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] object-cover"
+              className="h-[34px] w-[34px] shrink-0 rounded-[8px] border border-[var(--dl-line)] object-cover"
             />
           ) : (
-            <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] text-[13px] font-extrabold">
+            <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] text-[13px] font-extrabold">
               {(userName[0] || "P").toUpperCase()}
             </span>
           )}

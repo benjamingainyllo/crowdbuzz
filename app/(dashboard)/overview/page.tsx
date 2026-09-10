@@ -171,7 +171,7 @@ export default function OverviewPage() {
      single next action — a second one and neither is pointing at anything.
      ─────────────────────────────────────────────────────────────── */
   const panel =
-    "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+    "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
   const label =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
 
@@ -189,7 +189,7 @@ export default function OverviewPage() {
         <p className="text-[15px] font-semibold">{loadError}</p>
         <button
           onClick={load}
-          className="mt-4 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[13px] font-extrabold"
+          className="mt-4 rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[13px] font-extrabold"
         >
           Try again
         </button>
@@ -250,7 +250,7 @@ export default function OverviewPage() {
           Four steps to your first sale. You&apos;ve done {completed} of {steps.length}.
         </p>
 
-        <div className="mt-6 h-3 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-[2px]">
+        <div className="mt-6 h-3 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-[2px]">
           <div
             // Ink, not acid. A progress bar is not something you click, but
             // it is large and bright, and two acid areas on one screen is
@@ -265,11 +265,11 @@ export default function OverviewPage() {
             <li
               key={step.title}
               className={`flex items-center gap-4 p-5 ${
-                i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""
+                i !== 0 ? "border-t border-[var(--dl-line)]" : ""
               }`}
             >
               <span
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)] ${
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border border-[var(--dl-line)] ${
                   step.done ? "bg-[var(--dl-ink)] text-[var(--dl-paper)]" : ""
                 }`}
               >
@@ -296,7 +296,7 @@ export default function OverviewPage() {
               {!step.done && (
                 <Link
                   href={step.href as never}
-                  className={`shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px] ${
+                  className={`shrink-0 rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-bold transition-transform hover:-translate-y-[1px] ${
                     i === nextIndex
                       ? "bg-[var(--dl-ink)] text-[var(--dl-paper)]"
                       : ""
@@ -342,7 +342,7 @@ export default function OverviewPage() {
             href={`/${profile.handle}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex h-10 shrink-0 items-center gap-2 self-start rounded-[3px] border-2 border-[var(--dl-line)] px-4 text-[12.5px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px] sm:self-auto"
+            className="flex h-10 shrink-0 items-center gap-2 self-start rounded-[8px] border border-[var(--dl-line)] px-4 text-[12.5px] font-bold transition-transform hover:-translate-y-[1px] sm:self-auto"
           >
             Your public page <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
           </a>
@@ -357,7 +357,7 @@ export default function OverviewPage() {
           </p>
           <Link
             href="/payouts"
-            className="shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-3 py-1.5 text-[12px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)]"
+            className="shrink-0 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-3 py-1.5 text-[12px] font-bold text-[var(--dl-paper)]"
           >
             Connect
           </Link>
@@ -417,10 +417,10 @@ export default function OverviewPage() {
             <img
               src={nextEvent.cover_image_url}
               alt=""
-              className="h-16 w-24 shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] object-cover"
+              className="h-16 w-24 shrink-0 rounded-[8px] border border-[var(--dl-line)] object-cover"
             />
           ) : (
-            <span className="grid h-16 w-24 shrink-0 place-items-center rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-paper)] text-[10px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-faint)]">
+            <span className="grid h-16 w-24 shrink-0 place-items-center rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-paper)] text-[10px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-faint)]">
               no art
             </span>
           )}
@@ -438,13 +438,13 @@ export default function OverviewPage() {
           <div className="flex shrink-0 flex-wrap gap-2">
             <Link
               href={`/events/${nextEvent.id}/message` as never}
-              className="rounded-[3px] border-2 border-[var(--dl-line)] px-3.5 py-2 text-[12px] font-extrabold uppercase tracking-[0.04em]"
+              className="rounded-[8px] border border-[var(--dl-line)] px-3.5 py-2 text-[12px] font-bold"
             >
               Message guests
             </Link>
             <Link
               href={`/events/${nextEvent.id}/door` as never}
-              className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-3.5 py-2 text-[12px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)]"
+              className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-3.5 py-2 text-[12px] font-bold text-[var(--dl-paper)]"
             >
               Door scanner
             </Link>
@@ -496,7 +496,7 @@ export default function OverviewPage() {
             <div
               key={o.id}
               className={`flex items-center gap-4 px-5 py-3.5 ${
-                i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""
+                i !== 0 ? "border-t border-[var(--dl-line)]" : ""
               }`}
             >
               <div className="min-w-0 flex-1">

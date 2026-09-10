@@ -53,7 +53,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
        second skin over them and is declared after .dl in globals.css so
        its overrides win. Drop either class and the screen is half a
        design. */
-    <div className="dl adm relative flex h-screen flex-col overflow-hidden font-[family-name:var(--font-bricolage-grotesque)] lg:flex-row">
+    <div className="dl relative flex h-screen flex-col overflow-hidden font-[family-name:var(--font-bricolage-grotesque)] lg:flex-row">
       <AdminMobileHeader role={admin.role} alerts={alerts} />
       <AdminSidebar role={admin.role} email={admin.email} alerts={alerts} />
 

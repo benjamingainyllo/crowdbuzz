@@ -33,7 +33,7 @@ export function CohostEditor({
     onChange(cohosts.map((c, n) => (n === i ? { ...c, ...patch } : c)));
 
   const field =
-    "w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14.5px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]";
+    "w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14.5px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]";
 
   return (
     <div className="flex flex-col gap-2.5">
@@ -77,7 +77,7 @@ export function CohostEditor({
             type="button"
             onClick={() => onChange(cohosts.filter((_, n) => n !== i))}
             aria-label={`Remove cohost ${i + 1}`}
-            className="shrink-0 rounded-[3px] border-2 border-[var(--dl-line)] p-2.5 transition-transform hover:-translate-y-[1px]"
+            className="shrink-0 rounded-[8px] border border-[var(--dl-line)] p-2.5 transition-transform hover:-translate-y-[1px]"
           >
             <X className="h-4 w-4" strokeWidth={2.5} />
           </button>
@@ -88,7 +88,7 @@ export function CohostEditor({
         <button
           type="button"
           onClick={() => onChange([...cohosts, { name: "", handle: "" }])}
-          className="flex items-center gap-2 self-start rounded-[3px] border-2 border-[var(--dl-line)] px-3.5 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px]"
+          className="flex items-center gap-2 self-start rounded-[8px] border border-[var(--dl-line)] px-3.5 py-2 text-[12.5px] font-bold transition-transform hover:-translate-y-[1px]"
         >
           <Plus className="h-3.5 w-3.5" strokeWidth={3} />
           Add cohost

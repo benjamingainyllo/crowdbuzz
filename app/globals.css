@@ -162,10 +162,10 @@ html:has(.lp) body {
    * Space-separated RGB triples, because the Tailwind config wraps them in
    * rgb(... / <alpha-value>) so opacity modifiers keep working.
    */
-  --background: 244 241 250;  /* the paper */
+  --background: 244 245 246;  /* the paper */
   --surface: 255 255 255;     /* panels */
-  --muted: 234 230 241;       /* a tint below the panel */
-  --border: 179 172 192;      /* softer than the 2px ink rule, for 1px use */
+  --muted: 240 241 243;       /* a tint below the panel */
+  --border: 228 230 232;
   --text: 20 16 24;
   --subtle: 108 100 120;
 
@@ -202,13 +202,34 @@ html:has(.lp) body {
   --hairline: rgba(20, 16, 24, 0.14);
   --hairline-firm: rgba(20, 16, 24, 0.30);
 
-  --dl-paper: #F4F1FA;      /* the base under the wash */
+  /*
+   * THE EDGE IS GONE, AND THAT IS A CHANGE OF MIND RATHER THAN A TWEAK.
+   *
+   * Daylight's character used to be the EDGE: 2px full-ink rules, 3px
+   * corners, hard structure drawn on a lilac wash. The owner console was
+   * rebuilt flat and bordered — quiet grey ground, white cards with a
+   * light 1px edge, 8px corners — and running the two side by side made
+   * the organiser's half look like a different product by the same
+   * company. So the console's skin moves here, and both wear it.
+   *
+   * --dl-line is now a LIGHT grey, which means anything still written as
+   * `border-2 border-[var(--dl-line)]` comes out as a thick pale rule
+   * rather than the ink edge it was drawn for. Those are all swept; a new
+   * one is a mistake, not a style.
+   */
+  --dl-paper: #F4F5F6;      /* the quiet ground a white card sits on */
   --dl-panel: #FFFFFF;      /* anything that holds content */
-  --dl-ink: #141018;        /* near-black, violet-biased to sit with the wash */
+  --dl-ink: #141018;        /* near-black */
   --dl-ink-soft: #5A5268;   /* body copy */
   --dl-ink-faint: #6C6478;  /* labels, captions */
-  --dl-line: #141018;       /* structural rules are FULL ink, 2px. The edge. */
-  --dl-line-soft: #B3ACC0;  /* only where a hairline genuinely reads better */
+  --dl-line: #E4E6E8;       /* a light edge. Structure, not decoration. */
+  --dl-line-soft: #EDEFF1;  /* between rows inside a card */
+
+  --dl-radius: 12px;
+  --dl-radius-sm: 8px;
+  /* Almost nothing. Enough to separate a card from the ground on a
+     screen that is already mostly cards. */
+  --dl-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
 
   --dl-acid: #D8FF3E;       /* the single action colour */
   --dl-danger: #FF4B63;     /* refunds, failures, destructive things */
@@ -248,28 +269,32 @@ html:has(.lp) body {
   --dl-risk: #C9294A;
   --dl-group: #7B4FA8;
 
-  --dl-money-wash: #E8F3ED;
-  --dl-count-wash: #EAEDFB;
-  --dl-fee-wash: #FAF2E0;
-  --dl-risk-wash: #FCECEF;
-  --dl-group-wash: #F3EDF9;
-  --dl-neutral-wash: #F1EEF6;
+  /* Paler than they were, and mixed against a neutral ground rather than
+     a lilac one. These now only ever tint a small chip or an icon square;
+     a full panel wearing one reads as a highlighted row. */
+  --dl-money-wash: #EDF7F2;
+  --dl-count-wash: #EEF1FC;
+  --dl-fee-wash: #FBF5E8;
+  --dl-risk-wash: #FDF0F3;
+  --dl-group-wash: #F5F0FA;
+  --dl-neutral-wash: #F4F5F7;
 
-  background:
-    radial-gradient(58% 62% at 8% 4%, #E6DBFF 0%, rgba(230, 219, 255, 0) 60%),
-    radial-gradient(52% 58% at 94% 8%, #CDEAFF 0%, rgba(205, 234, 255, 0) 60%),
-    radial-gradient(56% 56% at 76% 99%, #FFDBE8 0%, rgba(255, 219, 232, 0) 62%),
-    var(--dl-paper);
-  background-attachment: fixed;
+  /* NO WASH. Three fixed radial gradients used to paint a lilac, sky and
+     pink haze across the whole signed-in product. It was the old
+     Daylight's colour, and against white bordered cards it reads as a
+     stain rather than as light — the ground is where the design used to
+     be, and now the design is in the data. Flat grey, and the cards do
+     the work. */
+  background: var(--dl-paper);
   color: var(--dl-ink);
   color-scheme: light;
 }
 
-/* The wash is painted by .dl itself, so the page behind it must not fight
-   it with the dark world's ground. */
+/* The page behind the shell, so an overscroll does not reveal the dark
+   world's ground under a light product. */
 html:has(.dl),
 html:has(.dl) body {
-  background: #F4F1FA;
+  background: #F4F5F6;
 }
 
 /* A highlighter stroke behind a word. Irregular on purpose — a flat
@@ -562,112 +587,70 @@ html:has(.sf) { overflow-x: hidden; }
 }
 
 /* ============================================================
-   THE OWNER CONSOLE.
+   SHARED FURNITURE for the signed-in product.
    ------------------------------------------------------------
-   A SECOND SKIN OVER .dl, NOT A REPLACEMENT FOR IT. The console and
-   the organiser's dashboard both live in the .dl scope, so anything
-   changed there changes both. This is scoped to .adm, which only the
-   admin shell carries, and it overrides .dl rather than forking it —
-   every token an admin screen already reads still resolves, and the
-   organiser's dashboard is untouched.
+   These were .dl-* and belonged to the owner console alone. The
+   organiser's dashboard now wears the same design, so they are
+   dl-* and belong to both — a card is a card on either side, and
+   two classes that render the same box is how the two halves drift
+   apart again.
 
-   IT MUST COME AFTER .dl IN THIS FILE. Both are single-class
-   selectors, so specificity is equal and the later rule wins. Move
-   this block above .dl and every override below silently stops
-   working, with nothing to show for it but the old design.
-
-   THE CHARACTER IS FLAT, DENSE AND BORDERED. A quiet grey ground,
-   white cards with a real 1px edge and a small radius, and no
-   decoration on the page itself — the colour is in the data and in
-   one accent, and nowhere else. This replaces an earlier attempt at
-   a soft gradient console; that one put the interest in the
-   background, which is the opposite of what an operations tool
-   wants. Nothing here should acquire a gradient, a glow or a
-   blur: on this screen those are noise between somebody and a number
-   they are trying to read.
-
-   ACID IS THE ACCENT HERE, WHICH REVERSES THE .dl RULE. In the
-   organiser's product acid marks the one next action, and the console
-   was given none on the grounds that it has no single next action.
-   That still holds for buttons — but the active menu item is not an
-   action, it is a position, and it is the one thing on the chrome
-   that has to be findable without reading. So acid marks where you
-   are, and the primary button, and nothing else.
+   ACID MARKS ONE THING PER SCREEN. In the organiser's product that
+   is "New event"; in the console it is where you are in the menu.
+   It is never decoration, and never two things at once.
    ============================================================ */
-.adm {
-  /* A quiet grey, so a white card reads as a card without needing a
-     shadow to lift it off the page. */
-  --dl-paper: #F4F5F6;
-  --dl-panel: #FFFFFF;
-
-  /* A real edge again, but a light one: structure comes from the
-     border and the grid, not from a 2px ink rule and not from a
-     shadow. */
-  --dl-line: #E4E6E8;
-  --dl-line-soft: #EDEFF1;
-
-  --adm-radius: 12px;
-  --adm-radius-sm: 8px;
-  /* Almost nothing. Enough to separate a card from the ground on a
-     screen that is already mostly cards. */
-  --adm-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
-
-  background: var(--dl-paper);
-  color: var(--dl-ink);
-}
-
-.adm-card {
+.dl-card {
   background: var(--dl-panel);
   border: 1px solid var(--dl-line);
-  border-radius: var(--adm-radius);
-  box-shadow: var(--adm-shadow);
+  border-radius: var(--dl-radius);
+  box-shadow: var(--dl-shadow);
 }
 
 /* The menu item. A row, not a pill — a full-width block reads as a
    place in a list, which is what a menu item is. */
-.adm-nav {
+.dl-nav {
   display: flex;
   align-items: center;
   gap: 10px;
   height: 38px;
   padding: 0 12px;
-  border-radius: var(--adm-radius-sm);
+  border-radius: var(--dl-radius-sm);
   font-size: 13.5px;
   font-weight: 600;
   color: var(--dl-ink-soft);
   transition: background-color 0.12s, color 0.12s;
 }
-.adm-nav:hover { background: #F1F2F4; color: var(--dl-ink); }
-.adm-nav-on {
+.dl-nav:hover { background: #F1F2F4; color: var(--dl-ink); }
+.dl-nav-on {
   background: var(--dl-acid);
   color: var(--dl-ink);
   font-weight: 800;
 }
-.adm-nav-on:hover { background: var(--dl-acid); color: var(--dl-ink); }
+.dl-nav-on:hover { background: var(--dl-acid); color: var(--dl-ink); }
 
 /* Controls. One height, so a search box, a select and a button sitting
    in a row line up without anybody nudging a padding value. */
-.adm-field {
+.dl-field {
   height: 38px;
   padding: 0 12px;
-  border-radius: var(--adm-radius-sm);
+  border-radius: var(--dl-radius-sm);
   border: 1px solid var(--dl-line);
   background: #FFFFFF;
   font-size: 13.5px;
   color: var(--dl-ink);
   outline: none;
 }
-.adm-field::placeholder { color: var(--dl-ink-faint); }
-.adm-field:focus { border-color: #C7CACE; box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.04); }
+.dl-field::placeholder { color: var(--dl-ink-faint); }
+.dl-field:focus { border-color: #C7CACE; box-shadow: 0 0 0 3px rgba(16, 24, 40, 0.04); }
 
-.adm-btn {
+.dl-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 7px;
   height: 38px;
   padding: 0 14px;
-  border-radius: var(--adm-radius-sm);
+  border-radius: var(--dl-radius-sm);
   border: 1px solid var(--dl-line);
   background: #FFFFFF;
   font-size: 13px;
@@ -676,10 +659,10 @@ html:has(.sf) { overflow-x: hidden; }
   white-space: nowrap;
   transition: background-color 0.12s;
 }
-.adm-btn:hover { background: #F1F2F4; }
-.adm-btn-primary {
+.dl-btn:hover { background: #F1F2F4; }
+.dl-btn-primary {
   background: var(--dl-acid);
   border-color: var(--dl-acid);
   color: var(--dl-ink);
 }
-.adm-btn-primary:hover { filter: brightness(0.96); background: var(--dl-acid); }
+.dl-btn-primary:hover { filter: brightness(0.96); background: var(--dl-acid); }

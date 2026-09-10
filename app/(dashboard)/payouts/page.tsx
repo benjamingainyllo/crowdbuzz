@@ -184,11 +184,11 @@ export default function PayoutsPage() {
       />
 
       {loadError && (
-        <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-surface p-6 text-center">
+        <div className="rounded-[8px] border border-[var(--dl-line)] bg-surface p-6 text-center">
           <p className="text-sm text-text">{loadError}</p>
           <button
             onClick={load}
-            className="mt-3 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-2 text-xs font-medium text-text"
+            className="mt-3 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-2 text-xs font-medium text-text"
           >
             Retry
           </button>
@@ -196,7 +196,7 @@ export default function PayoutsPage() {
       )}
 
       {demoMode && (
-        <div className="flex items-start gap-3 rounded-[3px] border border-[#FFDE594c] bg-[#FFDE591a] p-4">
+        <div className="flex items-start gap-3 rounded-[8px] border border-[#FFDE594c] bg-[#FFDE591a] p-4">
           <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-[var(--marker)]" />
           <div>
             <p className="text-sm font-bold text-[var(--marker)]">Demo mode — no payment gateway connected</p>
@@ -210,7 +210,7 @@ export default function PayoutsPage() {
       )}
 
       {/* How the money actually moves — worth stating plainly. */}
-      <div className="flex items-start gap-3 rounded-[3px] border border-[#FF6A4533] bg-[#FF6A450d] p-4">
+      <div className="flex items-start gap-3 rounded-[8px] border border-[#FF6A4533] bg-[#FF6A450d] p-4">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-[var(--dl-ink)]" />
         <p className="text-xs leading-relaxed text-subtle">
           CrowdBuzz never holds your money. When someone pays, the transaction is split at the
@@ -220,10 +220,10 @@ export default function PayoutsPage() {
       </div>
 
       {isConnected ? (
-        <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-surface p-6">
+        <div className="rounded-[8px] border border-[var(--dl-line)] bg-surface p-6">
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-[3px] bg-[#9BE3C01a]">
+              <div className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-[#9BE3C01a]">
                 <Landmark className="h-5 w-5 text-[var(--mint)]" />
               </div>
               <div>
@@ -233,15 +233,15 @@ export default function PayoutsPage() {
                 </p>
               </div>
             </div>
-            <span className="flex items-center gap-1.5 rounded-[3px] bg-[#9BE3C01a] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--mint)]">
+            <span className="flex items-center gap-1.5 rounded-[8px] bg-[#9BE3C01a] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--mint)]">
               <CheckCircle2 className="h-3 w-3" /> Connected
             </span>
           </div>
         </div>
       ) : (
-        <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-surface p-6">
+        <div className="rounded-[8px] border border-[var(--dl-line)] bg-surface p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-[3px] bg-[#FF6A451a]">
+            <div className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-[#FF6A451a]">
               <Landmark className="h-5 w-5 text-[var(--dl-ink)]" />
             </div>
             <div>
@@ -256,7 +256,7 @@ export default function PayoutsPage() {
               <select
                 value={bankCode}
                 onChange={(e) => setBankCode(e.target.value)}
-                className="h-11 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
+                className="h-11 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
               >
                 <option value="">Select your bank</option>
                 {banks.map((b) => (
@@ -281,7 +281,7 @@ export default function PayoutsPage() {
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value.replace(/\D/g, ""))}
                 placeholder="0123456789"
-                className="h-11 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
+                className="h-11 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
               />
             </div>
 
@@ -292,7 +292,7 @@ export default function PayoutsPage() {
             )}
 
             {resolvedName && (
-              <div className="rounded-[3px] border border-[#9BE3C033] bg-[#9BE3C00d] px-4 py-3">
+              <div className="rounded-[8px] border border-[#9BE3C033] bg-[#9BE3C00d] px-4 py-3">
                 <p className="text-[10px] uppercase tracking-wider text-subtle">Account name</p>
                 <p className="text-sm font-bold text-text">{resolvedName}</p>
               </div>
@@ -301,7 +301,7 @@ export default function PayoutsPage() {
             <button
               onClick={handleConnect}
               disabled={!resolvedName || connecting}
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-[3px] bg-[var(--dl-ink)] text-sm font-bold text-white transition-transform hover:scale-[1.01] disabled:opacity-50 disabled:hover:scale-100"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-[8px] bg-[var(--dl-ink)] text-sm font-bold text-white transition-transform hover:scale-[1.01] disabled:opacity-50 disabled:hover:scale-100"
             >
               {connecting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -322,9 +322,9 @@ export default function PayoutsPage() {
 
       {/* Settlement history — reporting only. Nothing on this page moves
           money; it records money that has already moved. */}
-      <div className="overflow-hidden rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+      <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
         <div
-          className="flex flex-wrap items-baseline justify-between gap-3 border-b-2 border-[var(--dl-line)] px-5 py-4"
+          className="flex flex-wrap items-baseline justify-between gap-3 border-b border-[var(--dl-line)] px-5 py-4"
           style={{ background: "var(--dl-money-wash)" }}
         >
           <p className="text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-money)]">
@@ -339,7 +339,7 @@ export default function PayoutsPage() {
 
         {settlements.length === 0 ? (
           <div className="px-6 py-14 text-center">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-[3px] border-2 border-[var(--dl-line)]">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-[8px] border border-[var(--dl-line)]">
               <Inbox className="h-6 w-6" />
             </div>
             <p className="text-[15px] font-bold">No payouts yet</p>
@@ -353,7 +353,7 @@ export default function PayoutsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-[13.5px]">
               <thead>
-                <tr className="border-b-2 border-[var(--dl-line)]">
+                <tr className="border-b border-[var(--dl-line)]">
                   <th scope="col" className="bg-[var(--dl-neutral-wash)] px-5 py-2.5 text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]">
                     Landed
                   </th>
@@ -414,7 +414,7 @@ function SettlementStatus({ status }: { status: string }) {
   };
   return (
     <span
-      className={`inline-block rounded-[2px] border-2 px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${
+      className={`inline-block rounded-[6px] border px-2 py-[1px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${
         tone[status] ?? tone.pending
       }`}
     >

@@ -189,14 +189,14 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
 
         <button
           onClick={onBack}
-          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-[3px] bg-black/50 text-white backdrop-blur-md transition-colors hover:bg-black/70"
+          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-[8px] bg-black/50 text-white backdrop-blur-md transition-colors hover:bg-black/70"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
 
         <div className="absolute right-4 top-4 flex items-center gap-2">
           <span
-            className={`flex items-center gap-1.5 rounded-[3px] px-4 py-1.5 text-[11px] font-bold text-white shadow-lg ${
+            className={`flex items-center gap-1.5 rounded-[8px] px-4 py-1.5 text-[11px] font-bold text-white shadow-lg ${
               isPublished ? "bg-[var(--mint)]" : "bg-[var(--dl-ink)]"
             }`}
           >
@@ -206,7 +206,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
 
           <Link
             href={`/events/${event.id}/message`}
-            className="flex items-center gap-1.5 rounded-[3px] bg-white/95 px-4 py-1.5 text-[11px] font-bold text-[var(--dl-ink)] shadow-lg transition-transform hover:-translate-y-[1px]"
+            className="flex items-center gap-1.5 rounded-[8px] bg-white/95 px-4 py-1.5 text-[11px] font-bold text-[var(--dl-ink)] shadow-lg transition-transform hover:-translate-y-[1px]"
           >
             <Megaphone className="h-3 w-3" strokeWidth={2.5} />
             Message
@@ -214,7 +214,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
 
           <Link
             href={`/events/${event.id}/edit`}
-            className="flex items-center gap-1.5 rounded-[3px] bg-white/95 px-4 py-1.5 text-[11px] font-bold text-[var(--dl-ink)] shadow-lg transition-transform hover:-translate-y-[1px]"
+            className="flex items-center gap-1.5 rounded-[8px] bg-white/95 px-4 py-1.5 text-[11px] font-bold text-[var(--dl-ink)] shadow-lg transition-transform hover:-translate-y-[1px]"
           >
             <Pencil className="h-3 w-3" strokeWidth={2.5} />
             Edit
@@ -244,7 +244,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
       </div>
 
       <div className="px-4 pb-12 md:px-8">
-        <div className="sticky top-0 z-10 -mx-4 mb-6 border-b-2 border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 md:-mx-6 md:px-6">
+        <div className="sticky top-0 z-10 -mx-4 mb-6 border-b border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 md:-mx-6 md:px-6">
           <div className="flex items-center gap-1 py-1">
             {([
               { key: "overview", label: "Overview", icon: Eye },
@@ -255,7 +255,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
               <button
                 key={t.key}
                 onClick={() => setTab(t.key)}
-                className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-semibold transition-colors ${
+                className={`flex items-center gap-2 border-b px-4 py-3 text-xs font-semibold transition-colors ${
                   tab === t.key
                     ? "border-[var(--dl-line)] text-[var(--dl-ink)]"
                     : "border-transparent text-[var(--dl-ink-faint)] hover:text-[var(--dl-ink-soft)]"
@@ -270,7 +270,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
               {isPublished && (
                 <Link
                   href={`/events/${event.id}/door`}
-                  className="flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-xs font-medium text-[var(--dl-ink-soft)] transition-colors hover:bg-[var(--dl-paper)]"
+                  className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-xs font-medium text-[var(--dl-ink-soft)] transition-colors hover:bg-[var(--dl-paper)]"
                 >
                   <ScanLine className="h-3.5 w-3.5" /> Door
                 </Link>
@@ -281,7 +281,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
                     navigator.clipboard?.writeText(shareUrl);
                     toast.success("Link copied");
                   }}
-                  className="flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-xs font-medium text-[var(--dl-ink-soft)] transition-colors hover:bg-[var(--dl-paper)]"
+                  className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-xs font-medium text-[var(--dl-ink-soft)] transition-colors hover:bg-[var(--dl-paper)]"
                 >
                   <Share2 className="h-3.5 w-3.5" /> Copy link
                 </button>
@@ -289,10 +289,10 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
               <button
                 onClick={handleTogglePublish}
                 disabled={publishing}
-                className={`flex items-center gap-2 rounded-[3px] px-3 py-2 text-xs font-bold transition-colors disabled:opacity-60 ${
+                className={`flex items-center gap-2 rounded-[8px] px-3 py-2 text-xs font-bold transition-colors disabled:opacity-60 ${
                   isPublished
-                    ? "border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] text-[var(--dl-ink-soft)]"
-                    : "border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]"
+                    ? "border border-[var(--dl-line)] bg-[var(--dl-panel)] text-[var(--dl-ink-soft)]"
+                    : "border border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]"
                 }`}
               >
                 {publishing ? (
@@ -311,7 +311,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
           <div className="space-y-6">
             {/* One ruled block. Same as Overview, Events and everywhere else —
                 no tinted icon chips, and the number does the talking. */}
-            <div className="flex flex-wrap rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+            <div className="flex flex-wrap rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
               {[
                 { label: "Taken", value: formatKobo(grossKobo) },
                 {
@@ -326,7 +326,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
               ].map((m) => (
                 <div
                   key={m.label}
-                  className="min-w-[152px] flex-1 border-l-2 border-[var(--dl-line)] px-5 py-4 first:border-l-0"
+                  className="min-w-[152px] flex-1 border-l border-[var(--dl-line)] px-5 py-4 first:border-l-0"
                 >
                   <p className="text-[27px] font-extrabold tracking-[-0.035em] [font-variant-numeric:tabular-nums]">
                     {m.value}
@@ -341,7 +341,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
             {/* How full it is. The bar is the reason this tab exists —
                 a percentage on its own doesn't tell you whether to
                 promote, and the seats-left figure does. */}
-            <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-5">
+            <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-5">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <p className="text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]">
                   How it is selling
@@ -354,11 +354,11 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
               </div>
 
               <div
-                className="mt-3 h-3 w-full overflow-hidden rounded-[2px]"
+                className="mt-3 h-3 w-full overflow-hidden rounded-[6px]"
                 style={{ background: TONE_TRACK.neutral }}
               >
                 <div
-                  className="h-full rounded-[2px]"
+                  className="h-full rounded-[6px]"
                   style={{
                     width:
                       pctSold === null
@@ -399,26 +399,26 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="overflow-hidden rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+              <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
                 <PanelHead title="Which ticket sells" tone="money" />
                 <TicketTypeSplit data={tierSplit} />
               </div>
 
-              <div className="overflow-hidden rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+              <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
                 <PanelHead title="When people buy" tone="count" />
                 <WeekdayBars data={shape.byWeekday} />
               </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-[2fr_1fr]">
-              <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
+              <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
                 <h3 className="mb-4 text-sm font-semibold text-[var(--dl-ink)]">About this event</h3>
                 <p className="text-sm leading-relaxed text-[var(--dl-ink-soft)]">
                   {event.description || "No description added yet."}
                 </p>
               </div>
 
-              <div className="space-y-1 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
+              <div className="space-y-1 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--dl-ink-faint)]">Location</p>
                 <p className="text-sm font-medium text-[var(--dl-ink)]">{event.location || "Online"}</p>
                 {event.map_link && (
@@ -442,19 +442,19 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
         )}
 
         {tab === "merch" && (
-          <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]/40 p-5">
+          <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]/40 p-5">
             <MerchEditor eventId={event.id} />
           </div>
         )}
 
         {tab === "tickets" && (
-          <div className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
+          <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
             <TicketTypesEditor eventId={event.id} />
           </div>
         )}
 
         {tab === "attendees" && (
-          <div className="overflow-hidden rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]">
+          <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
             {loading ? (
               <div className="flex items-center justify-center py-16">
                 <Loader2 className="h-6 w-6 animate-spin text-[var(--dl-ink-faint)]" />
@@ -464,14 +464,14 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
                 <p className="text-sm text-[var(--dl-ink-soft)]">{loadError}</p>
                 <button
                   onClick={fetchOrders}
-                  className="mt-4 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]/50 px-4 py-2 text-xs font-medium text-[var(--dl-ink-soft)] hover:bg-[var(--dl-paper)]"
+                  className="mt-4 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]/50 px-4 py-2 text-xs font-medium text-[var(--dl-ink-soft)] hover:bg-[var(--dl-paper)]"
                 >
                   Retry
                 </button>
               </div>
             ) : orders.length === 0 ? (
               <div className="px-6 py-16 text-center">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-[3px] bg-[var(--dl-panel)] text-[var(--dl-ink-faint)]">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-[8px] bg-[var(--dl-panel)] text-[var(--dl-ink-faint)]">
                   <Users className="h-6 w-6" />
                 </div>
                 <p className="text-sm font-medium text-[var(--dl-ink)]">No attendees yet</p>
@@ -485,7 +485,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
               <div className="divide-y divide-zinc-800/50">
                 {orders.map((o) => (
                   <div key={o.id} className="flex items-center gap-4 px-5 py-4">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[3px] bg-[var(--dl-ink)] text-xs font-bold text-white">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] bg-[var(--dl-ink)] text-xs font-bold text-white">
                       {(o.buyer_name || o.buyer_email).charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0 flex-1">
