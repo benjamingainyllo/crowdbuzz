@@ -214,7 +214,7 @@ export function Sidebar() {
               className="h-[34px] w-[34px] shrink-0 rounded-[8px] border border-[var(--dl-line)] object-cover"
             />
           ) : (
-            <span className="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] text-[13px] font-extrabold">
+            <span className="dl-card flex h-[34px] w-[34px] shrink-0 items-center justify-center text-[13px] font-extrabold">
               {(userName[0] || "P").toUpperCase()}
             </span>
           )}

@@ -105,7 +105,7 @@ export function SalesChart({ orders }: { orders: readonly SalesOrderRow[] }) {
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
 
   return (
-    <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+    <div className="dl-card">
       {/* Controls in one row above the plot, never floating over it. */}
       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--dl-line)] p-5">
         <div>
@@ -217,7 +217,7 @@ export function SalesChart({ orders }: { orders: readonly SalesOrderRow[] }) {
                   if (!active || !payload?.length) return null;
                   const p = payload[0].payload as SalesPoint;
                   return (
-                    <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 shadow-[3px_3px_0_var(--dl-line)]">
+                    <div className="dl-card px-3 py-2 shadow-[3px_3px_0_var(--dl-line)]">
                       <p className={label}>{p.label}</p>
                       <p
                         className="mt-1 text-[16px] font-extrabold [font-variant-numeric:tabular-nums]"

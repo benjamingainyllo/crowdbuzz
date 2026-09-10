@@ -328,11 +328,11 @@ export default function EventsPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] py-20">
+        <div className="dl-card flex items-center justify-center py-20">
           <Loader2 className="h-6 w-6 animate-spin text-[var(--dl-ink-faint)]" />
         </div>
       ) : loadError ? (
-        <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] py-16 text-center">
+        <div className="dl-card py-16 text-center">
           <p className="text-[14px]">{loadError}</p>
           <button onClick={fetchEvents} className={`${chip} mt-4`}>Retry</button>
         </div>
@@ -433,7 +433,7 @@ function EventCard({
           : TONE_HEX.count;
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+    <div className="dl-card flex flex-col overflow-hidden">
       <button onClick={onOpen} className="group block text-left">
         <div className="relative h-36 w-full overflow-hidden border-b border-[var(--dl-line)] bg-black/[0.04]">
           {event.cover_image_url ? (
@@ -450,18 +450,12 @@ function EventCard({
           )}
 
           <span
-            className={`absolute right-3 top-3 inline-flex items-center gap-1 rounded-[6px] border border-[var(--dl-line)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${
-              past
-                ? "bg-[var(--dl-panel)] text-[var(--dl-ink-soft)]"
-                : published
-                  ? "bg-[var(--dl-ink)] text-[var(--dl-panel)]"
-                  : "bg-[var(--dl-panel)]"
-            }`}
+            className={`dl-card absolute right-3 top-3 inline-flex items-center gap-1 px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em] ${ past ? "bg-[var(--dl-panel)] text-[var(--dl-ink-soft)]" : published ? "bg-[var(--dl-ink)] text-[var(--dl-panel)]" : "bg-[var(--dl-panel)]" }`}
           >
             {past ? "Done" : published ? <><Globe className="h-2.5 w-2.5" /> Live</> : <><Lock className="h-2.5 w-2.5" /> Draft</>}
           </span>
 
-          <span className="absolute bottom-3 left-3 rounded-[6px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em]">
+          <span className="dl-card absolute bottom-3 left-3 px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.06em]">
             {priceKobo === 0 ? "Free" : `${formatKobo(priceKobo)} a ticket`}
           </span>
         </div>

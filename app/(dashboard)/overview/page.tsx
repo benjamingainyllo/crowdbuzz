@@ -171,7 +171,7 @@ export default function OverviewPage() {
      single next action — a second one and neither is pointing at anything.
      ─────────────────────────────────────────────────────────────── */
   const panel =
-    "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
+    "dl-card";
   const label =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
 
@@ -247,12 +247,12 @@ export default function OverviewPage() {
           Four steps to your first sale. You&apos;ve done {completed} of {steps.length}.
         </p>
 
-        <div className="mt-6 h-3 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-[2px]">
+        <div className="dl-card mt-6 h-3 w-full p-[2px]">
           <div
             // Ink, not acid. A progress bar is not something you click, but
             // it is large and bright, and two acid areas on one screen is
             // exactly the muddle the rule exists to prevent.
-            className="h-full rounded-[1px] bg-[var(--dl-ink)] transition-all duration-500"
+            className="h-full rounded-[6px] bg-[var(--dl-ink)] transition-all duration-500"
             style={{ width: `${(completed / steps.length) * 100}%` }}
           />
         </div>

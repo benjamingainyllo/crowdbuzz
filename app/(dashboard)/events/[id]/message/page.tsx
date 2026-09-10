@@ -71,7 +71,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
   const label =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
   const panel =
-    "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
+    "dl-card";
 
   if (loading) {
     return (
@@ -85,7 +85,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
     return (
       <section className={`${panel} py-14 text-center`}>
         <p className="text-[15px] font-semibold">{loadError}</p>
-        <Link href="/events" className="mt-4 inline-block rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[13px] font-extrabold">
+        <Link href="/events" className="dl-btn mt-4 px-4 py-2 text-[13px] font-extrabold">
           Back to your events
         </Link>
       </section>
@@ -171,7 +171,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
               rows={7}
               maxLength={2000}
               placeholder={`The venue has changed. We're now at Landmark Beach instead of Hard Rock — same date, same time. Your ticket still works, just come to the new place.`}
-              className="mt-2.5 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-[var(--dl-ink-faint)]"
+              className="dl-card mt-2.5 w-full px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-[var(--dl-ink-faint)]"
             />
             <p className="mt-1.5 text-[12.5px] text-[var(--dl-ink-soft)]">
               {body.length}/2000. Their ticket stays valid — the message says so at the bottom.
@@ -207,7 +207,7 @@ export default function MessageGuestsPage({ params }: { params: { id: string } }
                   <p className="mt-1.5 text-[13.5px] leading-relaxed text-[var(--dl-ink-soft)]">
                     It can&apos;t be unsent or edited afterwards. Read it once more.
                   </p>
-                  <div className="mt-3.5 whitespace-pre-wrap rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3 text-[14px] leading-relaxed">
+                  <div className="dl-card mt-3.5 whitespace-pre-wrap px-4 py-3 text-[14px] leading-relaxed">
                     {body}
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2.5">

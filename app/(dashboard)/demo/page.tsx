@@ -96,7 +96,7 @@ export default function DemoPage() {
     }
   };
 
-  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "dl-card";
 
   if (loading) {
     return (
@@ -366,9 +366,7 @@ function Step({
 }) {
   return (
     <li
-      className={`flex gap-4 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-5 sm:p-6 ${
-        muted ? "opacity-55" : ""
-      }`}
+      className={`dl-card flex gap-4 p-5 sm:p-6 ${ muted ? "opacity-55" : "" }`}
     >
       <span
         className={`grid h-8 w-8 shrink-0 place-items-center rounded-[6px] font-mono text-[13px] font-semibold ${

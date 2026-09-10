@@ -42,9 +42,7 @@ export function TitleStylePicker({
               role="radio"
               aria-checked={on}
               onClick={() => onChange(s.id)}
-              className={`shrink-0 rounded-full border border-[var(--dl-line)] px-4 py-2 transition-transform hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)] focus-visible:ring-offset-2 ${
-                on ? "bg-[var(--dl-ink)] text-[var(--dl-paper)]" : "bg-[var(--dl-panel)]"
-              }`}
+              className={`dl-card shrink-0 rounded-full px-4 py-2 transition-transform hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)] focus-visible:ring-offset-2 ${ on ? "bg-[var(--dl-ink)] text-[var(--dl-paper)]" : "bg-[var(--dl-panel)]" }`}
               // The label wears the face it names. Fixed at 15px rather
               // than the display size, so a script doesn't blow the chip
               // out of the row.

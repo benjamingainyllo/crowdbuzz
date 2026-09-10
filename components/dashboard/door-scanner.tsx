@@ -276,7 +276,7 @@ export function DoorScanner({
           <p className="text-[10px] font-bold uppercase tracking-widest text-subtle">Door</p>
           <h1 className="truncate text-sm font-bold text-text">{eventTitle}</h1>
         </div>
-        <div className="flex shrink-0 items-center gap-1.5 rounded-[8px] bg-[var(--dl-panel)] px-3 py-2">
+        <div className="flex shrink-0 items-center gap-1.5 dl-card bg-[var(--dl-panel)] px-3 py-2">
           <Users className="h-3.5 w-3.5 text-subtle" />
           <span className="text-xs font-bold text-text">
             {stats.admitted}
@@ -389,7 +389,7 @@ export function DoorScanner({
             autoCapitalize="characters"
             autoComplete="off"
             spellCheck={false}
-            className="h-14 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 text-center font-mono text-lg font-bold uppercase tracking-[0.15em] text-text placeholder:font-sans placeholder:tracking-normal placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
+            className="dl-card h-14 w-full px-4 text-center font-mono text-lg font-bold uppercase tracking-[0.15em] text-text placeholder:font-sans placeholder:tracking-normal placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
           />
           <button
             type="submit"

@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Plus, Loader2, Pencil, Trash2, Ticket, EyeOff, RotateCcw, X } from "lucide-react";
+import {
+  Plus, Loader2, Pencil, Trash2, Ticket, EyeOff, RotateCcw, X, ChevronRight,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { formatKobo, koboToNaira } from "@/lib/money";
 import {
@@ -21,6 +23,11 @@ interface TicketTypeRow {
   quantity: number | null;
   sold_count: number;
   max_per_order: number;
+  /* The sales window. Both are on the row already — the query selects
+     "*" — and the type simply never named them, so the expanded detail
+     could not read the two facts an organiser most often checks. */
+  sales_start: string | null;
+  sales_end: string | null;
   status: "active" | "hidden";
   sort_order: number;
 }
@@ -172,20 +179,21 @@ export function TicketTypesEditor({ eventId }: { eventId: string }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-sm font-bold text-text">Ticket types</h3>
-          <p className="text-xs text-subtle">
-            What people can buy. The cheapest active type is the price shown on your event.
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-[18px] font-extrabold tracking-[-0.03em]">
+            {active.length + hidden.length}{" "}
+            {active.length + hidden.length === 1 ? "ticket tier" : "ticket tiers"}
+          </h3>
+          <p className="mt-0.5 text-[13px] text-[var(--dl-ink-soft)]">
+            What people can buy. The cheapest active tier is the price shown on
+            your event.
           </p>
         </div>
         {!adding && !editingId && (
-          <button
-            onClick={startAdd}
-            className="flex items-center gap-1.5 rounded-[8px] bg-text px-3 py-2 text-xs font-bold text-background transition-opacity hover:opacity-90"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            Add type
+          <button onClick={startAdd} className="dl-btn dl-btn-primary shrink-0">
+            <Plus className="h-[15px] w-[15px]" />
+            Add ticket tier
           </button>
         )}
       </div>
@@ -220,24 +228,39 @@ export function TicketTypesEditor({ eventId }: { eventId: string }) {
         />
       )}
 
-      <div className="space-y-2">
-        {active.map((tier) =>
-          editingId === tier.id ? null : (
-            <TierRow
-              key={tier.id}
-              tier={tier}
-              onEdit={() => startEdit(tier)}
-              onRemove={() => remove(tier)}
-            />
-          )
-        )}
-      </div>
+      {active.length > 0 && (
+        <div className="dl-card overflow-hidden">
+          {/* A header row, so the numbers down each column have a name.
+              Hidden on a phone, where the rows stack into labelled pairs
+              and a five-column header would be a horizontal scroll for
+              no gain. */}
+          <div className="hidden items-center gap-3 border-b border-[var(--dl-line)] bg-[#FAFBFB] px-4 py-2.5 text-[11.5px] font-bold text-[var(--dl-ink-faint)] sm:flex">
+            <span className="w-[18px] shrink-0" aria-hidden="true" />
+            <span className="min-w-0 flex-1">Tier</span>
+            <span className="w-[92px] shrink-0">Status</span>
+            <span className="w-[104px] shrink-0 text-right">Available</span>
+            <span className="w-[104px] shrink-0 text-right">Price</span>
+            <span className="w-[72px] shrink-0" aria-hidden="true" />
+          </div>
+
+          {active.map((tier) =>
+            editingId === tier.id ? null : (
+              <TierRow
+                key={tier.id}
+                tier={tier}
+                onEdit={() => startEdit(tier)}
+                onRemove={() => remove(tier)}
+              />
+            )
+          )}
+        </div>
+      )}
 
       {hidden.length > 0 && (
-        <div className="space-y-2 pt-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-subtle">
+        <div className="dl-card overflow-hidden">
+          <div className="border-b border-[var(--dl-line)] bg-[#FAFBFB] px-4 py-2.5 text-[11.5px] font-bold text-[var(--dl-ink-faint)]">
             No longer on sale
-          </p>
+          </div>
           {hidden.map((tier) => (
             <TierRow key={tier.id} tier={tier} onRestore={() => restore(tier)} />
           ))}
@@ -247,7 +270,23 @@ export function TicketTypesEditor({ eventId }: { eventId: string }) {
   );
 }
 
-function TierRow({
+/**
+ * One tier, as a row that opens.
+ *
+ * THE ROW IS THE SUMMARY; THE DETAIL IS BEHIND IT. A tier carries nine
+ * facts — price, cap, sold, max per order, both sales windows, its
+ * description, its state — and printing all nine on every row made four
+ * tiers into a wall nobody could scan. The row now answers the four
+ * questions somebody actually arrives with (which tier, is it selling,
+ * how many are left, what does it cost) and the rest is one click away.
+ *
+ * IT IS A BUTTON, NOT A DIV WITH AN onClick. Keyboard focus, Enter and
+ * Space, and a screen reader announcing "expanded" all come free from
+ * using the right element; none of them come from a handler on a div.
+ */
+/* Exported so the row can be rendered against fixtures — a long tier
+   name, a sold-out tier, an unlimited one — without a database. */
+export function TierRow({
   tier,
   onEdit,
   onRemove,
@@ -258,91 +297,155 @@ function TierRow({
   onRemove?: () => void;
   onRestore?: () => void;
 }) {
+  const [open, setOpen] = useState(false);
+
   const sold = Number(tier.sold_count ?? 0);
   const cap = tier.quantity;
   const soldOut = cap !== null && sold >= cap;
-  const pct = cap ? Math.min(100, Math.round((sold / cap) * 100)) : 0;
+  const left = cap === null ? null : Math.max(0, cap - sold);
+
+  const now = Date.now();
+  const startsAt = tier.sales_start ? new Date(tier.sales_start).getTime() : null;
+  const endsAt = tier.sales_end ? new Date(tier.sales_end).getTime() : null;
+
+  // The same order the buyer's page resolves these in, so an organiser
+  // never sees "On sale" here against a tier a buyer cannot reach.
+  const state = (() => {
+    if (tier.status === "hidden") return { label: "Hidden", tone: "flat" as const };
+    if (soldOut) return { label: "Sold out", tone: "bad" as const };
+    if (startsAt && now < startsAt) return { label: "Upcoming", tone: "warn" as const };
+    if (endsAt && now > endsAt) return { label: "Closed", tone: "flat" as const };
+    return { label: "On sale", tone: "ok" as const };
+  })();
+
+  const TONES = {
+    ok: "border-[#B7E4CB] bg-[#EDF9F2] text-[#146B45]",
+    warn: "border-[#F3DCA6] bg-[#FDF6E7] text-[#7A5000]",
+    bad: "border-[#F5C2CE] bg-[#FDEEF1] text-[#B32243]",
+    flat: "border-[var(--dl-line)] bg-[#F6F7F8] text-[var(--dl-ink-soft)]",
+  };
+
+  const when = (v: string | null | undefined) => {
+    if (!v) return "—";
+    const d = new Date(v);
+    if (Number.isNaN(d.getTime())) return "—";
+    return d.toLocaleString("en-NG", {
+      weekday: "short", day: "numeric", month: "short", year: "numeric",
+      hour: "numeric", minute: "2-digit",
+    });
+  };
 
   return (
-    <div
-      className={`rounded-[8px] border border-[var(--dl-line)] bg-surface p-4 ${
-        tier.status === "hidden" ? "opacity-60" : ""
-      }`}
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="truncate text-sm font-bold text-text">{tier.name}</span>
-            {soldOut && (
-              <span className="rounded-[8px] bg-[#FF54701a] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--danger)]">
-                Sold out
-              </span>
-            )}
-            {tier.status === "hidden" && (
-              <span className="flex items-center gap-1 rounded-[8px] bg-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-subtle">
-                <EyeOff className="h-2.5 w-2.5" />
-                Hidden
-              </span>
-            )}
-          </div>
+    <div className={`border-b border-[var(--dl-line-soft)] last:border-b-0 ${tier.status === "hidden" ? "opacity-70" : ""}`}>
+      <div className="flex items-center gap-3 px-4 py-3">
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-label={open ? `Hide ${tier.name} details` : `Show ${tier.name} details`}
+          className="grid h-[18px] w-[18px] shrink-0 place-items-center rounded-[6px] text-[var(--dl-ink-faint)] transition-colors hover:text-[var(--dl-ink)]"
+        >
+          <ChevronRight
+            className={`h-4 w-4 transition-transform ${open ? "rotate-90" : ""}`}
+            strokeWidth={2.5}
+          />
+        </button>
 
-          {tier.description && (
-            <p className="mt-1 line-clamp-2 text-xs text-subtle">{tier.description}</p>
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          className="min-w-0 flex-1 text-left"
+        >
+          <span className="block truncate text-[14px] font-bold">{tier.name}</span>
+          <span className="mt-0.5 block text-[12px] text-[var(--dl-ink-faint)] sm:hidden">
+            {tier.price_kobo === 0 ? "Free" : formatKobo(tier.price_kobo)}
+            {" · "}
+            {left === null ? "Unlimited" : `${left} left`}
+          </span>
+        </button>
+
+        <span className={`hidden w-[92px] shrink-0 sm:block`}>
+          <span
+            className={`inline-block whitespace-nowrap rounded-full border px-2.5 py-[2px] text-[11px] font-bold ${TONES[state.tone]}`}
+          >
+            {state.label}
+          </span>
+        </span>
+
+        <span className="hidden w-[104px] shrink-0 text-right text-[13.5px] font-semibold [font-variant-numeric:tabular-nums] sm:block">
+          {cap === null ? (
+            <span className="text-[var(--dl-ink-faint)]">Unlimited</span>
+          ) : (
+            <>
+              {sold}
+              <span className="text-[var(--dl-ink-faint)]">/{cap}</span>
+            </>
           )}
+        </span>
 
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-subtle">
-            <span className="font-semibold text-text">
-              {tier.price_kobo === 0 ? "Free" : formatKobo(tier.price_kobo)}
-            </span>
-            <span>·</span>
-            <span>
-              {sold} sold{cap !== null ? ` of ${cap}` : ""}
-            </span>
-            {cap === null && <span className="text-subtle">· unlimited</span>}
-          </div>
+        <span className="hidden w-[104px] shrink-0 text-right text-[13.5px] font-extrabold [font-variant-numeric:tabular-nums] sm:block">
+          {tier.price_kobo === 0 ? "Free" : formatKobo(tier.price_kobo)}
+        </span>
 
-          {cap !== null && (
-            <div className="mt-2 h-1 w-full overflow-hidden rounded-[8px] bg-muted">
-              <div
-                className={`h-full rounded-[8px] transition-all ${
-                  soldOut ? "bg-[var(--danger)]" : "bg-[var(--dl-ink)]"
-                }`}
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="flex shrink-0 items-center gap-1">
+        <span className="flex w-[72px] shrink-0 items-center justify-end gap-1">
           {onEdit && (
             <button
               onClick={onEdit}
               aria-label={`Edit ${tier.name}`}
-              className="flex h-8 w-8 items-center justify-center rounded-[8px] text-subtle transition-colors hover:bg-muted hover:text-text"
+              className="grid h-8 w-8 place-items-center rounded-[8px] text-[var(--dl-ink-faint)] transition-colors hover:bg-[#F1F2F4] hover:text-[var(--dl-ink)]"
             >
-              <Pencil className="h-3.5 w-3.5" />
+              <Pencil className="h-[15px] w-[15px]" />
             </button>
           )}
           {onRemove && (
             <button
               onClick={onRemove}
               aria-label={`Remove ${tier.name}`}
-              className="flex h-8 w-8 items-center justify-center rounded-[8px] text-subtle transition-colors hover:bg-[#FF54701a] hover:text-[var(--danger)]"
+              className="grid h-8 w-8 place-items-center rounded-[8px] text-[var(--dl-ink-faint)] transition-colors hover:bg-[#FDEEF1] hover:text-[var(--dl-danger)]"
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <Trash2 className="h-[15px] w-[15px]" />
             </button>
           )}
           {onRestore && (
             <button
               onClick={onRestore}
               aria-label={`Put ${tier.name} back on sale`}
-              className="flex h-8 w-8 items-center justify-center rounded-[8px] text-subtle transition-colors hover:bg-muted hover:text-text"
+              className="grid h-8 w-8 place-items-center rounded-[8px] text-[var(--dl-ink-faint)] transition-colors hover:bg-[#F1F2F4] hover:text-[var(--dl-ink)]"
             >
-              <RotateCcw className="h-3.5 w-3.5" />
+              <RotateCcw className="h-[15px] w-[15px]" />
             </button>
           )}
-        </div>
+        </span>
       </div>
+
+      {open && (
+        <div className="border-t border-[var(--dl-line-soft)] bg-[#FAFBFB] px-4 py-4 sm:pl-[45px]">
+          <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+            {[
+              ["Price", tier.price_kobo === 0 ? "Free" : formatKobo(tier.price_kobo)],
+              ["Quantity available", cap === null ? "Unlimited" : `${cap}`],
+              ["Sold", `${sold}`],
+              ["Max per order", `${tier.max_per_order ?? 10}`],
+              ["Sales open", when(tier.sales_start)],
+              ["Sales close", when(tier.sales_end)],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <dt className="text-[11.5px] font-bold text-[var(--dl-ink-faint)]">{k}</dt>
+                <dd className="mt-0.5 text-[13.5px] font-semibold">{v}</dd>
+              </div>
+            ))}
+          </dl>
+
+          {tier.description && (
+            <div className="mt-4">
+              <p className="text-[11.5px] font-bold text-[var(--dl-ink-faint)]">Description</p>
+              <p className="mt-0.5 max-w-[70ch] text-[13.5px] leading-relaxed text-[var(--dl-ink-soft)]">
+                {tier.description}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -363,7 +466,7 @@ function TierForm({
   isEdit: boolean;
 }) {
   const field =
-    "h-10 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none";
+    "dl-field w-full text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none";
 
   return (
     <div className="rounded-[8px] border border-[#FF6A4566] bg-surface p-4">

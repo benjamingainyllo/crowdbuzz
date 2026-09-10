@@ -232,7 +232,7 @@ export default function SettingsPage() {
 
                 <div>
                   <label className="mb-1 block text-xs font-medium text-subtle">Handle</label>
-                  <div className="flex items-center overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] focus-within:border-[var(--dl-line)]">
+                  <div className="dl-card flex items-center overflow-hidden focus-within:border-[var(--dl-line)]">
                     <span className="shrink-0 border-r border-border px-3 py-2.5 text-xs text-subtle">
                       {publicHost}/
                     </span>
@@ -289,7 +289,7 @@ export default function SettingsPage() {
                     onChange={(e) => setBio(e.target.value.slice(0, 200))}
                     rows={3}
                     placeholder="A line about what you make."
-                    className="w-full resize-none rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
+                    className="dl-card w-full resize-none p-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
                   />
                   <p className="mt-1 text-right text-[10px] text-subtle">{bio.length}/200</p>
                 </div>
@@ -300,7 +300,7 @@ export default function SettingsPage() {
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className="h-10 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
+                      className="dl-card h-10 w-full px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
                     >
                       <option value="">Choose one</option>
                       {CATEGORIES.map((c) => (
@@ -320,7 +320,7 @@ export default function SettingsPage() {
                       id="tz"
                       value={timezone}
                       onChange={(e) => setTimezone(e.target.value)}
-                      className="h-10 w-full appearance-none rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
+                      className="dl-card h-10 w-full appearance-none px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
                     >
                       <option value="">Not set</option>
                       {timezones().map((z) => (
@@ -340,7 +340,7 @@ export default function SettingsPage() {
                       id="country"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      className="h-10 w-full appearance-none rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
+                      className="dl-card h-10 w-full appearance-none px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
                     >
                       <option value="">Not set</option>
                       {COUNTRIES.map((c) => (
@@ -384,7 +384,7 @@ export default function SettingsPage() {
                     type={showPassword ? "text" : "password"}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="h-10 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 pr-10 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
+                    className="dl-card h-10 w-full px-3 pr-10 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
                   />
                   <button
                     type="button"
@@ -402,7 +402,7 @@ export default function SettingsPage() {
                   type={showPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="h-10 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
+                  className="dl-card h-10 w-full px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
                 />
                 {confirmPassword.length > 0 && newPassword !== confirmPassword && (
                   <p className="mt-1.5 text-[11px] text-[var(--danger)]">These don&apos;t match.</p>
@@ -471,7 +471,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="h-10 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
+        className="dl-card h-10 w-full px-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
       />
     </div>
   );

@@ -117,6 +117,16 @@ export function TrendChip({ trend, invert = false }: { trend: Trend; invert?: bo
  * rather than four floating cards, because that is how every other figure
  * row in this product already reads.
  */
+/** Column counts by tile count, so a row is always evenly divided. */
+const COLS: Record<number, string> = {
+  1: "lg:grid-cols-1",
+  2: "lg:grid-cols-2",
+  3: "lg:grid-cols-3",
+  4: "lg:grid-cols-4",
+  5: "lg:grid-cols-5",
+  6: "lg:grid-cols-3",
+};
+
 export function StatTiles({
   items,
 }: {
@@ -140,7 +150,16 @@ export function StatTiles({
        between them, and one product cannot show its headline figures two
        different ways. The 3px keyline stays — it is what tells the four
        apart now that they are all white. */
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    /*
+     * THE COLUMN COUNT FOLLOWS THE TILE COUNT.
+     *
+     * This was a hard lg:grid-cols-4, so a screen with five figures put
+     * four across and left the fifth alone on a second row at a quarter
+     * of the width — a card three times smaller than its neighbours,
+     * carrying a number of exactly the same importance. Five tiles get
+     * five columns, three get three, and nothing is ever orphaned.
+     */
+    <div className={`grid gap-3 sm:grid-cols-2 ${COLS[Math.min(items.length, 6)] ?? "lg:grid-cols-4"}`}>
       {items.map((f, i) => {
         const tone = f.tone ?? "neutral";
         const toned = Boolean(f.tone);
@@ -209,13 +228,13 @@ export function StatTiles({
 
         const inner = (
           <>
-            {toned && (
-              <span
-                aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-[3px]"
-                style={{ background: TONE_INK[tone] }}
-              />
-            )}
+            {/* NO KEYLINE. There used to be a 3px bar of the tone across
+                the top of every tile. It was doing a real job on a
+                gradient ground — telling four washed tiles apart — but the
+                console's cards are plain white with the tone in the label
+                alone, and these are meant to be the same card. Four
+                coloured bars in a row is also the loudest thing on a
+                screen whose entire job is showing figures. */}
             {body}
           </>
         );

@@ -17,7 +17,7 @@ export function RecentActivities() {
     <div className="rounded-[8px] border border-[var(--dl-line)] bg-[#0F0F12] overflow-hidden">
       <div className="flex items-center justify-between p-5 border-b border-[var(--dl-line)]/50">
         <h3 className="text-sm font-semibold text-text">Recent Activities</h3>
-        <button className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]/50 px-3 py-1.5 text-xs text-[var(--dl-ink-soft)] hover:bg-[var(--dl-panel)]">
+        <button className="dl-card flex items-center gap-2 bg-[var(--dl-panel)]/50 px-3 py-1.5 text-xs text-[var(--dl-ink-soft)] hover:bg-[var(--dl-panel)]">
           Filter <span className="text-[8px]">▼</span>
         </button>
       </div>

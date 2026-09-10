@@ -155,7 +155,7 @@ export function MerchEditor({ eventId }: { eventId: string }) {
   const active = items.filter((i) => i.status === "active");
   const hidden = items.filter((i) => i.status === "hidden");
   const input =
-    "w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none";
+    "dl-field w-full text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none";
   const label = "mb-1 block text-xs font-medium text-subtle";
 
   const editor = (

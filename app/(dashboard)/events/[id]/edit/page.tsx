@@ -150,7 +150,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
   };
 
   const row =
-    "flex items-center gap-3.5 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5";
+    "dl-card flex items-center gap-3.5  px-4 py-3.5";
   const rowIcon = "h-[18px] w-[18px] shrink-0 text-[var(--dl-ink-faint)]";
   const rowInput =
     "w-full bg-transparent text-[15px] text-[var(--dl-ink)] placeholder-[var(--dl-ink-faint)] outline-none [color-scheme:light]";
@@ -167,11 +167,11 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
 
   if (loadError) {
     return (
-      <section className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] py-14 text-center">
+      <section className="dl-card py-14 text-center">
         <p className="text-[15px] font-semibold">{loadError}</p>
         <Link
           href="/events"
-          className="mt-4 inline-block rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[13px] font-extrabold"
+          className="dl-btn mt-4 px-4 py-2 text-[13px] font-extrabold"
         >
           Back to your events
         </Link>
@@ -232,7 +232,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
                   </p>
                   <Link
                     href={`/events/${params.id}/message`}
-                    className="mt-3 inline-flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2 text-[12.5px] font-bold"
+                    className="dl-card mt-3 inline-flex items-center gap-2 px-3.5 py-2 text-[12.5px] font-bold"
                   >
                     <Megaphone className="h-3.5 w-3.5" strokeWidth={2.5} />
                     Message the {ticketsIssued}
@@ -297,7 +297,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
               placeholder="What should people know before they come?"
               aria-label="Description"
               rows={5}
-              className="w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-[var(--dl-ink-faint)]"
+              className="dl-card w-full px-4 py-3.5 text-[15px] leading-relaxed outline-none placeholder:text-[var(--dl-ink-faint)]"
             />
           </div>
 
@@ -310,7 +310,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
               placeholder="Your name, or what you throw parties as"
               maxLength={60}
               aria-label="Host name shown on the flyer"
-              className="mt-2.5 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[15px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]"
+              className="dl-card mt-2.5 w-full px-3.5 py-2.5 text-[15px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]"
             />
             <p className="mt-2 text-[13px] leading-relaxed text-[var(--dl-ink-soft)]">
               Optional. Leave it empty and we use your own name. This changes the flyer
@@ -326,7 +326,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
         <div className="flex flex-col gap-5">
           <div>
             <p className={sectionLabel}>Cover image</p>
-            <label className="mt-2.5 block cursor-pointer overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+            <label className="dl-card mt-2.5 block cursor-pointer overflow-hidden">
               <input
                 type="file"
                 accept="image/*"
@@ -360,7 +360,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
 
           {/* Prices live with the tickets, so say so rather than putting a
               price box here that wouldn't change what anyone is charged. */}
-          <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-4">
+          <div className="dl-card p-4">
             <div className="flex items-start gap-3">
               <Ticket className={rowIcon} />
               <div>

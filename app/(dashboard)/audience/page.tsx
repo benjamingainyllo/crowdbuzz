@@ -275,7 +275,7 @@ export default function AttendeesPage() {
     toast.success(`${tab === "tickets" ? "Tickets" : "Attendees"} exported`);
   };
 
-  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "dl-card";
   const chip =
     "rounded-[8px] border border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";
   const chipOn = "bg-[var(--dl-ink)] text-[var(--dl-panel)]";
@@ -344,7 +344,7 @@ export default function AttendeesPage() {
       />
 
       {live.length === 0 && orders.length > 0 && (
-        <p className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 py-4 text-[13.5px] text-[var(--dl-ink-soft)]">
+        <p className="dl-card px-5 py-4 text-[13.5px] text-[var(--dl-ink-soft)]">
           These sales happened before individual tickets were issued, so
           there is nothing to scan at the door yet — the list below is built
           from the orders themselves.

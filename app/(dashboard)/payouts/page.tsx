@@ -188,7 +188,7 @@ export default function PayoutsPage() {
           <p className="text-sm text-text">{loadError}</p>
           <button
             onClick={load}
-            className="mt-3 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-2 text-xs font-medium text-text"
+            className="dl-card mt-3 px-4 py-2 text-xs font-medium text-text"
           >
             Retry
           </button>
@@ -256,7 +256,7 @@ export default function PayoutsPage() {
               <select
                 value={bankCode}
                 onChange={(e) => setBankCode(e.target.value)}
-                className="h-11 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
+                className="dl-card h-11 w-full px-3 text-sm text-text focus:border-[var(--dl-line)] focus:outline-none"
               >
                 <option value="">Select your bank</option>
                 {banks.map((b) => (
@@ -281,7 +281,7 @@ export default function PayoutsPage() {
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value.replace(/\D/g, ""))}
                 placeholder="0123456789"
-                className="h-11 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
+                className="dl-card h-11 w-full px-3 text-sm text-text placeholder:text-subtle focus:border-[var(--dl-line)] focus:outline-none"
               />
             </div>
 
@@ -322,7 +322,7 @@ export default function PayoutsPage() {
 
       {/* Settlement history — reporting only. Nothing on this page moves
           money; it records money that has already moved. */}
-      <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+      <div className="dl-card overflow-hidden">
         <div
           className="flex flex-wrap items-baseline justify-between gap-3 border-b border-[var(--dl-line)] px-5 py-4"
           style={{ background: "var(--dl-money-wash)" }}

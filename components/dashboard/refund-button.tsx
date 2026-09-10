@@ -63,7 +63,7 @@ export function RefundButton({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="rounded-lg border border-[var(--dl-line)] px-3 py-1.5 text-[12.5px] font-bold text-[var(--dl-ink-soft)] transition-colors hover:border-[var(--dl-danger)] hover:text-[var(--dl-danger)]"
+        className="dl-btn text-[var(--dl-ink-soft)] transition-colors hover:border-[var(--dl-danger)] hover:text-[var(--dl-danger)]"
       >
         Refund
       </button>
@@ -71,7 +71,7 @@ export function RefundButton({
   }
 
   return (
-    <div className="rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] p-4 text-left">
+    <div className="dl-card p-4 text-left">
       <p className="text-[13.5px] font-bold">
         Send {formatKobo(grossKobo)} back to {buyerLabel}?
       </p>
@@ -86,14 +86,14 @@ export function RefundButton({
         value={reason}
         onChange={(e) => setReason(e.target.value)}
         placeholder="Why? e.g. buyer could not attend"
-        className="mt-3 w-full rounded-lg border border-[var(--dl-line)] bg-[var(--dl-paper)] px-3 py-2 text-[13.5px] outline-none focus:border-[var(--coral)]"
+        className="mt-3 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-paper)] px-3 py-2 text-[13.5px] outline-none focus:border-[var(--coral)]"
       />
 
       <div className="mt-3 flex gap-2">
         <button
           onClick={submit}
           disabled={pending}
-          className="flex items-center gap-2 rounded-lg bg-[var(--dl-danger)] px-3.5 py-2 text-[12.5px] font-extrabold text-white disabled:opacity-60"
+          className="flex items-center gap-2 rounded-[8px] bg-[var(--dl-danger)] px-3.5 py-2 text-[12.5px] font-extrabold text-white disabled:opacity-60"
         >
           {pending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
           {pending ? "Sending…" : "Yes, refund it"}
@@ -104,7 +104,7 @@ export function RefundButton({
             setReason("");
           }}
           disabled={pending}
-          className="rounded-lg border border-[var(--dl-line)] px-3.5 py-2 text-[12.5px] font-bold text-[var(--dl-ink-soft)]"
+          className="dl-btn text-[var(--dl-ink-soft)]"
         >
           Keep it
         </button>

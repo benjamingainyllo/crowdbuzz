@@ -78,7 +78,7 @@ export function InviteAudienceButton({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-lg border border-[var(--dl-line)] px-3.5 py-2 text-[12.5px] font-bold text-[var(--dl-ink)] transition-colors hover:border-[var(--coral)] hover:text-[var(--coral)]"
+        className="inline-flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] px-3.5 py-2 text-[12.5px] font-bold text-[var(--dl-ink)] transition-colors hover:border-[var(--coral)] hover:text-[var(--coral)]"
       >
         <Send className="h-3.5 w-3.5" />
         Tell your {size} past {size === 1 ? "guest" : "guests"}
@@ -87,7 +87,7 @@ export function InviteAudienceButton({
   }
 
   return (
-    <div className="rounded-xl border border-[var(--dl-line)] bg-[var(--dl-panel)] p-4 text-left">
+    <div className="dl-card p-4 text-left">
       <p className="text-[13.5px] font-bold">
         Message {size} {size === 1 ? "person" : "people"} on WhatsApp about{" "}
         {eventTitle}?
@@ -101,7 +101,7 @@ export function InviteAudienceButton({
         <button
           onClick={send}
           disabled={pending}
-          className="flex items-center gap-2 rounded-lg bg-[var(--coral)] px-3.5 py-2 text-[12.5px] font-extrabold text-white disabled:opacity-60"
+          className="flex items-center gap-2 rounded-[8px] bg-[var(--coral)] px-3.5 py-2 text-[12.5px] font-extrabold text-white disabled:opacity-60"
         >
           {pending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
           {pending ? "Sending…" : "Yes, tell them"}
@@ -109,7 +109,7 @@ export function InviteAudienceButton({
         <button
           onClick={() => setOpen(false)}
           disabled={pending}
-          className="rounded-lg border border-[var(--dl-line)] px-3.5 py-2 text-[12.5px] font-bold text-[var(--dl-ink-soft)]"
+          className="dl-btn text-[var(--dl-ink-soft)]"
         >
           Not yet
         </button>

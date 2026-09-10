@@ -176,142 +176,99 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
     origin ? `${origin}/event/${event.id}` : "";
 
   return (
-    <div className="dl fixed inset-0 z-50 overflow-y-auto font-[family-name:var(--font-bricolage-grotesque)]">
-      <div className="relative h-56 w-full overflow-hidden bg-[var(--dl-panel)] md:h-72">
-        {event.cover_image_url ? (
-          <img src={event.cover_image_url} alt={event.title} className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-[var(--dl-ink-faint)]">
-            <CalendarIcon className="h-12 w-12 opacity-20" />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-
-        <button
-          onClick={onBack}
-          className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-[8px] bg-black/50 text-white backdrop-blur-md transition-colors hover:bg-black/70"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
-
-        <div className="absolute right-4 top-4 flex items-center gap-2">
-          <span
-            className={`flex items-center gap-1.5 rounded-[8px] px-4 py-1.5 text-[11px] font-bold text-white shadow-lg ${
-              isPublished ? "bg-[var(--mint)]" : "bg-[var(--dl-ink)]"
-            }`}
+    /*
+     * THE LAYOUT IS THE REFERENCE'S, THE SKIN IS OURS.
+     *
+     * This used to open with a 288px cover photo carrying white text and
+     * four floating glass buttons over a black gradient — a poster, which
+     * is the right shape for the page a BUYER sees and the wrong one for
+     * the page an organiser works in. The reference puts the artwork in a
+     * side rail and gives the whole width to the work: a title row, a row
+     * of tabs, and a two-column body whose right-hand column holds the
+     * facts that stay true whichever tab you are on.
+     *
+     * Nothing here is borrowed visually. The cards, buttons, fields and
+     * tabs are the same classes the owner console uses, so this screen
+     * gains a structure without inventing a fifth look for the product.
+     */
+    <div className="dl fixed inset-0 z-50 overflow-y-auto bg-[var(--dl-paper)] font-[family-name:var(--font-bricolage-grotesque)]">
+      {/* ── Title row ──────────────────────────────────────────── */}
+      <div className="sticky top-0 z-20 border-b border-[var(--dl-line)] bg-[var(--dl-panel)]">
+        <div className="mx-auto flex max-w-[1400px] items-center gap-3 px-4 py-3 md:px-6">
+          <button
+            onClick={onBack}
+            aria-label="Back to events"
+            className="dl-btn h-9 w-9 shrink-0 px-0"
           >
-            {isPublished ? <Globe className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
-            {isPublished ? "Live" : "Draft"}
-          </span>
+            <ArrowLeft className="h-[17px] w-[17px]" />
+          </button>
 
-          <Link
-            href={`/events/${event.id}/message`}
-            className="flex items-center gap-1.5 rounded-[8px] bg-white/95 px-4 py-1.5 text-[11px] font-bold text-[var(--dl-ink)] shadow-lg transition-transform hover:-translate-y-[1px]"
-          >
-            <Megaphone className="h-3 w-3" strokeWidth={2.5} />
-            Message
-          </Link>
+          <h1 className="min-w-0 flex-1 truncate text-[19px] font-extrabold tracking-[-0.03em] md:text-[22px]">
+            {event.title}
+          </h1>
 
-          <Link
-            href={`/events/${event.id}/edit`}
-            className="flex items-center gap-1.5 rounded-[8px] bg-white/95 px-4 py-1.5 text-[11px] font-bold text-[var(--dl-ink)] shadow-lg transition-transform hover:-translate-y-[1px]"
-          >
-            <Pencil className="h-3 w-3" strokeWidth={2.5} />
-            Edit
-          </Link>
-        </div>
-
-        <div className="absolute bottom-6 left-6 right-6">
-          <h1 className="text-2xl font-bold text-white md:text-3xl">{event.title}</h1>
-          <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-white/80">
-            <span className="flex items-center gap-1.5">
-              <CalendarIcon className="h-4 w-4" />
-              {event.date
-                ? new Date(event.date).toLocaleDateString("en-NG", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
-                : "Date TBD"}
-              {event.time ? ` • ${event.time}` : ""}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <MapPin className="h-4 w-4" />
-              {event.location || "Online"}
-            </span>
+          <div className="flex shrink-0 items-center gap-2">
+            {isPublished && (
+              <button
+                onClick={() => {
+                  navigator.clipboard?.writeText(shareUrl);
+                  toast.success("Link copied");
+                }}
+                className="dl-btn hidden sm:inline-flex"
+              >
+                <Share2 className="h-[15px] w-[15px]" /> Copy link
+              </button>
+            )}
+            <Link href={`/events/${event.id}/edit`} className="dl-btn">
+              <Pencil className="h-[15px] w-[15px]" /> Edit
+            </Link>
+            <button
+              onClick={handleTogglePublish}
+              disabled={publishing}
+              className={`dl-btn ${isPublished ? "" : "dl-btn-primary"}`}
+            >
+              {publishing ? (
+                <Loader2 className="h-[15px] w-[15px] animate-spin" />
+              ) : isPublished ? (
+                <Lock className="h-[15px] w-[15px]" />
+              ) : (
+                <Globe className="h-[15px] w-[15px]" />
+              )}
+              {isPublished ? "Unpublish" : "Publish"}
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="px-4 pb-12 md:px-8">
-        <div className="sticky top-0 z-10 -mx-4 mb-6 border-b border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 md:-mx-6 md:px-6">
-          <div className="flex items-center gap-1 py-1">
-            {([
-              { key: "overview", label: "Overview", icon: Eye },
-              { key: "tickets", label: "Tickets", icon: Ticket },
-              { key: "merch", label: "Merch", icon: Package },
-              { key: "attendees", label: "Attendees", icon: Users },
-            ] as const).map((t) => (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`flex items-center gap-2 border-b px-4 py-3 text-xs font-semibold transition-colors ${
-                  tab === t.key
-                    ? "border-[var(--dl-line)] text-[var(--dl-ink)]"
-                    : "border-transparent text-[var(--dl-ink-faint)] hover:text-[var(--dl-ink-soft)]"
-                }`}
-              >
-                <t.icon className="h-3.5 w-3.5" />
-                {t.label}
-              </button>
-            ))}
-
-            <div className="ml-auto flex items-center gap-2">
-              {isPublished && (
-                <Link
-                  href={`/events/${event.id}/door`}
-                  className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-xs font-medium text-[var(--dl-ink-soft)] transition-colors hover:bg-[var(--dl-paper)]"
-                >
-                  <ScanLine className="h-3.5 w-3.5" /> Door
-                </Link>
-              )}
-              {isPublished && (
-                <button
-                  onClick={() => {
-                    navigator.clipboard?.writeText(shareUrl);
-                    toast.success("Link copied");
-                  }}
-                  className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-xs font-medium text-[var(--dl-ink-soft)] transition-colors hover:bg-[var(--dl-paper)]"
-                >
-                  <Share2 className="h-3.5 w-3.5" /> Copy link
-                </button>
-              )}
-              <button
-                onClick={handleTogglePublish}
-                disabled={publishing}
-                className={`flex items-center gap-2 rounded-[8px] px-3 py-2 text-xs font-bold transition-colors disabled:opacity-60 ${
-                  isPublished
-                    ? "border border-[var(--dl-line)] bg-[var(--dl-panel)] text-[var(--dl-ink-soft)]"
-                    : "border border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]"
-                }`}
-              >
-                {publishing ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : isPublished ? (
-                  "Unpublish"
-                ) : (
-                  "Publish"
-                )}
-              </button>
-            </div>
-          </div>
+      <div className="mx-auto max-w-[1400px] px-4 py-5 md:px-6 md:py-6">
+        {/* ── Tabs ─────────────────────────────────────────────── */}
+        <div className="dl-tabs mb-5 w-fit max-w-full">
+          {([
+            { key: "overview", label: "Overview", icon: Eye },
+            { key: "tickets", label: "Tickets", icon: Ticket },
+            { key: "merch", label: "Merch", icon: Package },
+            { key: "attendees", label: "Attendees", icon: Users },
+          ] as const).map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              aria-current={tab === t.key ? "page" : undefined}
+              className={`dl-tab ${tab === t.key ? "dl-tab-on" : ""}`}
+            >
+              <t.icon className="h-[15px] w-[15px]" />
+              {t.label}
+            </button>
+          ))}
         </div>
 
+        {/* ── Body: work on the left, facts on the right ────────── */}
+        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="min-w-0">
         {tab === "overview" && (
           <div className="space-y-6">
             {/* One ruled block. Same as Overview, Events and everywhere else —
                 no tinted icon chips, and the number does the talking. */}
-            <div className="flex flex-wrap rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+            <div className="dl-card flex flex-wrap">
               {[
                 { label: "Taken", value: formatKobo(grossKobo) },
                 {
@@ -341,7 +298,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
             {/* How full it is. The bar is the reason this tab exists —
                 a percentage on its own doesn't tell you whether to
                 promote, and the seats-left figure does. */}
-            <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-5">
+            <div className="dl-card p-5">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <p className="text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]">
                   How it is selling
@@ -399,26 +356,26 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
             </div>
 
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+              <div className="dl-card overflow-hidden">
                 <PanelHead title="Which ticket sells" tone="money" />
                 <TicketTypeSplit data={tierSplit} />
               </div>
 
-              <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+              <div className="dl-card overflow-hidden">
                 <PanelHead title="When people buy" tone="count" />
                 <WeekdayBars data={shape.byWeekday} />
               </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-[2fr_1fr]">
-              <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
+              <div className="dl-card p-6">
                 <h3 className="mb-4 text-sm font-semibold text-[var(--dl-ink)]">About this event</h3>
                 <p className="text-sm leading-relaxed text-[var(--dl-ink-soft)]">
                   {event.description || "No description added yet."}
                 </p>
               </div>
 
-              <div className="space-y-1 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
+              <div className="dl-card space-y-1 p-6">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--dl-ink-faint)]">Location</p>
                 <p className="text-sm font-medium text-[var(--dl-ink)]">{event.location || "Online"}</p>
                 {event.map_link && (
@@ -442,19 +399,19 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
         )}
 
         {tab === "merch" && (
-          <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]/40 p-5">
+          <div className="dl-card bg-[var(--dl-panel)]/40 p-5">
             <MerchEditor eventId={event.id} />
           </div>
         )}
 
         {tab === "tickets" && (
-          <div className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-6">
+          <div className="dl-card p-6">
             <TicketTypesEditor eventId={event.id} />
           </div>
         )}
 
         {tab === "attendees" && (
-          <div className="overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]">
+          <div className="dl-card overflow-hidden">
             {loading ? (
               <div className="flex items-center justify-center py-16">
                 <Loader2 className="h-6 w-6 animate-spin text-[var(--dl-ink-faint)]" />
@@ -464,7 +421,7 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
                 <p className="text-sm text-[var(--dl-ink-soft)]">{loadError}</p>
                 <button
                   onClick={fetchOrders}
-                  className="mt-4 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]/50 px-4 py-2 text-xs font-medium text-[var(--dl-ink-soft)] hover:bg-[var(--dl-paper)]"
+                  className="dl-card mt-4 bg-[var(--dl-panel)]/50 px-4 py-2 text-xs font-medium text-[var(--dl-ink-soft)] hover:bg-[var(--dl-paper)]"
                 >
                   Retry
                 </button>
@@ -508,6 +465,92 @@ export function EventDetailView({ event, onBack, onChanged }: EventDetailViewPro
             )}
           </div>
         )}
+          </div>
+
+          {/* ── The rail ───────────────────────────────────────────
+              THE FACTS THAT DO NOT CHANGE WITH THE TAB. Whichever
+              screen you are on, "when is it, where is it, is it live"
+              are the questions you are answering against — so they stop
+              being a banner you scroll past and become a column that
+              stays. It is sticky above xl and simply the last block on a
+              narrow window, where a pinned rail would eat the page. */}
+          <aside className="min-w-0 xl:sticky xl:top-[76px] xl:h-fit">
+            <div className="dl-card overflow-hidden">
+              <div className="relative aspect-[16/10] w-full bg-[#ECEEF0]">
+                {event.cover_image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={event.cover_image_url}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center text-[var(--dl-ink-faint)]">
+                    <CalendarIcon className="h-10 w-10 opacity-30" />
+                  </div>
+                )}
+                <span
+                  className={`absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold ${
+                    isPublished
+                      ? "bg-[var(--dl-acid)] text-[var(--dl-ink)]"
+                      : "bg-[var(--dl-ink)] text-white"
+                  }`}
+                >
+                  {isPublished ? <Globe className="h-3 w-3" /> : <Lock className="h-3 w-3" />}
+                  {isPublished ? "Live" : "Draft"}
+                </span>
+              </div>
+
+              <div className="space-y-3 p-4">
+                <p className="flex items-start gap-2.5 text-[13.5px] font-semibold">
+                  <CalendarIcon className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[var(--dl-ink-faint)]" />
+                  <span>
+                    {event.date
+                      ? new Date(event.date).toLocaleDateString("en-NG", {
+                          weekday: "short", day: "numeric", month: "short", year: "numeric",
+                        })
+                      : "Date to be announced"}
+                    {event.time ? ` · ${event.time}` : ""}
+                  </span>
+                </p>
+                <p className="flex items-start gap-2.5 text-[13.5px] font-semibold">
+                  <MapPin className="mt-[2px] h-[15px] w-[15px] shrink-0 text-[var(--dl-ink-faint)]" />
+                  <span className="min-w-0">{event.location || "Online"}</span>
+                </p>
+              </div>
+
+              <div className="space-y-2 border-t border-[var(--dl-line)] p-4">
+                {isPublished ? (
+                  <>
+                    <Link href={`/events/${event.id}/door`} className="dl-btn w-full">
+                      <ScanLine className="h-[15px] w-[15px]" /> Scan tickets
+                    </Link>
+                    <Link href={`/events/${event.id}/message`} className="dl-btn w-full">
+                      <Megaphone className="h-[15px] w-[15px]" /> Message guests
+                    </Link>
+                    <a
+                      href={shareUrl || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="dl-btn w-full"
+                    >
+                      <ExternalLink className="h-[15px] w-[15px]" /> View public page
+                    </a>
+                  </>
+                ) : (
+                  /* NOT DISABLED BUTTONS. A draft has no public page to
+                     open and no door to scan at, and four greyed-out
+                     controls is a worse answer than one sentence saying
+                     why. */
+                  <p className="text-[13px] leading-relaxed text-[var(--dl-ink-soft)]">
+                    Scanning, messaging and the public link all switch on the
+                    moment you publish.
+                  </p>
+                )}
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
   );

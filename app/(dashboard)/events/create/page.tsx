@@ -224,7 +224,7 @@ export default function CreateEventPage() {
   /* A row: an icon, then whatever goes in it. No labels — the placeholder
      is the label, which is what keeps the page short enough to scan. */
   const row =
-    "flex items-center gap-3.5 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5";
+    "dl-card flex items-center gap-3.5  px-4 py-3.5";
   const rowIcon = "h-[18px] w-[18px] shrink-0 text-[var(--dl-ink-faint)]";
   const sectionLabel =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
@@ -284,7 +284,7 @@ export default function CreateEventPage() {
                 placeholder="Your name, or what you throw parties as"
                 maxLength={60}
                 aria-label="Host name shown on the flyer"
-                className="mt-2.5 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[15px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]"
+                className="dl-card mt-2.5 w-full px-3.5 py-2.5 text-[15px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]"
               />
               <p className="mt-2 text-[13px] leading-relaxed text-[var(--dl-ink-soft)]">
                 Optional. Leave it empty and we use your own name. This changes
@@ -382,7 +382,7 @@ export default function CreateEventPage() {
             </div>
 
             {/* ── Price ──────────────────────────────────────── */}
-            <div className="mt-8 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-5">
+            <div className="dl-card mt-8 p-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-3.5">
                   <Tag className={rowIcon} />
@@ -416,7 +416,7 @@ export default function CreateEventPage() {
 
               {!isFree && (
                 <>
-                  <div className="mt-4 flex items-center gap-3.5 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-4 py-3.5 ">
+                  <div className="dl-card mt-4 flex items-center gap-3.5 px-4 py-3.5">
                     <span className="text-[15px] font-bold text-[var(--dl-ink-faint)]">₦</span>
                     <input
                       type="number"
@@ -482,7 +482,7 @@ export default function CreateEventPage() {
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="What should people know? Line-up, dress code, what time it really starts."
                 aria-label="Description"
-                className="w-full resize-none rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-4 text-[15px] leading-relaxed text-[var(--dl-ink)] outline-none transition-colors placeholder:text-[var(--dl-ink-faint)] focus:border-[var(--dl-line)]"
+                className="dl-card w-full resize-none p-4 text-[15px] leading-relaxed text-[var(--dl-ink)] outline-none transition-colors placeholder:text-[var(--dl-ink-faint)] focus:border-[var(--dl-line)]"
               />
             </div>
           </div>
@@ -494,7 +494,7 @@ export default function CreateEventPage() {
               onClick={() => fileInputRef.current?.click()}
               onDrop={handleImageDrop}
               onDragOver={(e) => e.preventDefault()}
-              className="group relative block aspect-[4/5] w-full overflow-hidden rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] text-left transition-colors hover:border-[var(--dl-line)]"
+              className="dl-card group relative block aspect-[4/5] w-full overflow-hidden text-left transition-colors hover:border-[var(--dl-line)]"
             >
               {imagePreview ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -526,7 +526,7 @@ export default function CreateEventPage() {
               className="hidden"
             />
 
-            <div className="mt-5 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-4">
+            <div className="dl-card mt-5 p-4">
               <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--dl-ink-faint)]">
                 Shared as
               </p>

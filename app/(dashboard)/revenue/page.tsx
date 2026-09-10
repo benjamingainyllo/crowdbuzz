@@ -203,7 +203,7 @@ export default function RevenuePage() {
     URL.revokeObjectURL(url);
   };
 
-  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "dl-card";
   const capLabel = "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
   const chip =
     "rounded-[8px] border border-[var(--dl-line)] px-3 py-1 text-[11.5px] font-extrabold uppercase tracking-[0.06em] transition-transform hover:-translate-y-[1px]";

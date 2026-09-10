@@ -630,6 +630,74 @@ html:has(.sf) { overflow-x: hidden; }
 
 /* Controls. One height, so a search box, a select and a button sitting
    in a row line up without anybody nudging a padding value. */
+/* ------------------------------------------------------------
+   THE SAFETY NET.
+
+   Every screen in the signed-in product used to draw its own
+   controls: a radius here, a border width there, each one a
+   hand-copy of the same idea that drifted the moment somebody
+   edited one and not the others. Fifty-four cards and a dozen
+   fields have been moved onto the shared classes above, but a
+   class only helps the markup that uses it, and the next person
+   to add a button will type Tailwind rather than reach for
+   .dl-btn.
+
+   So the shape is enforced at the element level too. Anything you
+   can click or type into inside .dl gets the product's corner,
+   whatever its class list says, and a control that genuinely
+   wants to be a circle opts out by saying rounded-full — which
+   reads as a deliberate exception rather than an accident.
+
+   This is a floor, not a licence: new work should still use
+   .dl-btn and .dl-field, because they carry the height, the
+   border and the hover as well as the corner.
+   ------------------------------------------------------------ */
+.dl button:not([class*="rounded-full"]),
+.dl select:not([class*="rounded-full"]),
+.dl textarea:not([class*="rounded-full"]),
+.dl input:not([type="checkbox"]):not([type="radio"]):not([class*="rounded-full"]) {
+  border-radius: var(--dl-radius-sm);
+}
+
+/* A tab in a row of tabs. Not a menu row and not a button: the active
+   one is a white card lifted off the grey track, which is how you say
+   "you are on this one" without spending the accent colour — acid is
+   already committed to the single primary action on the screen. */
+.dl-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 13px;
+  border-radius: var(--dl-radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--dl-ink-soft);
+  border: 1px solid transparent;
+  transition: background-color 0.12s, color 0.12s;
+}
+.dl-tab:hover { color: var(--dl-ink); }
+.dl-tab-on {
+  background: var(--dl-panel);
+  border-color: var(--dl-line);
+  color: var(--dl-ink);
+  box-shadow: var(--dl-shadow);
+}
+.dl-tab-on:hover { color: var(--dl-ink); }
+
+/* The track the tabs sit in. */
+.dl-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--dl-radius);
+  background: #ECEEF0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.dl-tabs::-webkit-scrollbar { display: none; }
+
 .dl-field {
   height: 38px;
   padding: 0 12px;

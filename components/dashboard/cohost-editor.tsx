@@ -33,7 +33,7 @@ export function CohostEditor({
     onChange(cohosts.map((c, n) => (n === i ? { ...c, ...patch } : c)));
 
   const field =
-    "w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14.5px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]";
+    "dl-field w-full text-[14.5px] font-semibold outline-none focus-visible:ring-2 focus-visible:ring-[var(--dl-ink)]";
 
   return (
     <div className="flex flex-col gap-2.5">

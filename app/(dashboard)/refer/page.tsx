@@ -82,7 +82,7 @@ export default function ReferPage() {
     setBusyEvent(null);
   };
 
-  const panel = "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)]";
+  const panel = "dl-card";
   const label =
     "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
 
