@@ -46,17 +46,47 @@ export function DescriptionBubble({
   const [truncated, setTruncated] = useState(false);
   const [open, setOpen] = useState(false);
 
-  // Layout effect, so the "Read more" is decided in the same frame the
-  // text is painted. In a plain effect the button appears a beat late and
-  // the column visibly reflows under the reader.
+  /*
+   * Layout effect, so the "Read more" is decided in the same frame the
+   * text is painted. In a plain effect the button appears a beat late and
+   * the column visibly reflows under the reader.
+   *
+   * AND THE CLIP LANDS ON A LINE, NOT THROUGH ONE. Clipping by height
+   * cuts wherever the box happens to end, which is usually halfway down
+   * a row of letters — the reader sees the top half of a sentence and it
+   * looks like a rendering fault rather than a deliberate fold. The
+   * height is rounded down to a whole number of lines before it is
+   * applied, so the last visible line is a whole one.
+   *
+   * The measurement is taken with the cap removed, so it reads the space
+   * flex actually gave the element rather than the cap set last time —
+   * otherwise each pass would shrink it by one more line.
+   */
   useLayoutEffect(() => {
     const el = clampRef.current;
     if (!el) return;
-    const check = () => setTruncated(el.scrollHeight > el.clientHeight + 1);
-    check();
-    const ro = new ResizeObserver(check);
+
+    const measure = () => {
+      el.style.maxHeight = "";
+      const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+      const available = el.clientHeight;
+
+      if (Number.isFinite(lineHeight) && lineHeight > 0 && available > 0) {
+        const lines = Math.max(1, Math.floor(available / lineHeight));
+        const snapped = lines * lineHeight;
+        if (available - snapped > 0.5) el.style.maxHeight = `${snapped}px`;
+      }
+
+      setTruncated(el.scrollHeight > el.clientHeight + 1);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => {
+      ro.disconnect();
+      if (el) el.style.maxHeight = "";
+    };
   }, [text]);
 
   useEffect(() => {
@@ -72,11 +102,17 @@ export function DescriptionBubble({
     <>
       <div className="mt-8 max-w-[52ch] lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
         {hostName && (
-          <p className="mb-2 shrink-0 pl-1 text-[12.5px] font-extrabold tracking-[0.01em] text-[var(--dl-ink-faint)]">
+          <p className="mb-2 shrink-0 text-[12.5px] font-extrabold tracking-[0.01em] text-[var(--dl-ink-faint)]">
             {hostName}
           </p>
         )}
-        <div className="relative rounded-[20px] rounded-bl-[6px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-5 py-4 lg:flex lg:min-h-[4.5rem] lg:flex-1 lg:flex-col lg:overflow-hidden">
+        {/* NO BOX. This was a rounded, bordered, tinted bubble with a
+            tail — a chat message, which was the idea: the host talking
+            rather than an institution announcing. On a page that is
+            already a stack of panels it read as one more container, and
+            the thing inside it is just the host's own words. They sit on
+            the page now. */}
+        <div className="relative lg:flex lg:min-h-[4.5rem] lg:flex-1 lg:flex-col lg:overflow-hidden">
           <p
             ref={clampRef}
             className="relative whitespace-pre-line text-[14.5px] leading-[1.55] text-[var(--dl-ink)] lg:min-h-0 lg:flex-1 lg:overflow-hidden"
