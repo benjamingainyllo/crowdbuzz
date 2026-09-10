@@ -98,10 +98,10 @@ function MonthBars({
 
       <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1.5">
         <span className="flex items-center gap-2 text-[12px] text-[var(--dl-ink-soft)]">
-          <span className="h-2.5 w-2.5 rounded-[3px] bg-[var(--dl-ink)]" /> Your fee
+          <span className="h-2.5 w-2.5 rounded-[8px] bg-[var(--dl-ink)]" /> Your fee
         </span>
         <span className="flex items-center gap-2 text-[12px] text-[var(--dl-ink-soft)]">
-          <span className="h-2.5 w-2.5 rounded-[3px] bg-[rgba(20,16,24,0.10)]" /> Moved through
+          <span className="h-2.5 w-2.5 rounded-[8px] bg-[rgba(20,16,24,0.10)]" /> Moved through
         </span>
       </div>
     </div>

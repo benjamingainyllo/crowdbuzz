@@ -32,7 +32,7 @@ export default async function AdminRefundsPage({
             { value: "failed", label: "Failed" },
           ]}
         />
-        <button type="submit" className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)]">
+        <button type="submit" className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-bold text-[var(--dl-paper)]">
           Filter
         </button>
       </form>

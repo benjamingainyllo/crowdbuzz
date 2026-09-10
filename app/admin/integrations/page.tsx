@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "Integrations — owner",
@@ -6,18 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="Integrations"
-      sub="The outside services this platform is wired to."
-      will={[
-        "Each provider \u2014 payments, email, WhatsApp \u2014 with whether a key is set, which environment it belongs to, and when it was last used successfully.",
-        "Switching a provider without a deploy, since payments and email already sit behind interfaces designed for exactly that.",
-        "Webhook endpoints and their recent deliveries.",
-      ]}
-      needs={[
-        "Nothing new to show the state. Switching providers from here means keeping the choice in the database rather than in an environment variable.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("integrations");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   Activity, AlertTriangle, ArrowLeftRight, ArrowUpRight, BadgePercent, BarChart3,
   Bell, Calendar, ChevronsLeft, ChevronsRight, CreditCard, FileText, Gavel,
-  HeartPulse, KeyRound, LayoutGrid, LifeBuoy, LogOut, Menu, Plug, Radio, Receipt,
+  HeartPulse, KeyRound, LayoutGrid, LifeBuoy, LogOut, Map, Menu, Plug, Radio, Receipt,
   RotateCcw, ScanLine, ScrollText, Settings2, ShieldCheck, Store, Ticket,
   UserRound, UsersRound, Wallet, X,
 } from "lucide-react";
@@ -39,10 +39,12 @@ import type { AdminRole } from "@/lib/admin-roles";
  * a screen that arrives later has a place already waiting rather than
  * being wedged into whichever group happened to have room.
  *
- * `soon` marks a screen that is in the menu but not yet real. Those route
- * to a page that says so and says what it will hold — never to a page of
- * invented figures, and never to a dead link. When one becomes real, the
- * flag comes off and nothing else about this file changes.
+ * ONLY BUILT SCREENS ARE IN HERE. There were fourteen more, each wearing
+ * a "Soon" label, and the result was a console of fifteen working screens
+ * that read as a prototype — a menu is a list of what you can do, not a
+ * list of what is planned. The plan is one row at the bottom of System
+ * and one page behind it; the placeholder screens stay reachable by URL.
+ * Adding a built screen here is one line.
  *
  * Two labels differ from the obvious name and both are deliberate:
  * "Chargebacks" is the existing disputes screen, which is what a
@@ -56,7 +58,6 @@ const GROUPS: {
     label: string;
     icon: typeof LayoutGrid;
     needs?: AdminRole[];
-    soon?: boolean;
   }[];
 }[] = [
   {
@@ -79,7 +80,6 @@ const GROUPS: {
   {
     label: "Finance",
     items: [
-      { href: "/admin/transactions", label: "Transactions", icon: ArrowLeftRight, soon: true },
       { href: "/admin/payments", label: "Payments", icon: CreditCard },
       { href: "/admin/payouts", label: "Payouts", icon: Wallet },
       { href: "/admin/refunds", label: "Refunds", icon: RotateCcw },
@@ -92,37 +92,26 @@ const GROUPS: {
   {
     label: "Operations",
     items: [
-      { href: "/admin/check-ins", label: "Check-ins", icon: ScanLine, soon: true },
-      { href: "/admin/live-events", label: "Live Events", icon: Radio, soon: true },
       { href: "/admin/attention", label: "Fraud & Risk", icon: AlertTriangle },
-      { href: "/admin/support", label: "Support", icon: LifeBuoy, soon: true },
     ],
   },
   {
     label: "Growth",
     items: [
-      { href: "/admin/promotions", label: "Promotions", icon: BadgePercent, soon: true },
-      { href: "/admin/marketplace", label: "Marketplace", icon: Store, soon: true },
       { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-      { href: "/admin/reports", label: "Reports", icon: FileText, soon: true },
     ],
   },
   {
     label: "Content",
     items: [
-      { href: "/admin/cms", label: "CMS", icon: ScrollText, soon: true },
-      { href: "/admin/notifications", label: "Notifications", icon: Bell, soon: true },
     ],
   },
   {
     label: "System",
     items: [
       { href: "/admin/admins", label: "Admin Users", icon: ShieldCheck, needs: ["super_admin"] },
-      { href: "/admin/roles", label: "Roles & Permissions", icon: KeyRound, needs: ["super_admin"], soon: true },
-      { href: "/admin/audit", label: "Audit Logs", icon: ScrollText, soon: true },
-      { href: "/admin/health", label: "System Health", icon: HeartPulse, soon: true },
-      { href: "/admin/integrations", label: "Integrations", icon: Plug, soon: true },
       { href: "/admin/settings", label: "Settings", icon: Settings2, needs: ["super_admin"] },
+      { href: "/admin/roadmap", label: "Roadmap", icon: Map },
     ],
   },
 ];
@@ -134,13 +123,6 @@ function visibleGroups(role: AdminRole) {
   })).filter((g) => g.items.length > 0);
 }
 
-/**
- * The mark on a menu item whose screen is not built yet.
- *
- * Quiet on purpose: it is a note about the roadmap, not a warning. Loud
- * enough to stop somebody clicking it expecting figures, quiet enough
- * that six of them in a row do not shout over the six that work.
- */
 export interface AlertCount {
   total: number;
   critical: number;
@@ -194,14 +176,6 @@ function AlertBadge({ alerts, dot = false }: { alerts: AlertCount; dot?: boolean
       title={`${alerts.total} open${urgent ? `, ${alerts.critical + alerts.high} urgent` : ""}`}
     >
       {alerts.total > 99 ? "99+" : alerts.total}
-    </span>
-  );
-}
-
-function SoonTag() {
-  return (
-    <span className="ml-auto shrink-0 rounded-full border border-[var(--dl-line)] bg-[#F6F7F8] px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.06em] text-[var(--dl-ink-faint)]">
-      Soon
     </span>
   );
 }
@@ -289,7 +263,6 @@ export function AdminSidebar({
                     {i.href === ALERT_HREF && (
                       <AlertBadge alerts={alerts} dot={collapsed} />
                     )}
-                    {i.soon && !collapsed && !on && <SoonTag />}
                   </Link>
                 );
               })}
@@ -390,7 +363,6 @@ export function AdminMobileHeader({ role, alerts }: { role: AdminRole; alerts: A
                     <i.icon strokeWidth={2} className="h-[16px] w-[16px] shrink-0" />
                     <span className="truncate">{i.label}</span>
                     {i.href === ALERT_HREF && <AlertBadge alerts={alerts} />}
-                    {i.soon && !isOn(pathname, i.href) && <SoonTag />}
                   </Link>
                 ))}
               </div>

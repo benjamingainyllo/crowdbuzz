@@ -35,7 +35,7 @@ export function GlobalSearch() {
         type="search"
         placeholder="Find an order, ticket, event or person…"
         aria-label="Search everything"
-        className="w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] py-2.5 pl-9 pr-3 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]"
+        className="w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] py-2.5 pl-9 pr-3 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]"
       />
     </form>
   );

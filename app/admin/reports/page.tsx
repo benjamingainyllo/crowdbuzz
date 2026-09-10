@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "Reports — owner",
@@ -6,18 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="Reports"
-      sub="Numbers you can send to somebody else."
-      will={[
-        "Scheduled exports \u2014 monthly fee income, payouts made, refunds issued \u2014 as files rather than screens.",
-        "A per-organiser statement, which is what an organiser asks for at tax time.",
-        "Anything on this console exportable as CSV from the screen you are looking at.",
-      ]}
-      needs={[
-        "An export path and a place to keep generated files. The underlying figures already exist.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("reports");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

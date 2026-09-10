@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "Roles & Permissions — owner",
@@ -6,18 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="Roles & Permissions"
-      sub="What each kind of admin can do."
-      will={[
-        "The capability matrix as a table: every role down one side, every action across the top, so a permission question has an answer you can point at.",
-        "Changing a role's capabilities without a deploy.",
-        "Who granted whom what, and when.",
-      ]}
-      needs={[
-        "The roles and their capabilities are defined in code today (lib/admin-roles.ts) and are correct \u2014 showing them here is straightforward. Editing them means moving the definition into the database.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("roles");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

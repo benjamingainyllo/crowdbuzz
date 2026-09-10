@@ -65,7 +65,7 @@ export default async function ActivityPage({
           rows.map((r, i) => (
             <div
               key={r.id}
-              className={`px-5 py-4 ${i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""}`}
+              className={`px-5 py-4 ${i !== 0 ? "border-t border-[var(--dl-line)]" : ""}`}
             >
               <div className="flex flex-wrap items-baseline justify-between gap-3">
                 <p className="font-mono text-[13px] font-semibold">{r.action}</p>

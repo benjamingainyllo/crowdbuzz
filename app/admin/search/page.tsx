@@ -38,7 +38,7 @@ export default async function AdminSearchPage({ searchParams }: { searchParams: 
               <div className={`${panel} mt-3`}>
                 {r!.orders.map((o: any, i: number) => (
                   <Link key={o.id} href={`/admin/orders/${o.id}` as never}
-                    className={`${row} ${i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""}`}>
+                    className={`${row} ${i !== 0 ? "border-t border-[var(--dl-line)]" : ""}`}>
                     <span className="font-mono text-[13px] font-bold">{o.reference}</span>
                     <span className="ml-3 text-[var(--dl-ink-soft)]">{o.buyer_name || o.buyer_email}</span>
                     <span className="ml-3"><Badge tone={stateTone(o.status)}>{o.status}</Badge></span>
@@ -54,7 +54,7 @@ export default async function AdminSearchPage({ searchParams }: { searchParams: 
               <div className={`${panel} mt-3`}>
                 {r!.tickets.map((t: any, i: number) => (
                   <Link key={t.id} href={(t.order_id ? `/admin/orders/${t.order_id}` : `/admin/tickets?q=${t.code}`) as never}
-                    className={`${row} ${i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""}`}>
+                    className={`${row} ${i !== 0 ? "border-t border-[var(--dl-line)]" : ""}`}>
                     <span className="font-mono text-[13px] font-bold">{t.code}</span>
                     <span className="ml-3"><Badge tone={stateTone(t.status)}>{t.status}</Badge></span>
                   </Link>
@@ -69,7 +69,7 @@ export default async function AdminSearchPage({ searchParams }: { searchParams: 
               <div className={`${panel} mt-3`}>
                 {r!.events.map((e: any, i: number) => (
                   <Link key={e.id} href={`/admin/events/${e.id}` as never}
-                    className={`${row} ${i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""}`}>
+                    className={`${row} ${i !== 0 ? "border-t border-[var(--dl-line)]" : ""}`}>
                     <span className="font-extrabold">{e.title}</span>
                     <span className="ml-3 text-[var(--dl-ink-soft)]">{niceDate(e.date)}</span>
                   </Link>
@@ -84,7 +84,7 @@ export default async function AdminSearchPage({ searchParams }: { searchParams: 
               <div className={`${panel} mt-3`}>
                 {r!.organisers.map((p: any, i: number) => (
                   <Link key={p.id} href={`/admin/organisers/${p.id}` as never}
-                    className={`${row} ${i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""}`}>
+                    className={`${row} ${i !== 0 ? "border-t border-[var(--dl-line)]" : ""}`}>
                     <span className="font-extrabold">{p.name}</span>
                     {p.handle && <span className="ml-3 text-[var(--dl-ink-soft)]">@{p.handle}</span>}
                   </Link>

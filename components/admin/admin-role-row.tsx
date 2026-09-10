@@ -55,7 +55,7 @@ export function AdminRoleRow({
   };
 
   return (
-    <div className={`flex flex-wrap items-center gap-3 px-5 py-4 ${first ? "" : "border-t-2 border-[var(--dl-line)]"}`}>
+    <div className={`flex flex-wrap items-center gap-3 px-5 py-4 ${first ? "" : "border-t border-[var(--dl-line)]"}`}>
       <div className="min-w-[200px] flex-1">
         <p className="truncate text-[14.5px] font-extrabold">
           {email}
@@ -68,7 +68,7 @@ export function AdminRoleRow({
         value={role}
         disabled={busy}
         onChange={(e) => change(e.target.value as AdminRole)}
-        className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-[13.5px] font-bold outline-none disabled:opacity-50"
+        className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2 text-[13.5px] font-bold outline-none disabled:opacity-50"
       >
         {ROLES.map((r) => (
           <option key={r} value={r}>{ROLE_LABELS[r]}</option>
@@ -82,14 +82,14 @@ export function AdminRoleRow({
               type="button"
               onClick={remove}
               disabled={busy}
-              className="flex items-center gap-1.5 rounded-[3px] border-2 border-[var(--dl-danger)] bg-[var(--dl-danger)] px-3 py-2 text-[12px] font-extrabold uppercase tracking-[0.04em] text-white disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-[8px] border border-[var(--dl-danger)] bg-[var(--dl-danger)] px-3 py-2 text-[12px] font-bold text-white disabled:opacity-50"
             >
               {busy && <Loader2 className="h-3 w-3 animate-spin" />} Remove
             </button>
             <button
               type="button"
               onClick={() => setConfirmRemove(false)}
-              className="rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-2 text-[12px] font-extrabold uppercase tracking-[0.04em]"
+              className="rounded-[8px] border border-[var(--dl-line)] px-3 py-2 text-[12px] font-bold"
             >
               No
             </button>
@@ -99,7 +99,7 @@ export function AdminRoleRow({
             type="button"
             onClick={() => setConfirmRemove(true)}
             disabled={busy}
-            className="rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-2 text-[12px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-danger)]"
+            className="rounded-[8px] border border-[var(--dl-line)] px-3 py-2 text-[12px] font-bold text-[var(--dl-danger)]"
           >
             Remove
           </button>

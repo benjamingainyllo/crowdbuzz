@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "Audit Logs — owner",
@@ -6,18 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="Audit Logs"
-      sub="Every action an admin took."
-      will={[
-        "A permanent, unchangeable record of admin actions \u2014 refunds issued, states changed, roles granted \u2014 with who, what, when and from where.",
-        "Filters by admin and by object, so \u201cwho refunded this order\u201d is one search.",
-        "Kept separately from Live Activity, which is the platform's own events rather than staff actions.",
-      ]}
-      needs={[
-        "Admin actions are partly recorded already. This needs one append-only table that nothing in the product can update or delete.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("audit");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

@@ -46,7 +46,7 @@ export default async function AdminPaymentsPage({
   });
 
   const input =
-    "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14px] outline-none [color-scheme:light]";
+    "rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14px] outline-none [color-scheme:light]";
 
   return (
     <section>
@@ -80,7 +80,7 @@ export default async function AdminPaymentsPage({
         <label className="flex items-center gap-1.5 text-[12.5px] font-bold text-[var(--dl-ink-faint)]">
           To <input type="date" name="to" defaultValue={searchParams.to ?? ""} className={input} />
         </label>
-        <button type="submit" className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)]">
+        <button type="submit" className="rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-bold text-[var(--dl-paper)]">
           Filter
         </button>
       </form>

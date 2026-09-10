@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "Transactions — owner",
@@ -6,18 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="Transactions"
-      sub="Every movement of money through the platform, in one ledger."
-      will={[
-        "One row per money movement \u2014 a charge, a split to an organiser, a refund, a payout \u2014 with its reference, its provider and the order it belongs to.",
-        "A running platform balance per day, so a discrepancy shows up as a step rather than as a number nobody can explain.",
-        "Filters by provider, by state, and by date, and an export for reconciling against a bank statement.",
-      ]}
-      needs={[
-        "A single ledger table. Today the movements live across orders, payouts and refunds and are only joinable by hand.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("transactions");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

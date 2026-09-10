@@ -44,7 +44,7 @@ export function SettingsForm({ initial }: { initial: any }) {
   };
 
   const field =
-    "w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[15px] font-semibold outline-none";
+    "w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[15px] font-semibold outline-none";
   const help = "mt-1.5 text-[13px] leading-relaxed text-[var(--dl-ink-soft)]";
   const lbl = "text-[13.5px] font-extrabold";
 
@@ -104,7 +104,7 @@ export function SettingsForm({ initial }: { initial: any }) {
         type="button"
         onClick={save}
         disabled={busy}
-        className="flex items-center gap-2 self-start rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-3 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)] disabled:opacity-50"
+        className="flex items-center gap-2 self-start rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-5 py-3 text-[12.5px] font-bold text-[var(--dl-paper)] disabled:opacity-50"
       >
         {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
         Save settings

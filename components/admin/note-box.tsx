@@ -44,13 +44,13 @@ export function NoteBox({
         onChange={(e) => setBody(e.target.value)}
         rows={3}
         placeholder="Internal note. Only admins see this."
-        className="w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]"
+        className="w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]"
       />
       <button
         type="button"
         onClick={save}
         disabled={busy || !body.trim()}
-        className="mt-2 flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em] disabled:opacity-40"
+        className="mt-2 flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] px-4 py-2 text-[12.5px] font-bold disabled:opacity-40"
       >
         {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
         Add note
@@ -59,7 +59,7 @@ export function NoteBox({
       {notes.length > 0 && (
         <div className="mt-5 flex flex-col gap-3">
           {notes.map((n, i) => (
-            <div key={i} className="border-l-2 border-[var(--dl-line)] pl-3.5">
+            <div key={i} className="border-l border-[var(--dl-line)] pl-3.5">
               <p className="text-[11.5px] font-bold text-[var(--dl-ink-faint)]">
                 {n.author_email ?? "admin"} ·{" "}
                 {new Date(n.created_at).toLocaleString("en-NG", {

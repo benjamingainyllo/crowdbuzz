@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "CMS — owner",
@@ -6,17 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="CMS"
-      sub="The words on the public site, without a deploy."
-      will={[
-        "The marketing pages, the help articles and the legal pages, editable here.",
-        "Who changed what, and the ability to put it back.",
-      ]}
-      needs={[
-        "Every public page is currently written in code, which means changing a sentence takes a deploy. Moving them here means a content store and a rendering path for it.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("cms");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

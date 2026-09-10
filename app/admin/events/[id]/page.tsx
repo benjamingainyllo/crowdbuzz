@@ -24,7 +24,7 @@ export default async function AdminEventPage({ params }: { params: { id: string 
 
   return (
     <section>
-      <Link href="/admin/events" className="mb-6 inline-block text-[13px] font-extrabold uppercase tracking-[0.04em]">
+      <Link href="/admin/events" className="mb-6 inline-block text-[13px] font-bold">
         ← All events
       </Link>
 
@@ -127,7 +127,7 @@ export default async function AdminEventPage({ params }: { params: { id: string 
               </Scroll>
             )}
             {orders.length > 100 && (
-              <p className="border-t-2 border-[var(--dl-line)] px-4 py-3 text-[13px] text-[var(--dl-ink-soft)]">
+              <p className="border-t border-[var(--dl-line)] px-4 py-3 text-[13px] text-[var(--dl-ink-soft)]">
                 Showing the 100 most recent of {orders.length}.
               </p>
             )}
@@ -143,7 +143,7 @@ export default async function AdminEventPage({ params }: { params: { id: string 
                   <span
                     key={t.id}
                     title={`${t.holder_email ?? ""} ${t.checked_in_at ? "· scanned" : ""}`}
-                    className={`rounded-[2px] border-2 px-2 py-1 font-mono text-[11.5px] ${
+                    className={`rounded-[6px] border px-2 py-1 font-mono text-[11.5px] ${
                       t.checked_in_at
                         ? "border-[var(--mint)] bg-[#E4F5EC]"
                         : t.status === "valid"

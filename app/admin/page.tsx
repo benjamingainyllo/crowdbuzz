@@ -137,7 +137,7 @@ export default async function AdminPage() {
                   key={e.id}
                   href={`/admin/events/${e.id}` as never}
                   className={`flex items-center gap-3 px-4 py-2.5 transition-colors hover:bg-black/[0.03] ${
-                    i !== 0 ? "border-t-2 border-[var(--dl-line)]" : ""
+                    i !== 0 ? "border-t border-[var(--dl-line)]" : ""
                   }`}
                 >
                   <span className="min-w-0 flex-1">

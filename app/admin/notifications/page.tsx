@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "Notifications — owner",
@@ -6,18 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="Notifications"
-      sub="Everything the platform sends, and whether it arrived."
-      will={[
-        "Every message sent \u2014 ticket delivery, reminders, the WhatsApp roundup \u2014 with its state and its failure reason when it failed.",
-        "The templates themselves, editable, with the approval state of each WhatsApp template.",
-        "A resend, for the ticket that did not land.",
-      ]}
-      needs={[
-        "Email and WhatsApp both go out through provider interfaces already, but nothing records what was sent. That log is the missing piece.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("notifications");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

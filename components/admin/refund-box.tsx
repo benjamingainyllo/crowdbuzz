@@ -69,7 +69,7 @@ export function RefundBox({
   };
 
   const field =
-    "w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]";
+    "w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]";
 
   return (
     <div>
@@ -107,12 +107,12 @@ export function RefundBox({
           type="button"
           disabled={!valid || !reason.trim()}
           onClick={() => setConfirming(true)}
-          className="mt-3 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] disabled:opacity-40"
+          className="mt-3 rounded-[8px] border border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-bold disabled:opacity-40"
         >
           Refund…
         </button>
       ) : (
-        <div className="mt-3 rounded-[3px] border-2 border-[var(--dl-danger)] bg-[#FFF1F3] p-4">
+        <div className="mt-3 rounded-[8px] border border-[var(--dl-danger)] bg-[#FFF1F3] p-4">
           <div className="flex items-start gap-3">
             <AlertTriangle className="mt-[2px] h-[18px] w-[18px] shrink-0 text-[var(--dl-danger)]" strokeWidth={2.5} />
             <div className="min-w-0">
@@ -127,7 +127,7 @@ export function RefundBox({
                   type="button"
                   onClick={send}
                   disabled={busy}
-                  className="flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)] disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-bold text-[var(--dl-paper)] disabled:opacity-50"
                 >
                   {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                   Yes, refund
@@ -136,7 +136,7 @@ export function RefundBox({
                   type="button"
                   onClick={() => setConfirming(false)}
                   disabled={busy}
-                  className="rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em]"
+                  className="rounded-[8px] border border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-bold"
                 >
                   Cancel
                 </button>

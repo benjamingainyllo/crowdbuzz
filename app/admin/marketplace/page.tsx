@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { Planned } from "@/components/admin/planned";
+import { plannedScreen } from "@/lib/admin-roadmap";
 
 export const metadata = {
   title: "Marketplace — owner",
@@ -6,18 +8,9 @@ export const metadata = {
 };
 
 export default function Page() {
-  return (
-    <Planned
-      title="Marketplace"
-      sub="How Explore is curated."
-      will={[
-        "Which events are surfaced on Explore and why, with the ability to feature and to hide.",
-        "Reported listings, and anything auto-flagged before a person sees it.",
-        "What Explore is actually converting: views to ticket sales, per city.",
-      ]}
-      needs={[
-        "Explore currently shows every published event with no editorial layer. Featuring needs a flag on events and a reason recorded against it.",
-      ]}
-    />
-  );
+  // Gone from the manifest means the screen was built or dropped, and
+  // either way this placeholder should no longer be answering for it.
+  const s = plannedScreen("marketplace");
+  if (!s) notFound();
+  return <Planned title={s.title} sub={s.sub} will={s.will} needs={s.needs} />;
 }

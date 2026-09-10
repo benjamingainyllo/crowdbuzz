@@ -37,7 +37,7 @@ export function AttentionRow({ item, first }: { item: any; first: boolean }) {
   };
 
   const btn =
-    "rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-1.5 text-[11.5px] font-extrabold uppercase tracking-[0.04em] disabled:opacity-40";
+    "rounded-[8px] border border-[var(--dl-line)] px-3 py-1.5 text-[11.5px] font-bold disabled:opacity-40";
 
   // Where to go to actually look at the problem.
   const investigate = item.order_id
@@ -49,11 +49,11 @@ export function AttentionRow({ item, first }: { item: any; first: boolean }) {
         : null;
 
   return (
-    <div className={`px-5 py-4 ${first ? "" : "border-t-2 border-[var(--dl-line)]"}`}>
+    <div className={`px-5 py-4 ${first ? "" : "border-t border-[var(--dl-line)]"}`}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={`rounded-[2px] border-2 px-2 py-[2px] text-[10px] font-extrabold uppercase tracking-[0.08em] ${TONE[item.severity] ?? TONE.medium}`}>
+            <span className={`rounded-[6px] border px-2 py-[2px] text-[10px] font-extrabold uppercase tracking-[0.08em] ${TONE[item.severity] ?? TONE.medium}`}>
               {item.severity}
             </span>
             <span className="font-mono text-[11.5px] text-[var(--dl-ink-faint)]">{item.kind}</span>
@@ -83,13 +83,13 @@ export function AttentionRow({ item, first }: { item: any; first: boolean }) {
       </div>
 
       {open && (
-        <div className="mt-3 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] p-3.5">
+        <div className="mt-3 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] p-3.5">
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
             placeholder="What did you find? Optional, but it's what the next person reads."
-            className="w-full rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-2 text-[13.5px] outline-none placeholder:text-[var(--dl-ink-faint)]"
+            className="w-full rounded-[8px] border border-[var(--dl-line)] px-3 py-2 text-[13.5px] outline-none placeholder:text-[var(--dl-ink-faint)]"
           />
           <div className="mt-2.5 flex flex-wrap gap-2">
             <button type="button" disabled={busy} onClick={() => act("investigating")} className={btn}>

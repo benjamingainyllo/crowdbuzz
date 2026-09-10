@@ -25,7 +25,7 @@ export default async function AdminOrganiserPage({ params }: { params: { id: str
 
   return (
     <section>
-      <Link href="/admin/organisers" className="mb-6 inline-block text-[13px] font-extrabold uppercase tracking-[0.04em]">
+      <Link href="/admin/organisers" className="mb-6 inline-block text-[13px] font-bold">
         ← Organisers
       </Link>
 

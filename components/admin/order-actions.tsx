@@ -22,7 +22,7 @@ export function OrderActions({ orderId, canResend }: { orderId: string; canResen
   const [, startTransition] = useTransition();
 
   const btn =
-    "flex w-full items-center justify-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px] disabled:opacity-40";
+    "flex w-full items-center justify-center gap-2 rounded-[8px] border border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-bold transition-transform hover:-translate-y-[1px] disabled:opacity-40";
 
   const resend = async () => {
     setBusy("resend");
@@ -66,13 +66,13 @@ export function OrderActions({ orderId, canResend }: { orderId: string; canResen
           Flag for review
         </button>
       ) : (
-        <div className="rounded-[3px] border-2 border-[var(--dl-line)] p-3">
+        <div className="rounded-[8px] border border-[var(--dl-line)] p-3">
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}
             placeholder="What looks wrong?"
-            className="w-full rounded-[3px] border-2 border-[var(--dl-line)] px-3 py-2 text-[13.5px] outline-none placeholder:text-[var(--dl-ink-faint)]"
+            className="w-full rounded-[8px] border border-[var(--dl-line)] px-3 py-2 text-[13.5px] outline-none placeholder:text-[var(--dl-ink-faint)]"
           />
           <div className="mt-2 flex gap-2">
             <button type="button" onClick={flag} disabled={busy !== null || !note.trim()} className={btn}>

@@ -67,7 +67,7 @@ export function StateControl({
               setChoice(o.value === choice ? null : o.value);
               setReason("");
             }}
-            className={`rounded-[3px] border-2 px-3.5 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em] transition-transform hover:-translate-y-[1px] disabled:opacity-35 disabled:hover:translate-y-0 ${
+            className={`rounded-[8px] border px-3.5 py-2 text-[12.5px] font-bold transition-transform hover:-translate-y-[1px] disabled:opacity-35 disabled:hover:translate-y-0 ${
               choice === o.value
                 ? "border-[var(--dl-line)] bg-[var(--dl-ink)] text-[var(--dl-paper)]"
                 : o.danger
@@ -82,7 +82,7 @@ export function StateControl({
 
       {choice && (
         <div
-          className={`mt-4 rounded-[3px] border-2 p-4 ${
+          className={`mt-4 rounded-[8px] border p-4 ${
             chosen?.danger
               ? "border-[var(--dl-danger)] bg-[#FFF1F3]"
               : "border-[var(--dl-line)] bg-[var(--dl-panel)]"
@@ -110,7 +110,7 @@ export function StateControl({
                 onChange={(e) => setReason(e.target.value)}
                 rows={2}
                 placeholder={needsReason ? "Why? This goes in the log." : "Reason (optional)"}
-                className="mt-3 w-full rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]"
+                className="mt-3 w-full rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]"
               />
 
               <div className="mt-3 flex flex-wrap gap-2">
@@ -118,7 +118,7 @@ export function StateControl({
                   type="button"
                   onClick={apply}
                   disabled={busy || pending || (needsReason && !reason.trim())}
-                  className="flex items-center gap-2 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)] disabled:opacity-40"
+                  className="flex items-center gap-2 rounded-[8px] border border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-bold text-[var(--dl-paper)] disabled:opacity-40"
                 >
                   {(busy || pending) && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
                   Confirm
@@ -127,7 +127,7 @@ export function StateControl({
                   type="button"
                   onClick={() => setChoice(null)}
                   disabled={busy}
-                  className="rounded-[3px] border-2 border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em]"
+                  className="rounded-[8px] border border-[var(--dl-line)] px-4 py-2.5 text-[12.5px] font-bold"
                 >
                   Cancel
                 </button>

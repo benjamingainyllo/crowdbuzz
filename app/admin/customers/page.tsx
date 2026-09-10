@@ -34,7 +34,7 @@ export default async function AdminCustomersPage({
     const c = await getCustomerDetail(email);
     return (
       <section>
-        <Link href="/admin/customers" className="mb-6 inline-block text-[13px] font-extrabold uppercase tracking-[0.04em]">
+        <Link href="/admin/customers" className="mb-6 inline-block text-[13px] font-bold">
           ← Customers
         </Link>
         <PageHead title={c.name ?? c.email} sub={[c.email, c.phone].filter(Boolean).join(" · ")} />
@@ -102,7 +102,7 @@ export default async function AdminCustomersPage({
               {c.tickets.map((t: any) => (
                 <span
                   key={t.id}
-                  className={`rounded-[2px] border-2 px-2 py-1 font-mono text-[11.5px] ${
+                  className={`rounded-[6px] border px-2 py-1 font-mono text-[11.5px] ${
                     t.checked_in_at
                       ? "border-[var(--mint)] bg-[#E4F5EC]"
                       : t.status === "valid"

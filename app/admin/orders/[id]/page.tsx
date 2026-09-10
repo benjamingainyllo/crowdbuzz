@@ -33,7 +33,7 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
 
   return (
     <section>
-      <Link href="/admin/orders" className="mb-6 inline-block text-[13px] font-extrabold uppercase tracking-[0.04em]">
+      <Link href="/admin/orders" className="mb-6 inline-block text-[13px] font-bold">
         ← Orders
       </Link>
 
@@ -106,7 +106,7 @@ export default async function AdminOrderPage({ params }: { params: { id: string 
           </div>
 
           {tickets.some((t: any) => t.checked_in_at) && disputes.length > 0 && (
-            <div className="mt-3 rounded-[3px] border-2 border-[var(--mint)] bg-[#E4F5EC] px-4 py-3">
+            <div className="mt-3 rounded-[8px] border border-[var(--mint)] bg-[#E4F5EC] px-4 py-3">
               <p className="text-[13.5px] leading-relaxed">
                 <strong>A ticket on this order was scanned at the door.</strong> That is the
                 strongest evidence there is against a chargeback — the buyer walked in.

@@ -18,7 +18,7 @@ export default async function AdminSplitPage({ params }: { params: { id: string 
 
   return (
     <section>
-      <Link href="/admin/splits" className="mb-6 inline-block text-[13px] font-extrabold uppercase tracking-[0.04em]">
+      <Link href="/admin/splits" className="mb-6 inline-block text-[13px] font-bold">
         ← Split payments
       </Link>
 
@@ -46,7 +46,7 @@ export default async function AdminSplitPage({ params }: { params: { id: string 
       />
 
       {group.status === "expired" && paidKobo > 0 && (
-        <div className="mt-4 rounded-[3px] border-2 border-[var(--dl-danger)] bg-[#FFF1F3] px-4 py-3.5">
+        <div className="mt-4 rounded-[8px] border border-[var(--dl-danger)] bg-[#FFF1F3] px-4 py-3.5">
           <p className="text-[14px] leading-relaxed">
             <strong>This group expired with {formatKobo(paidKobo)} collected.</strong> Everybody
             who paid bought nothing — refund each of their orders below. Refunding is deliberately
