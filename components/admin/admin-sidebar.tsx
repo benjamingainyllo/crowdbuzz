@@ -160,22 +160,22 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
   const [collapsed, setCollapsed] = useState(false);
 
   const item = (active: boolean) =>
-    `group flex h-9 items-center rounded-[3px] text-[14px] transition-colors ${
+    `group flex h-[38px] items-center rounded-full text-[13.5px] transition-colors ${
       active
-        ? "bg-[var(--dl-ink)] font-extrabold text-[var(--dl-paper)]"
-        : "font-semibold text-[var(--dl-ink-soft)] hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)]"
-    } ${collapsed ? "justify-center px-0" : "gap-3 px-3"}`;
+        ? "bg-[var(--dl-ink)] font-extrabold text-white"
+        : "font-semibold text-[var(--dl-ink-soft)] hover:bg-[rgba(255,255,255,0.7)] hover:text-[var(--dl-ink)]"
+    } ${collapsed ? "justify-center px-0" : "gap-3 px-3.5"}`;
 
   const icon = "h-[16px] w-[16px] shrink-0";
   const text = `truncate ${collapsed ? "hidden" : ""}`;
 
   return (
     <aside
-      className={`relative hidden h-screen shrink-0 flex-col overflow-y-auto overflow-x-hidden border-r-2 border-[var(--dl-line)] transition-[width] duration-200 lg:flex ${
+      className={`relative z-10 hidden h-screen shrink-0 flex-col overflow-y-auto overflow-x-hidden transition-[width] duration-200 lg:flex ${
         collapsed ? "w-[76px]" : "w-[236px]"
       }`}
     >
-      <div className="flex h-[60px] shrink-0 items-center justify-between border-b-2 border-[var(--dl-line)] px-4">
+      <div className="flex h-[68px] shrink-0 items-center justify-between px-4">
         <Link
           href="/admin"
           className={`overflow-hidden whitespace-nowrap text-[16px] font-extrabold tracking-[-0.03em] ${
@@ -187,7 +187,7 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
         <button
           onClick={() => setCollapsed(!collapsed)}
           aria-label={collapsed ? "Expand the menu" : "Collapse the menu"}
-          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-[3px] text-[var(--dl-ink-faint)] transition-colors hover:bg-[rgba(20,16,24,0.06)] hover:text-[var(--dl-ink)] ${
+          className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[var(--dl-ink-faint)] transition-colors hover:bg-[rgba(255,255,255,0.7)] hover:text-[var(--dl-ink)] ${
             collapsed ? "mx-auto" : ""
           }`}
         >
@@ -204,7 +204,7 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
               </p>
             )}
             {g.label && collapsed && gi !== 0 && (
-              <div className="mx-auto mb-3 mt-1 h-[2px] w-6 bg-[var(--dl-line)]" />
+              <div className="mx-auto mb-3 mt-1 h-px w-6 bg-[var(--dl-line)]" />
             )}
             <nav className="space-y-0.5">
               {g.items.map((i) => {
@@ -228,15 +228,15 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
         ))}
       </div>
 
-      <div className="mt-auto border-t-2 border-[var(--dl-line)] p-3">
+      <div className="mt-auto p-3">
         <Link href="/overview" className={item(false)}>
           <ArrowUpRight strokeWidth={2} className={icon} />
           <span className={text}>Your own dashboard</span>
         </Link>
         <button
           onClick={() => signOut()}
-          className={`flex h-9 w-full items-center rounded-[3px] text-[14px] font-semibold text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(255,75,99,0.12)] hover:text-[var(--dl-danger)] ${
-            collapsed ? "justify-center px-0" : "gap-3 px-3"
+          className={`flex h-[38px] w-full items-center rounded-full text-[13.5px] font-semibold text-[var(--dl-ink-soft)] transition-colors hover:bg-[rgba(255,75,99,0.12)] hover:text-[var(--dl-danger)] ${
+            collapsed ? "justify-center px-0" : "gap-3 px-3.5"
           }`}
         >
           <LogOut strokeWidth={2} className={icon} />
@@ -244,7 +244,7 @@ export function AdminSidebar({ role, email }: { role: AdminRole; email: string |
         </button>
 
         {!collapsed && (
-          <div className="mt-3 border-t-2 border-[var(--dl-line)] pt-3">
+          <div className="mt-3 border-t border-[var(--dl-line)] pt-3">
             <p className="truncate text-[12.5px] font-extrabold">{email ?? "—"}</p>
             <p className="text-[11.5px] uppercase tracking-[0.1em] text-[var(--dl-ink-faint)]">
               {role.replace("_", " ")}
@@ -269,7 +269,7 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b-2 border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 lg:hidden">
+      <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b border-[var(--dl-line)] bg-[var(--dl-paper)] px-4 lg:hidden">
         <Link href="/admin" className="flex h-11 items-center text-[16px] font-extrabold tracking-[-0.03em]">
           CrowdBuzz <span className="ml-1 text-[var(--dl-ink-faint)]">owner</span>
         </Link>
@@ -287,7 +287,7 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
           <div className="absolute inset-0 bg-black/40" />
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative ml-auto flex h-full w-[260px] flex-col overflow-y-auto border-l-2 border-[var(--dl-line)] bg-[var(--dl-paper)] p-4"
+            className="relative ml-auto flex h-full w-[268px] flex-col overflow-y-auto bg-[var(--dl-paper)] p-4"
           >
             <div className="mb-3 flex items-center justify-between">
               <span className="text-[15px] font-extrabold">Menu</span>
@@ -310,9 +310,9 @@ export function AdminMobileHeader({ role }: { role: AdminRole }) {
                   <Link
                     key={i.href}
                     href={i.href as never}
-                    className={`flex h-11 items-center gap-3 rounded-[3px] px-3 text-[14px] ${
+                    className={`flex h-11 items-center gap-3 rounded-full px-3.5 text-[14px] ${
                       isOn(pathname, i.href)
-                        ? "bg-[var(--dl-ink)] font-extrabold text-[var(--dl-paper)]"
+                        ? "bg-[var(--dl-ink)] font-extrabold text-white"
                         : "font-semibold text-[var(--dl-ink-soft)]"
                     }`}
                   >

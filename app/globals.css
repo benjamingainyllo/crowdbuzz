@@ -560,3 +560,119 @@ html:has(.sf) { overflow-x: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .sf-float { display: none; }
 }
+
+/* ============================================================
+   THE OWNER CONSOLE — soft light.
+   ------------------------------------------------------------
+   A SECOND SKIN OVER .dl, NOT A REPLACEMENT FOR IT. The console and
+   the organiser's dashboard both live in the .dl scope, so anything
+   changed there changes both. This is scoped to .adm, which only the
+   admin shell carries, and it overrides .dl rather than forking it —
+   every token an admin screen already reads still resolves, and the
+   organiser's dashboard is untouched by all of it.
+
+   IT MUST COME AFTER .dl IN THIS FILE. Both are single-class
+   selectors, so specificity is equal and the later rule wins. Move
+   this block above .dl and every override below silently stops
+   working, with nothing to show for it but the old design.
+
+   WHAT CHANGES, AND WHY IT IS A REAL CHANGE OF MIND. Daylight's
+   character was the EDGE: 2px full-ink rules, 3px corners, hard
+   structure on a soft ground. This is the opposite bet — no rules at
+   all, large radii, white cards floating on a coloured haze, and
+   structure carried by shadow and space instead of by lines. Both are
+   coherent; they are not mixable, which is exactly why this is a
+   scope and not a handful of overrides sprinkled through the markup.
+   ============================================================ */
+.adm {
+  /* The ground goes almost white. The colour on this screen comes from
+     the aurora behind it and from the gradient cards, and a lilac paper
+     underneath both muddies them. */
+  --dl-paper: #F6F6F7;
+  --dl-panel: #FFFFFF;
+
+  /* The rules stop being structure. They are still here because a table
+     needs to separate its rows, but at a tenth of the ink they read as
+     a change of row rather than as a drawn box. */
+  --dl-line: rgba(20, 16, 24, 0.10);
+  --dl-line-soft: rgba(20, 16, 24, 0.06);
+
+  --adm-radius: 22px;
+  --adm-radius-sm: 14px;
+  /* One shadow, used everywhere, so nothing floats at a different
+     height from the thing beside it. Two stops: a tight one for the
+     edge and a wide soft one for the lift. */
+  --adm-shadow: 0 1px 2px rgba(20, 16, 24, 0.04), 0 12px 32px -12px rgba(20, 16, 24, 0.14);
+
+  background: var(--dl-paper);
+  color: var(--dl-ink);
+}
+
+/* The haze. Fixed, so it does not travel with a scrolling table, and
+   pointer-events:none so it can never eat a click. Heavily blurred at
+   low opacity: at full strength these four blobs read as a bug, and at
+   this strength they read as light coming from somewhere. */
+.adm-aurora {
+  position: fixed;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(90px);
+  opacity: 0.5;
+  background:
+    radial-gradient(28% 34% at 22% 18%, #FFD9C2 0%, transparent 70%),
+    radial-gradient(30% 32% at 62% 8%,  #D9FF9E 0%, transparent 72%),
+    radial-gradient(26% 30% at 88% 34%, #FFC9DA 0%, transparent 70%),
+    radial-gradient(34% 36% at 44% 82%, #CFE4FF 0%, transparent 74%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .adm-aurora { animation: adm-drift 48s ease-in-out infinite alternate; }
+  @keyframes adm-drift {
+    from { transform: translate3d(-1.5%, -1%, 0) scale(1.04); }
+    to   { transform: translate3d(1.5%, 1.5%, 0) scale(1.1); }
+  }
+}
+
+/* Anything that holds content. The hairline is inside the shadow, not
+   instead of it — on a white-on-near-white card the shadow alone leaves
+   the top edge indistinct. */
+.adm-card {
+  background: var(--dl-panel);
+  border: 1px solid rgba(20, 16, 24, 0.06);
+  border-radius: var(--adm-radius);
+  box-shadow: var(--adm-shadow);
+}
+
+/* The two gradient cards. Deliberately only two: a set of six unrelated
+   gradients is a swatch page, and the pair reads as a system. Both run
+   light-to-dark down the diagonal so white type sits on the bottom half
+   and the lime accent stays legible on the top. */
+.adm-grad-lime { background: linear-gradient(152deg, #E9FFB0 0%, #A8D45F 34%, #4C6B22 100%); }
+.adm-grad-rose { background: linear-gradient(152deg, #FFE3D2 0%, #F0A891 36%, #7A3A38 100%); }
+
+/* The pill row. The active one is solid ink; the rest are barely there
+   until you point at them, which is what keeps a row of eight from
+   competing with the screen behind it. */
+.adm-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--dl-ink-soft);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(20, 16, 24, 0.06);
+  transition: background-color 0.15s, color 0.15s;
+}
+.adm-pill:hover { background: #FFFFFF; color: var(--dl-ink); }
+.adm-pill-on {
+  background: var(--dl-ink);
+  color: #FFFFFF;
+  border-color: var(--dl-ink);
+}
+.adm-pill-on:hover { background: var(--dl-ink); color: #FFFFFF; }

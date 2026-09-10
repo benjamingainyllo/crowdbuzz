@@ -3,6 +3,7 @@ import { getPlatformStats } from "@/lib/platform-stats";
 import { getOverviewShape, listAttention, attentionSummary } from "@/lib/admin-queries";
 import { runDetectors } from "@/lib/attention";
 import { formatKobo } from "@/lib/money";
+import type { Trend } from "@/lib/dashboard-shape";
 import { TicketTypeSplit, WeekdayBars } from "@/components/charts/bars";
 import {
   panel, label, Figures, Band, Badge, stateTone, niceDate, th, td, tdNum, Scroll,
@@ -43,6 +44,67 @@ function alertHref(item: any): string {
   if (item.event_id) return `/admin/events/${item.event_id}`;
   if (item.creator_id) return `/admin/organisers/${item.creator_id}`;
   return "/admin/attention";
+}
+
+/**
+ * One of the two numbers the business turns on.
+ *
+ * WHITE TYPE ON A GRADIENT, WHICH ONLY WORKS BECAUSE OF WHERE THE
+ * GRADIENT ENDS. Both stops in .adm-grad-* run light at the top-left to
+ * dark at the bottom-right, so the value and its caption sit on the dark
+ * half and the small print at the top sits on the light half in ink. Swap
+ * the direction and half of this becomes unreadable.
+ */
+function HeroFigure({
+  grad,
+  label: title,
+  value,
+  note,
+  aside,
+  trend,
+}: {
+  grad: string;
+  label: string;
+  value: string;
+  note: string;
+  aside: { k: string; v: string };
+  trend?: Trend;
+}) {
+  return (
+    <div className={`${grad} relative overflow-hidden rounded-[22px] p-5 shadow-[0_12px_32px_-12px_rgba(20,16,24,0.22)]`}>
+      <div className="flex items-start justify-between gap-4">
+        <p className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-[rgba(20,16,24,0.62)]">
+          {title}
+        </p>
+        <div className="text-right">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[rgba(20,16,24,0.5)]">
+            {aside.k}
+          </p>
+          <p className="text-[13px] font-extrabold text-[rgba(20,16,24,0.8)] [font-variant-numeric:tabular-nums]">
+            {aside.v}
+          </p>
+        </div>
+      </div>
+
+      <p className="mt-8 text-[42px] font-extrabold leading-none tracking-[-0.05em] text-white [font-variant-numeric:tabular-nums]">
+        {value}
+      </p>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <span className="text-[12.5px] font-semibold text-[rgba(255,255,255,0.82)]">{note}</span>
+        {/* changePct is null when there is no previous period to compare
+            against, and a new platform is in that state for its first
+            month. Showing "+0%" there would be a claim about a comparison
+            that was never made, so the chip simply does not appear. */}
+        {trend && trend.changePct !== null && (
+          <span className="rounded-full bg-[rgba(255,255,255,0.22)] px-2.5 py-[3px] text-[11.5px] font-extrabold text-white">
+            {trend.changePct >= 0 ? "+" : ""}
+            {Math.round(trend.changePct)}% vs previous
+          </span>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default async function AdminPage() {
@@ -157,40 +219,55 @@ export default async function AdminPage() {
         </div>
       </div>
 
-      {/* ── The numbers, as a strip rather than a feature. ──── */}
+      {/* ── The numbers ───────────────────────────────────────
+          TWO GRADIENT CARDS, THEN A STRIP. The two that matter are the
+          fee income and the volume it came from — those are the numbers
+          that decide whether the business works, and they get the size
+          and the colour to say so. The rest are supporting and stay as
+          plain tiles; six gradient cards in a row is a swatch page, not
+          a hierarchy. */}
       <div>
-        <p className={`${label} mb-2.5`}>Last 30 days</p>
-        <Figures
-          items={[
-            {
-              l: "Your fees",
-              n: formatKobo(shape.feesTrend.value),
-              t: shape.feesTrend,
-              tone: "fee",
-            },
-            {
-              l: "Moved through",
-              n: formatKobo(shape.grossTrend.value),
-              t: shape.grossTrend,
-              x: "all organisers",
-              tone: "money",
-            },
-            {
-              l: "Tickets sold",
-              n: shape.ticketsTrend.value.toLocaleString("en-NG"),
-              t: shape.ticketsTrend,
-              x: `${shape.ordersTrend.value} orders`,
-              tone: "count",
-            },
-            { l: "Effective take", n: takeRate, x: "fees ÷ gross, all time", tone: "fee" },
-            {
-              l: "All-time fees",
-              n: formatKobo(s.feesKobo),
-              x: `on ${formatKobo(s.grossKobo)}`,
-              tone: "money",
-            },
-          ]}
-        />
+        <p className={`${label} mb-3`}>Last 30 days</p>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <HeroFigure
+            grad="adm-grad-lime"
+            label="Your fees"
+            value={formatKobo(shape.feesTrend.value)}
+            note="What CrowdBuzz earned"
+            aside={{ k: "All time", v: formatKobo(s.feesKobo) }}
+            trend={shape.feesTrend}
+          />
+          <HeroFigure
+            grad="adm-grad-rose"
+            label="Moved through"
+            value={formatKobo(shape.grossTrend.value)}
+            note="Across every organiser"
+            aside={{ k: "Take", v: takeRate }}
+            trend={shape.grossTrend}
+          />
+        </div>
+
+        <div className="mt-3">
+          <Figures
+            items={[
+              {
+                l: "Tickets sold",
+                n: shape.ticketsTrend.value.toLocaleString("en-NG"),
+                t: shape.ticketsTrend,
+                x: `${shape.ordersTrend.value} orders`,
+                tone: "count",
+              },
+              { l: "Effective take", n: takeRate, x: "fees \u00F7 gross, all time", tone: "fee" },
+              {
+                l: "All-time volume",
+                n: formatKobo(s.grossKobo),
+                x: "gross, every organiser",
+                tone: "money",
+              },
+            ]}
+          />
+        </div>
       </div>
 
       {/* ── The body: two tables, side by side. ─────────────── */}

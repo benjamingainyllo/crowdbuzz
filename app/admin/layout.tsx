@@ -33,24 +33,36 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (!admin) notFound();
 
   return (
-    <div className="dl flex h-screen flex-col overflow-hidden font-[family-name:var(--font-bricolage-grotesque)] lg:flex-row">
+    /* `dl` AND `adm`, in that order and both required. The console reads
+       .dl's tokens like the rest of the signed-in product; .adm is the
+       second skin over them and is declared after .dl in globals.css so
+       its overrides win. Drop either class and the screen is half a
+       design. */
+    <div className="dl adm relative flex h-screen flex-col overflow-hidden font-[family-name:var(--font-bricolage-grotesque)] lg:flex-row">
+      {/* The haze. Fixed and behind everything, so a scrolling table does
+          not drag it up the screen. */}
+      <div className="adm-aurora" aria-hidden="true" />
+
       <AdminMobileHeader role={admin.role} />
       <AdminSidebar role={admin.role} email={admin.email} />
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        <header className="flex h-[60px] shrink-0 items-center gap-4 border-b-2 border-[var(--dl-line)] px-5 md:px-7">
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
+        {/* No rule under the header. The old 2px line was the divider
+            between chrome and work; here the work is a set of floating
+            cards and the chrome is simply the space above them. */}
+        <header className="flex h-[68px] shrink-0 items-center gap-4 px-5 md:px-7">
           <div className="w-full max-w-[460px]">
             <GlobalSearch />
           </div>
 
           <div className="ml-auto hidden items-center gap-3 md:flex">
-            <span className="rounded-[2px] border-2 border-[var(--dl-line)] px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-soft)]">
+            <span className="rounded-full bg-[rgba(20,16,24,0.05)] px-3 py-[5px] text-[10.5px] font-extrabold uppercase tracking-[0.1em] text-[var(--dl-ink-soft)]">
               {admin.role.replace("_", " ")}
             </span>
           </div>
         </header>
 
-        <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden p-5 md:p-7">
+        <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-5 pb-8 pt-1 md:px-7">
           {children}
         </main>
       </div>

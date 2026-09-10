@@ -14,9 +14,18 @@ import { TONE_INK, TONE_WASH, type Tone as FigureTone } from "@/lib/tones";
  * own is how an internal tool starts to feel like seven tools.
  */
 
-export const panel = "rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)]";
+/*
+ * A card, not a ruled box.
+ *
+ * This was a 3px-cornered box with a 2px full-ink border, which is the
+ * old Daylight character: structure carried by the edge. The console now
+ * carries structure with shadow and space instead, so the border drops to
+ * a hairline that only stops a white card dissolving into a near-white
+ * page, and the lift does the rest. See the .adm block in globals.css.
+ */
+export const panel = "adm-card";
 export const label =
-  "text-[10.5px] font-extrabold uppercase tracking-[0.18em] text-[var(--dl-ink-faint)]";
+  "text-[10.5px] font-extrabold uppercase tracking-[0.16em] text-[var(--dl-ink-faint)]";
 
 /**
  * A screen's label in a console, not a headline on a page.
@@ -36,10 +45,12 @@ export function PageHead({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <h1 className="text-[22px] font-extrabold tracking-[-0.03em]">{title}</h1>
-        {sub && <p className="text-[13px] text-[var(--dl-ink-soft)]">{sub}</p>}
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+      <div className="min-w-0">
+        <h1 className="text-[30px] font-extrabold leading-none tracking-[-0.04em]">{title}</h1>
+        {sub && (
+          <p className="mt-2 text-[13.5px] text-[var(--dl-ink-soft)]">{sub}</p>
+        )}
       </div>
       {right}
     </div>
@@ -62,36 +73,42 @@ export function Figures({
 }: {
   items: { n: string; l: string; x?: string; t?: Trend; invert?: boolean; tone?: FigureTone }[];
 }) {
-  // The wrapper is shifted up and left by the rule width so the outer
-  // edges of the first row and first column tuck under the panel's own
-  // border. Without it, a strip that wraps to a second row shows a stray
-  // rule hanging off the left of the first cell in that row — which is
-  // exactly what five figures did on a phone.
+  /*
+   * Separate tiles, not one ruled grid.
+   *
+   * The old strip was a single bordered block cut into cells by 2px
+   * rules, with a negative-margin trick so the outer rules tucked under
+   * the panel border. None of that survives a design with no rules in
+   * it: the tiles are their own cards now and the gap between them does
+   * what the rule used to.
+   *
+   * The numerals grow to 34px because on this screen they are the
+   * content. A tone still tints the tile, but at a fraction of its old
+   * strength — a saturated wash behind a large number fights it.
+   */
   return (
-    <div className={`${panel} overflow-hidden`}>
-      <div className="-ml-[2px] -mt-[2px] flex flex-wrap">
+    <div className="flex flex-wrap gap-3">
       {items.map((f) => (
         <div
           key={f.l}
-          className="min-w-[148px] flex-1 border-l-2 border-t-2 border-[var(--dl-line)] px-5 py-3.5"
-          style={{ background: f.tone ? TONE_WASH[f.tone] : "var(--dl-panel)" }}
+          className="adm-card min-w-[172px] flex-1 px-5 py-4"
+          style={f.tone ? { background: TONE_WASH[f.tone] } : undefined}
         >
           <p
-            className="text-[10.5px] font-extrabold uppercase tracking-[0.18em]"
+            className="text-[10.5px] font-extrabold uppercase tracking-[0.16em]"
             style={{ color: f.tone ? TONE_INK[f.tone] : "var(--dl-ink-faint)" }}
           >
             {f.l}
           </p>
-          <p className="mt-1.5 text-[24px] font-extrabold leading-none tracking-[-0.035em] [font-variant-numeric:tabular-nums]">
+          <p className="mt-2 text-[34px] font-extrabold leading-none tracking-[-0.045em] [font-variant-numeric:tabular-nums]">
             {f.n}
           </p>
-          <div className="mt-1.5 flex flex-wrap items-center gap-2">
+          <div className="mt-2.5 flex flex-wrap items-center gap-2">
             {f.t && <TrendChip trend={f.t} invert={f.invert} />}
             {f.x && <span className="text-[12px] text-[var(--dl-ink-soft)]">{f.x}</span>}
           </div>
         </div>
       ))}
-      </div>
     </div>
   );
 }
@@ -99,16 +116,16 @@ export function Figures({
 type Tone = "ok" | "warn" | "bad" | "flat";
 
 const TONES: Record<Tone, string> = {
-  ok: "border-[var(--mint)] bg-[#E4F5EC] text-[var(--mint)]",
-  warn: "border-[#8A5A00] bg-[#FFF3D6] text-[#8A5A00]",
-  bad: "border-[var(--dl-danger)] bg-[#FFF1F3] text-[var(--dl-danger)]",
-  flat: "border-[var(--dl-line-soft)] bg-transparent text-[var(--dl-ink-soft)]",
+  ok: "bg-[#E8F7EE] text-[#146B45]",
+  warn: "bg-[#FDF1D8] text-[#7A5000]",
+  bad: "bg-[#FFEBEF] text-[#B32243]",
+  flat: "bg-[rgba(20,16,24,0.05)] text-[var(--dl-ink-soft)]",
 };
 
 export function Badge({ tone = "flat", children }: { tone?: Tone; children: React.ReactNode }) {
   return (
     <span
-      className={`inline-block whitespace-nowrap rounded-[2px] border-2 px-2 py-[2px] text-[10.5px] font-extrabold uppercase tracking-[0.08em] ${TONES[tone]}`}
+      className={`inline-block whitespace-nowrap rounded-full px-2.5 py-[3px] text-[10.5px] font-extrabold uppercase tracking-[0.08em] ${TONES[tone]}`}
     >
       {children}
     </span>
@@ -155,7 +172,7 @@ export function Band({
 }) {
   return (
     <div
-      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b-2 border-[var(--dl-line)] px-5 py-3"
+      className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-[var(--dl-line)] px-5 py-3.5"
       style={{ background: TONE_WASH[tone] }}
     >
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -189,8 +206,8 @@ export function Scroll({ children }: { children: React.ReactNode }) {
 }
 
 export const th =
-  "bg-[var(--dl-neutral-wash)] border-b-2 border-[var(--dl-line)] px-4 py-2.5 text-left text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--dl-ink-faint)] whitespace-nowrap";
-export const td = "border-b border-[var(--dl-line-soft)] px-4 py-3 text-[14px] align-top";
+  "border-b border-[var(--dl-line)] px-5 py-3 text-left text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--dl-ink-faint)] whitespace-nowrap";
+export const td = "border-b border-[var(--dl-line-soft)] px-5 py-3.5 text-[14px] align-top";
 export const tdNum = `${td} text-right [font-variant-numeric:tabular-nums] whitespace-nowrap`;
 
 export function Pager({
@@ -216,8 +233,7 @@ export function Pager({
     return `${base}?${q.toString()}`;
   };
 
-  const btn =
-    "rounded-[3px] border-2 border-[var(--dl-line)] px-3.5 py-2 text-[12.5px] font-extrabold uppercase tracking-[0.04em]";
+  const btn = "adm-pill px-4 uppercase tracking-[0.04em] text-[12px]";
 
   return (
     <div className="mt-4 flex items-center justify-between gap-4">
@@ -259,12 +275,12 @@ export function SearchBar({
         name="q"
         defaultValue={q ?? ""}
         placeholder={placeholder}
-        className="min-w-[220px] flex-1 rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3.5 py-2.5 text-[14px] outline-none placeholder:text-[var(--dl-ink-faint)]"
+        className="h-[42px] min-w-[220px] flex-1 rounded-full border border-[rgba(20,16,24,0.08)] bg-[var(--dl-panel)] px-4 text-[14px] outline-none transition-shadow placeholder:text-[var(--dl-ink-faint)] focus:shadow-[0_0_0_3px_rgba(20,16,24,0.06)]"
       />
       {extra}
       <button
         type="submit"
-        className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-ink)] px-4 py-2.5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-[var(--dl-paper)]"
+        className="h-[42px] rounded-full bg-[var(--dl-ink)] px-5 text-[12.5px] font-extrabold uppercase tracking-[0.04em] text-white transition-transform hover:-translate-y-[1px]"
       >
         Search
       </button>
@@ -285,7 +301,7 @@ export function FilterSelect({
     <select
       name={name}
       defaultValue={value ?? "all"}
-      className="rounded-[3px] border-2 border-[var(--dl-line)] bg-[var(--dl-panel)] px-3 py-2.5 text-[14px] font-semibold outline-none"
+      className="h-[42px] rounded-full border border-[rgba(20,16,24,0.08)] bg-[var(--dl-panel)] px-4 text-[14px] font-semibold outline-none"
     >
       {options.map((o) => (
         <option key={o.value} value={o.value}>
